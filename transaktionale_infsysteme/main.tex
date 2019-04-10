@@ -1,0 +1,111 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+
+\title{Transaktionale Informationssysteme \\ SoSe19}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+\begin{abstract}
+\end{abstract}
+
+\section{1. Vorlesung}
+Foliensatz 1
+\subsection*{Orga}
+\begin{itemize}
+  \item \textbf{Vorlesung} Di, 14:15-15:45, H11
+  \item \textbf{Übung} Mo, 13-14
+  \item \textbf{Prüfung} mündlich 16.06. und 22.10.
+\end{itemize}
+\subsection*{Motivation}
+Bei vielen, kurzen Transaktionen (Änderungen) darf die Datenbasis nicht zerstört werden
+\begin{itemize}
+  \item Rollback
+  \item Administration der Aktionen auf der Datenbasis
+  \item $\Rightarrow$ Datenkonsistenz
+\end{itemize}
+\paragraph*{Konsistenz}
+Bewahrung der Korrektheit Daten im Fehlerfall
+
+\paragraph*{Generizität}
+Abstraktion von Szenarien
+
+\subsection*{Paralleler Zugriff Beispiel 1.1 (Folie 12)}
+Naive Parallelverarbeitung sorgt zum Konflikt
+
+\paragraph*{Optimistischer Ansatz}
+Laufen lassen, bis ein Fehler Auftritt
+
+\paragraph*{Pessimistische Ansatz}
+Zugriff blockieren
+
+\subsection*{Fehlerhafte Ausführung Beispiel 1.2 (Folie 13)}
+Prozess wird durch Fehler unterbrochen
+
+\paragraph*{Rollback}
+Sollten nicht alle Aktionen ausführbar sein, nicht ausführen (Komplett oder gar nicht)
+
+\subsection*{Verteiltes Datensystem Beispiel 1.3 (Folie 14)}
+Verschiedene Datenbestände nicht korrekt synchronisiert (zB Client- und Serverwarenkorb), Datensysteme sind verschieden und unahängig voneinander (heterogen und autonom)
+
+\paragraph*{Transaktionale Eigenschaften}
+\begin{itemize}
+  \item Synchronisierung von Client und Serverinformationen
+  \item Verifikation des Abschlusses einer Transaktion
+\end{itemize}
+
+\subsection*{Beispiel 1.4 (Folie 19)}
+Gesamte Aktion muss erfolgreich sein: Schlägt eine Transaktion im Block fehl, wirf eine Fehlermeldung (zB Prüfungsanmeldung und Bestätigung)
+
+\subsection*{Workflow Management}
+Spezifikation von Workflows 
+\begin{itemize}
+  \item Wer bekommt welche Rolle
+\end{itemize}
+
+\paragraph*{Workflow}
+\begin{itemize}
+  \item Geschäftsprozess (zB Beschaffung, Reiseplanung) 
+  \item Langlebig
+\end{itemize}
+\paragraph*{Aktivität}
+Teile eines Workflows, die von verschiedenen Akteuren augeführt werden
+
+\subsection*{Architekturen}
+\paragraph*{Einfache Server Struktur (Folie 27)}
+Data Server: Datendatendarstellung
+\begin{itemize}
+  \item Gekapselt in Objekten (Request, Reply)
+  \item Ungekapselt als Tupel 
+\end{itemize}
+\paragraph*{Föderierte Systeme}
+\begin{itemize}
+  \item Alte Systeme müssen mit neuen Systemen kooperieren
+\end{itemize}
+
+\subsection*{Transaktionsmanagement}
+\paragraph*{ACID (Folie 30)}
+\begin{itemize}
+  \item Atomarität: Ganz oder gar nicht
+  \item Consistenz: Konsistenzerhaltung, waren die Daten Konsistent vor der Transaktion, sind sie es auch danach
+  \item Isolation: Transaktionen beeinflussen sich nicht gegenseitig
+  \item Dauerhaftigkeit: Wenn Transaktion erfolgreich, so ist sie in der Datenbank vorhanden 
+\end{itemize}
+\paragraph*{Anforderungen and Transaktionsmanagement (Folie 31)}
+\begin{itemize}
+  \item Concurrency Control
+  \item !nachgucken!
+\end{itemize}
+
+\paragraph*{Aufbau (Folie 32}
+\begin{itemize}
+  \item Transaktionsmanagement sorgt für Synch der Zugriffe
+  \item Datenbank-Cache: Lesen und Bearbeiten der Daten im DB-Cache. Schreiben geschieht später
+  \item DB Seiten (Folie 37)
+\end{itemize}
+
+\end{document}

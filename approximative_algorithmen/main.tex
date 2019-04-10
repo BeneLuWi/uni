@@ -1,0 +1,114 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+
+\title{Approximationsalgorithmen \\SoSe 2019}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+\begin{abstract}
+
+\end{abstract}
+
+\section{1.Vorlesung}
+Foliensatz 1
+\subsection{Orga}
+\begin{itemize}
+  \item \textbf{Sprechstunde} Do, 13-14 Uhr
+  \item \textbf{Vorlesung} Di, 12:15-13:45
+  \item \textbf{Übung} Di, 8:15-9:45 Uhr (erster Termin 16.04.)
+  \item \textbf{Prüfung} Mündl Prüfung
+\end{itemize}
+
+\subsection{Einführung}
+\subsubsection*{Motivation}
+\begin{itemize}
+  \item wenn P $ \neq $ NP, kan man keinen guten oder schnellen Algorithmus schreiben
+  \item Zeigt man, dass ein Problem NP-schwer ist, kann kein schneller Algorithmus geschrieben werden  
+\end{itemize}
+$\Rightarrow$ Heuristische Verfahren (keine mathematische Garantie). Warum funktionieren die Heuristiken so gut?
+Herangehensweisen
+\begin{itemize}
+  \item Greedy Verfahren
+  \item Randomisierte Verfahren: finden der Lösung mit hoher Wahrscheinlichkeit
+  \item Parametrisierte Verfahren: exakte Lösungen und Versuch, den exponentiellen Teil gering zu halten
+  \item Näherungsverfahren: Heuristiken mit Leistungsgarantie
+\end{itemize}
+Klasse von Problemen die zur Betrachtung stehen. \\
+\textbf{Quatrupel} $ (I\rho, S\rho, m\rho , opt\rho) $ zur Beschreibung eines Optimierungsproblems
+\begin{itemize}
+  \item $ I\rho $: geeignete Instanz eines Problems, genauer: "geeignet binär-codierte formale Sprachen".
+  \item $ S\rho $: Bildet auf Menge der möglichen Lösungen ab
+  \item $ m\rho $: x Instanz und y eine Lösung. Abbildung auf Maßzahl
+  \item $ opt\rho $: Möglichst kleines Ergebnis oder möglichst großes
+\end{itemize}
+\begin{itemize}
+  \item $ S*\rho: I\rho \rightarrow $ Menge der bestmöglichen Lösungen
+  \item $ m*\rho $ Wert oder Grenzwert einer bestmöglichen Lösung
+  \item * bedeutet idR bestmöglich
+\end{itemize}
+$\Rightarrow$ \textbf{Ziel}: Leistungsgröße (Folie 15) ist 1, wenn Lösung optimal ist
+
+\subsubsection*{Beispiel: Knotenüberdeckung}
+Möglichst wenige Knoten, um alle Kanten abzudecken
+\begin{itemize}
+  \item Zuordnung zu den Optimierungsparametern Folie 17
+  \item Verschiedene Beobachtungen zur Optimierung
+  \begin{itemize}
+    \item Zwei Knoten im Dreieck gehören dazu
+    \item Bei Knoten mit Grad 1 wird immer der Nachbar genommen
+    \item 
+  \end{itemize}
+  \item Auswählen eines Knotens bedeutet, dass diese Teile abgeschnitten werden
+  \item $\Rightarrow$ Vereinfachung des Graphen, zB neue Grad 1 Knoten
+\end{itemize}
+
+\paragraph*{Greedyverfahren, GreedyVC (Folie 23)}
+\begin{itemize}
+  \item Änderung der Grade bei Durchführung
+  \item Problem: Implementierung der Kantenlöschung (Kopieren des Graphen bei jeder Iteration nötig?)
+  \item Folie 24: Lösung insofern (inklusions-) minimal, als dass das Entfernen eines Knotens keine andere Lösung zulässt
+\end{itemize}
+
+\paragraph*{Suchbaumverfahren, Entscheidungsproblem (Folie 25)}
+Liefert exakte Lösungen
+\begin{itemize}
+  \item Zusätzlicher Parameter $ k $ ("Budget")
+  \item Zwei Abbruchskriterien:
+  \begin{itemize}
+    \item Alle Kanten abgedeckt
+    \item Nicht alle Kanten abgedeckt, aber $ k=0 $
+  \end{itemize}
+  \item Suchbaum im worst-case ein vollständiger Binärbaum, \textbf{aber} höchsten $ 2^{k} $ Schritte im Baum, da die Tiefe durch $ k $ begrenzt ist
+\end{itemize}
+\paragraph*{Näherungsverfahren (Folie 30)}
+Suchbaumverfahren ohne Fallunterscheidung. (Faktor 2-Approximations-Verfahren)
+\begin{itemize}
+  \item Bei jeder Kante muss einer der Knoten in die Überdeckung 
+  \item Lokaler Fehler höchsten Faktor 2
+  \item Zufall bei der Auswahl der Kanten kann zum Vorteil sein
+\end{itemize} 
+
+Näherung gibt Schranke für die minimale Lösung dadurch, dass Heuristik eine Faktor 2 Lösung zeigt.
+$\Rightarrow$ (Folie 31) Lösung mit 22 Knoten zeigt eine optimale Lösung mit 11 Knoten
+
+\subsubsection*{Beispiel: MAXSAT (Folie 32)}
+$ m\rho $ = Anzahl der Klauseln, die die Formel erfüllen
+\paragraph*{Einfacher Ansatz}
+\begin{itemize}
+  \item Alles 0 und alles 1 setzen, dann das bessere Ergebnis zurückliefern
+  \item $\Rightarrow$ liefert 2-Approximation
+\end{itemize}
+
+\subsubsection*{Beispiel: Unabhängige Knotenmengen (Folie 34)}
+Sehr schwer approximierbar
+
+\subsubsection*{Beispiel: Unabhängige Kantenmengen (Folie 35)}
+Lösung in Polinomialzeit, um eine untere Schranke für die Knotenüberdeckung zu finden
+
+
+\end{document}
