@@ -1,9 +1,8 @@
-# uni
 Mitschriften, Zusammenfassungen und Projekte im Master an der Universität Trier
 
 ## Sommersemenster 18
 [Formale Sprachen B](formale_sprachen_b/fsb.pdf)  
-[Information Retrieval](information_retrieval/ir2.pdf)
+[Information Retrieval](information_retrieval/ir2.pdf)  
 [Rechnerarithmetik](rechnerarithmetik/)  
 [Verteilte Systeme](verteilte_systeme/vs.pdf)  
 
