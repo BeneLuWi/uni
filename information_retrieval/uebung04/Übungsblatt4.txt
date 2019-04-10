@@ -1,0 +1,31 @@
+Benedikt Lüken-Winkels, 1138844
+
+Aufgabe 5:
+
+Verbesserungen:
+    -"Stemming" der Form, dass Groß- und Kleinschreibung ignoriert wird
+    - Ignorieren von Anführungszeichen und Klammern
+    - Abhängig vom Anwendungszweck der Tokenisierung Zahlen zusammenfassen
+
+
+Aufgabe 6:
+
+Therme, die in >5% der Dokumente vorkommen, sind Stoppworte
+
+
+Aufgabe 7:
+
+cacm.xml
+Total Bits Gamma Notation:  28213
+Total Bits Delta Notation:  31572
+Total Bits Int:             12671 * 32 = 405472
+
+Aufgabe 8:
+
+ca. Zeile 300
+
+Aufgabe 9:
+
+ca. Zeile 260
+
+Hook ca. bei Zeile 405

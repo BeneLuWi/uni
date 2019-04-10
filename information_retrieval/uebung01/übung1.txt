@@ -1,0 +1,25 @@
+1.Übung Information Retrieval 2
+Benedikt Lüken-Winkels, 1138844, s4beluek
+
+Übung 1:
+
+ö = c3 b6 (hex)
+
+
+Übung 2:
+
+a) hallo  =
+  (utf-8) = \x68\x61\x6c\x6c\x6f
+  (utf-16)= \u{68}\u{61}\u{6c}\u{6c}\u{6f}
+
+b) aßh ̧Ca =
+  (utf-8) = \x61\xc3\x9f\x68\x20\xcc\xa7\x43\x61
+  (utf-16)= \u{61}\u{df}\u{68}\u{20}\u{327}\u{43}\u{61}
+
+c) Анналь =
+  (utf-8) = \xd0\x90\xd0\xbd\xd0\xbd\xd0\xb0\xd0\xbb\xd1\x8c
+  (utf-16)= \u{410}\u{43d}\u{43d}\u{430}\u{43b}\u{44c}
+
+d) 🍟🍜🍔🚾🍺📷 =
+  (utf-8) = \xf0\x9f\x8d\x9f\xf0\x9f\x8d\x9c\xf0\x9f\x8d\x94\xf0\x9f\x9a\xbe\xf0\x9f\x8d\xba\xf0\x9f\x93\xb7
+  (utf-16)= \u{1f35f}\u{1f35c}\u{1f354}\u{1f6be}\u{1f37a}\u{1f4f7}

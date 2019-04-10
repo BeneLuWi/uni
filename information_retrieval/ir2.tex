@@ -1,0 +1,363 @@
+\documentclass{article}
+
+% Change font and reload config
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+
+
+\title{Information Retrieval 2 \\Zusammenfassung}
+\author{Benedikt Lüken-Winkels}
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Schriftsysteme, Zeichen und Alphabete}
+\subsection{Unicode}
+\paragraph{Ziele des Unicodedesigns}
+\begin{itemize}
+\item Universell einsetzbar: alle Zeichen können verwendet und dargestellt werden 
+\item Effizient: Einfacher Text ist leicht zu parsen, während komplizierte Zeichen eindeutig und schnell decodiert werden
+\item Eindeutig: Jedes Zeichen hat genau einen Unicode code point.
+\end{itemize}
+\paragraph{Designprinzipien von Unicode}
+\begin{itemize}
+\item Universality 
+\item Efficiency
+\item Characters, not glyphs: Zeichen werden auf Glyphen gemappt
+\item Semantics
+\item Plain text
+\item Logical order
+\item Unification: verschiedene Zeichen mit der gleichen Form, Nutzung und Eigenschaften aus verschiedenen Sprachen erhalten den gleichen code point
+\item Dynamic composition: Zeichen, wie Ü werden aus dem code point für U und dem non-spacing mark 'Anführungszeichen' 
+\item Equivalent sequences
+\item Convertibility
+
+\end{itemize}
+
+\subsubsection{UTF: Unicode Tansformation Formats}
+Mit Unicode 2.0 und UTF-16 werden alle Zeichen außerhalb des Basic mulitlingual plane durch high und low surrogate abgebildet. Auch leading und trailing surrogates.  \\
+\textbf{high surrogate}: 1024 code points  \\
+\textbf{low surrogate}:  1024 code points
+
+\paragraph{UTF-16}
+Kodierung eines Wortes außerhalb der BML in zwei Teilen:
+\begin{enumerate}
+\item Abziehen von 65536 (10000$_{hex}$) $\Rightarrow$ 20Bit Zahl im Bereich 00000$_{hex}$ - FFFFF$_{hex}$ beleibt übrig
+\item Aufteilen in 2 10 Bit Blöcke
+\item Dem ersten Block wird 110110 vorne angestellt, dem zweiten 110111: Erster Block = High surrogate, Zweiter Block = Low surrogate
+\end{enumerate}
+
+\paragraph{Java und Unicode}
+Zwei Identifier sind gleich, sobald sie den selben Unicode-Charakter für jedes Zeichen haben. Sie können also gleich aussehen, aber trotzdem verschieden sein. Zum Beispiel a aus verschiedenen Schriftsystemem (griechisch und lateinisch)
+
+\paragraph{Combining Class}
+Diakritische Zeichen können in fast beliebiger Reihenfolge codiert werden $\Rightarrow$ Jedes Zeichen erhält einen Wert zwischen 0 und 255. Anhand dieser Zahl wird die Reihenfolge der code points bestimmt, sodass das Zeichen eindeutig kodiert wird.
+
+
+\newpage
+\section{Textdokumente}
+
+\paragraph{Postscript}
+\begin{itemize}
+\item Turingvollständige Programmiersprache
+\item Stackorientiert: Postfix Operatoren / reverse polish notation
+\item Teilweise Verwendung als Zwischenschritt bei Druckern etc
+\item Problematisch bei maschineller Texterkennung, da fließender Übergang zwischen graphischen Elementen und Textzeichen
+\item[$\Rightarrow$] Überschreiben von Operatoren, wie 'show', sodass die Elemente in einer eigenen Datenstruktur gespeichert werden.
+\end{itemize}
+
+
+\paragraph{PDF}
+\begin{itemize}
+\item 7Bit ASCII Datei, \textbf{keine} Programmiersprache, also keine Schleifen oder If-statemets usw.
+\item Ähnlichkeiten zu Postscript: graphische Primitive
+\item Aufbau in Hierarchien in der Datenstruktur
+\item[$\Rightarrow$] Logische Struktur des Dokuments darstellbar
+\item Elemente:
+\begin{itemize}
+\item Dictionaries: Name-Wert-Paare
+\item Arrays: lineare Liste ohne Typen
+\item Booleans, Numbers, Strings, Names
+\item Streams: Anfang, Ende und Länge sind Tags im Dokument
+\end{itemize}
+\item Aufbau:
+\begin{itemize}
+\item Header: Codierung und Dekodierverfahren
+\item Body
+\item Cross-Reference Table: Enthält Zeiger für alle indirekten Objekte
+\item Trailer
+\end{itemize}
+\item \textbf{OCR} Optical Character Recognition extrahiert Text aus Bildern und erzeugt positionierten Text, der das Bild ersetzt.
+
+
+
+\end{itemize}
+
+
+
+\newpage
+\section{Exakte Suche in Strings}
+\subsection{Knuth-Morris-Pratt-Algorithmus}
+\textbf{Vorverarbeitung des Suchmusters:}
+\begin{align*}
+b \in \{0...k-1\}\\
+Suchmuster\ x &= x_{0} ... x_{k-1} \\
+echtes\ Suffix\ u &= u_{k-b} ... u_{k-1} \\
+echtes\ Praefix\ u &= u_{0} ... u_{b-1}, \ also\ x \neq u \\
+Rand\ r &= x_{0} ... x_{b-1} \wedge r = x_{b-k} ... x_{k-1}
+\end{align*}
+\framebox{Fortsetzung des Randes $r$ durch $a$, falls $ra$ Rand von $xa$ }
+\begin{itemize}
+\item Erstellung eines Arrays $d$ mit Länge($d$) = k+1, $d[i]$ ist die Länge des breitesten Randes für jedes Präfix der Länge $i$. Ist die Länge des Präfixes 0, so wird im Array der Wert -1 eingetragen.
+\item Prüfe, ob sich ein Rand von $b[m-1]$ durch $\alpha$ fortsetzen lässt. Wenn ja, $b[m] = b[m-1] + length(\alpha) $
+\end{itemize}
+\textbf{Suche:}
+\begin{itemize}
+\item Fange an, Zeichen für Zeichen zu vergleichen. Bei Mismatch, verschiebe um $| b[i] - i |$, sodass Suffix und Präfix überlappen. Dieser Teil muss nicht mehr überprüft werden.
+\end{itemize}
+\textbf{Laufzeit: } O(n) + O(m) 
+\begin{itemize}
+\item n Länge des Dokumentes 
+\item m Länge des zu durchlauf Suchstrings 
+\end{itemize} 
+
+\subsection{Boyer-Moore-Algorithmus}
+\textbf{Vorverarbeitung des Suchmusters}\\
+Sprungtabelle
+\begin{itemize}
+\item Bad-Character: Abstand zwischen dem letzten Vorkommen jedes Zeichens im Suchmuster zum Ende des Musters
+\item Good-Suffix: Abstand zwischen jedem Teilmuster
+\end{itemize}
+
+\textbf{Suche:}
+\begin{itemize}
+\item Lege das Muster linksbündig an den Suchstring an und vergleiche die Zeichen von rechts nach links. Bei Mismatch, die maximale Verschiebung von:
+\begin{itemize}
+\item \textbf{Bad-Character-Heuristik:} Verschiebung des Musters, bis Mismatchzeichen im Suchstring und letztes Vorkommen des Zeichens im Muster übereinanderliegen. Bei Verschiebung nach links: ein Feld nach rechts. Zeichen $\notin$ Muster: Komplett verschieben.
+\item \textbf{Good-Suffix-Heuristik:} Stimmt ein Suffix des Musters überein, wird das Muster bis zum nächsten Vorkommen des Suffixes im Muster verschoben oder komlett. 
+\end{itemize}
+\end{itemize}
+
+\textbf{Laufzeit:} 
+\begin{itemize}
+\item Günstigster Fall: Beim ersten Vergleich wird ein Zeichen gefunden, das nicht Muster vorkommt. O($\frac{n}{m}$)
+
+\end{itemize}
+
+\newpage
+\section{Vorverarbeitung von Dokumenten}
+\begin{itemize}
+\item Suchmaschinen gehen von statischen Dokumenten aus
+\item[$\Rightarrow$] ermöglicht Indexierung
+\end{itemize}
+\textbf{Indexe}
+\begin{itemize}
+\item Datenbank besteht aus Sammlung von Dokumenten. $\rightarrow$ Definition eines Dokuments wichtig (Seite, Text, Wort, ...)
+\item Vorverarbeitung von Termen:
+\begin{itemize}
+\item Stemming 
+\item Case-folding (zB Kleinschreibung)
+\item Auslassen von Stoppworten
+\end{itemize}
+
+\end{itemize}
+
+\subsection{Invertierte Dateien}
+\begin{itemize}
+\item Einträge der Form (Term, Zeigerliste auf alle Vorkommen)
+\item Indexkompression nötig, da zu viel Speicher benötigt
+\end{itemize}
+\subsubsection{Differenzdarstellung}
+\begin{align*}
+&<t, f_{t}, [d_{1}, d_{2}, ..., d_{ft}]> t=term, f_{t}= number(docs)\\
+&<t, f_{t}, [d_{1}, d_{2}-d_{1}, ..., d_{ft}-d_{ft-1}]>
+\end{align*}
+$\Rightarrow$ zu wenig Kompression
+
+\subsubsection{$\gamma$-Kode}
+Anzahl der folgenden übrigen Bits als Präfix im Unärcode $\Rightarrow$ Vorderste 1 wird abgeschnitten\\
+\begin{center}
+\begin{tabular}{c|c}
+$\gamma$-Kode & Binär \\
+\hline
+10 0 & 10\\
+10 1 & 11\\
+110 00 & 100\\
+... & ...\\
+1110 000 & 1000
+
+\end{tabular}
+\end{center}
+\subsubsection{$\delta$-Kode}
+Anzahl der folgenden Bits im Präfix im $\gamma$-Kode \\
+
+\begin{center}
+\begin{tabular}{c|c}
+$\delta$-Kode & Binär \\
+\hline
+100 0 & 10\\
+100 1 & 11\\
+101 00 & 100\\
+... & ...\\
+1101 000 & 1000
+
+\end{tabular}
+\end{center}
+
+\subsubsection{Globales Bernoulli-Modell/Golomb Code}
+\paragraph{Darstellung} der Zahl $n$ durch Quotienten $q$ und Rest $r$, der bei der Division durch Parameter $b$ übrig bleibt. Mit dem Steuerungsparameter $c$ wird die Ausgabe codiert. $c$ ergibt sich aus dem aufgerundeten $\log_{2}b$. \\
+Zunächst werden $q+1$ 1en gefolgt von einer 0, dann wird abhängig von $c$ entweder:
+\begin{itemize}
+\item $r$ als Binärcode mit $|[r]_{2}| = c-1$, falls $r < 2^{c} - b$ oder
+\item $r +  2^{c} - b$ als Binärcode mit $|[r +  2^{c} - b]_{2}| = c$ geschrieben.
+\end{itemize}
+\paragraph{Vorteile} Je größer der Parameter, desto langsamer wächst die Anzahl der zur Darstellung benötigten Bits, aber desto größer ist die Anzahl der minimal benötigten Bits für die kleinen Zahlen. 
+\paragraph{Voraussetzung} Geometrische Verteilung der zu kodierenden Daten nötig
+
+\subsection{Invertierte Dateien für das Vektorraummodell}
+\paragraph{Idee} Zusätzliche Speicherung der Vorkommen eines Terms innerhalb eines Dokuments.
+\paragraph{Aufbauschritte}
+\begin{enumerate}
+\item Aufteilen des Texts
+\item Erstellen einer Häufigkeitsmatrix
+\item Übertragen in Tupel (Transponieren der Matrix)
+\end{enumerate}
+
+\subsubsection{Memory-based inversion}
+\paragraph{Idee} Erstellen einer Hash-Tabelle
+
+\subsubsection{Sort-based inversion}
+\paragraph{Idee} Indexierung bei großen Dokumenten nur effizient, wenn sequenziell gearbeitet wird.
+\begin{enumerate}
+\item Erstellung eines Tupels für jeden Term in den Dokumenten <Term(-nummer), Dokument, Vorkommen von Term in Dokument>
+\item Sortierung der Tupel nach Dokument und Aufteilung in Blöcke
+\item Mergesort nach Termnummer
+\end{enumerate}
+\paragraph{Sortierverfahren}
+\begin{itemize}
+\item Quicksort: am schnellsten, aber genügend Hauptspeicher notwendig
+\item Mergesort schnelles und stabiles Sortierverfahren, wenig Hauptspeicher nötig
+\item[$\Rightarrow$] Quicksort, soglange genug Hauptspeicher, dann Mergesort
+\end{itemize}
+
+\subsubsection{Kanonischer Huffman code}
+\paragraph{Idee} Präfixfreie Kodierung der Terme $\rightarrow$ je seltener das Wort, desto Länger die Kodierung. Worte gleicher Länge sind alphabetisch sortiert
+\paragraph{Besonderheiten des kanonischen Huffman codes} Nach der Bestimmung der Codewortlänge werden die Terme innerhalb der Längenklassen sortiert und erhalten dann aufsteigende (Binär-)Codierungen.
+\paragraph{Huffman-Baum zur Bestimmung der Codelänge} Erstellung eines Huffman-Baums für Wort der Länge n
+\begin{enumerate}
+\item Erstellen eines Arrays mit 2n Einträgen (0 bis n-1: Zeiger auf Heap; n bis 2n-1: Häufigkeiten)
+\item Bauen eines Min-Heaps (Kindknoten sind größer)
+\item Iterieren
+\begin{enumerate}
+\item Entfernen der Wurzel $r_{1}$, Indizes der Pointer rücken nach links
+\item Entfernen der Wurzel $r_{2}$, erstes Feld bleibt frei
+\item Schreibe die Summe der Häufigkeiten an die hinterste Stelle der Pointer. Die Stellen der Häufigkeiten werden durch Pointer auf die Summe ersetzt. Schreibe einen Pointer auf die Summe an die Stelle des Pointers von $r_{2}$
+\item Stelle Min-Heap wiederher
+\end{enumerate}
+\item Tiefe des Blattes im neuen Heap ist die Länge des Codewortes
+\end{enumerate}
+
+\paragraph{Problem} Degenerierter Baum bei ungerader Anzahl an Blättern/Knoten $\Rightarrow$ Einführen von Dummyknoten nötig
+
+\subsection{Signatur-Dateien}
+\paragraph{Idee} Terme werden gehasht und dann durch Superimposing (Überlagerung) aneinandergehangen.
+\begin{itemize}
+\item Test ob alle Einsen der Anfragesignatur gesetzt sind
+\item Zu viel Überlagerung sorgt für Ungenauigkeit und vielen false Drops
+\item Bei \textbf{vertikaler Partitionierung} werden nur die 'Signaturscheiben' genommen, wo die Anfragebits 1 sind (?)
+\end{itemize}
+
+
+\newpage
+\section{Edit-Distanz, Approximative Suche}
+\subsection{Phonetische Verfahren}
+\paragraph{Soundex} Ähnlichkeit durch Normierung bestimmen (Löschen der Vokale, Mehrere Zeichen haben den gleichen Code)
+\paragraph{Phonix} Soundex Variante, bei der Buchstaben transformiert werden
+
+\subsection{String-Ähnlichkeit}
+\subsubsection{Levenshtein-Metrik/Edit-Distanz}
+\paragraph{Idee}Abstand d zwischen zwei Worten, falls d Operation nötig sind, um das eine in das andere Wort zu überführen.
+\paragraph{Substring-Suche} Setze obere Zeile auf 0: Kommt unten eine 0 an, Substring gefunden
+\paragraph{Ukkonen Cut-off} Abbrechen der Berechnung, sobald die Fehlertoleranz erreicht ist. Dafür: Initialisierung der ersten Zeile mit 0
+
+\subsubsection{Landau-Vishkin (brute-force}
+\paragraph{Idee} Finden aller Vorkommen des Suchpatterns mit dem Editabstand $\leq$ k mit Hilfe von Suffix-Bäumen
+
+\subsubsection{Shift-And-Algorithmus}
+\paragraph{Idee} Suchanfragen sind nicht länger als ein Maschinenwort (64 Bit). Dadurch Parallelisierung der Bit-Operationen ($\Rightarrow$ Beschleunigung)
+
+\paragraph{Verfahren}
+\begin{enumerate}
+\item Erstelle Bit-Vektor mit Position des Zeichens für jeden Buchstaben im Suchmuster. (Einige können zusammengefasst werden)
+\item Vergleich mit Text:
+\begin{enumerate}
+\item SHIFT rechts
+\item OR mit 100...00
+\item AND mit Bit-Vektor des Zeichens
+\end{enumerate}
+\item Kommt eine 1 durch, bzw 'unten an' $\Rightarrow$ Match
+\end{enumerate}
+\paragraph{Erweiterung} Weitere Arrays R$_{j}^{d}$ kodieren Arrays mit $d$ Fehlern. Verknüpfung bedeutet linearen Mehraufwand $\Rightarrow$ Levenshtein auf Bit-Ebene runterbrechen und Bit-parallel zu machen
+\paragraph{Verwendung} Wird bei \textbf{agrep} verwendet. Platz O(m), Zeit O(n)
+
+\subsubsection{Längste gemeinsame Teilsequenz LCS}
+\paragraph{Idee} Wenige Operationen um von String1 zu String2 zu kommen.
+\paragraph{Verfahren}
+\begin{enumerate}
+\item Baue Matrix auf: 1. Spalte und 1. Zeile := 0
+\begin{itemize}
+\item bei gleichen Zeichen ++
+\item sonst Maximum von oben und links
+\end{itemize}
+\item Backtracking der Lösung
+\item[$\Rightarrow$] Diagonale bedeutet Teilsequenz
+\end{enumerate}
+\paragraph{Verbesserung} Naiv sehr hoher Platzbedarf. Durch Monotonie der Matrix in Spalte, Zeile und Diagonale müssen nur Eckpunkte kodiert werden.
+\section{Suffix-Bäume}
+\paragraph{Idee} Wird derselbe Text immer wieder durchsucht, ist es sinnvoll eine Hilfsdatenstruktur aufzubauen.
+\paragraph{Trie} Enthält alle möglichen Wege die Worte zu erstellen: Ein Knoten für jeden Buchstaben des Alphabets
+\paragraph{Suffix-Trie} Enthält alle möglichen Suffixe des Dokuments: Ende eines Suffixes wird durch $\$_{1} ... \$_{n}$ für $n$ Dokumente beschrieben. \\
+Hoher Platzaufwand $\Rightarrow$ kompakter \textbf{Patricia Trie:}  linearer Platzaufwand, da Daten komprimiert dargestellt werden und nicht jedes Zeichen einen Knoten bekommt. Zudem kann die Kantenbeschriftung durch Position und Länge des Teilstrings erfolgen\\
+Realisierung:
+\begin{itemize}
+\item falls $|\Sigma|$ groß: Hashtabelle für den Baum
+\item falls $|\Sigma|$ klein: Array
+\item balancierte Bäume
+\end{itemize}
+
+\subsection{Approximate String Matching}
+\paragraph{Idee} Baumverzweigung für jede Spalte der Edit-Distanz. Tiefe wird durch Fehlertoleranz beschränkt
+
+\paragraph{Impliziter Suffix-Baum} Streichen der Endzeichen aus einem Suffix-Baum, Zusammenfassen aller Knoten mit Ausgangsgrad kleiner 2
+\paragraph{Suffix-Erweiterung} Erweiterung eines vorhandenen Suffixes $\beta$ um ein neues Zeichen S(i+1). 3 Fälle sind zu unterscheiden:
+\begin{enumerate}
+\item $\beta$ endet in einem Blatt: Erweiterung um ein Zeichen (neues Blatt) $\beta$S(i+1)
+\item $\beta$ endet nicht in einem Blatt und es gibt eine weiterführende Kante, die nicht S(i+1) ist
+\begin{enumerate}
+\item Neues Blatt: Kante wird mit $\beta$S(i+1) beschriftet
+\item $\beta$ endet in mitten eine Kante: Kante wird gesplittet und ein neues Blatt S(i+1) eingefügt
+\end{enumerate}
+\item $\beta$S(i+1) ist bereits im Baum
+\end{enumerate}
+
+\paragraph{Suffix-Links} Verlinkung innerhalb des Baums. Sobald es einen Teilstring gibt, der bereits im Baum vorgekommen ist, wird dieser dem Baum angehangen und eine Verlinkung in Form eines Eintrags in eine lineare Liste zum vorherigen Vorkommen eingetragen.
+
+
+
+
+\end{document}
+
+
+
+%=============================
+%
+% END
+%
+%=============================

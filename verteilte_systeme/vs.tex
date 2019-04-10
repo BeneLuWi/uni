@@ -1,0 +1,790 @@
+\documentclass{scrartcl}
+
+% Change font and reload config
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+\usepackage{hyperref}
+
+\usepackage{amsfonts,amsmath,amssymb,amsthm} 
+\usepackage{marvosym}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+
+\title{Verteilte Systeme \\Zusammenfassung}
+\author{Benedikt Lüken-Winkels}
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+%===============
+%
+%  Section
+%
+%===============
+
+\section{Grundlagen}
+
+\paragraph{Verteiltes System}
+\begin{itemize}
+\item Zusammenschluss unabhängiger Computer
+\item kein gemeinsamer Speicher 
+\item Kommunikation über Nachrichten 
+\end{itemize} 
+
+%===============
+% Subsection
+%===============
+
+\subsection{Verschiedene Systemarten}
+
+\begin{itemize}
+\item Client-Server-System: Viele Clients greifen auf einen oder mehrere Server zu.
+\item Verteilte Anwendung: Durch die Programmierung der Anwendung wird das verteilte System erstellt.
+\item Verteiltes Betriebssystem: Das Betriebssystem selbst ist verteilt, für Benutzer und Anwendungen ist dies nicht sichtbar.
+\end{itemize}
+
+
+
+%===============
+% Subsection
+%===============
+
+\subsection{Vorteile} \label{vort}
+
+\begin{itemize}
+\item Speedup
+\begin{itemize}
+\item $T_1(n)$ = Rechenzeit auf einem Kern, $T_k(n)$ Rechenzeit auf $k$ Kernen 
+\item $\frac{T_1(n)}{T_k(n)} \leq k$
+\item zu viel Lastverteilung, kann zu $k<1$ führen und damit verlangsamen
+\end{itemize} 
+\item Redundanz $\Rightarrow$ Ausfallsicherheit. Naive Redundanz zu teuer: Primary Backup Approach. Einfacher 2. Rechner
+\item Räumliche Verteilung der Partner
+\end{itemize}
+
+
+
+%===============
+%  Subsection
+%===============
+
+\subsection{Probleme} \label{prob}
+
+\begin{itemize}
+\item Wahrscheinlichkeit von Fehlverhalten wächst mit Anzahl der beteiligten Prozesse
+\item Erkennen von Teilausfällen $\Rightarrow$ zB regelmäßiges Anpingen
+\item Synchronisation der Prozesse $\Rightarrow$ Wechselseitiger Ausschluss beim Dateizugriff (Mutex)
+\item Deadlocks (Zyklische Wartesituation mehrerer Prozesse)
+\item Debugging bei verteilter Berechnung kompliziert
+\item Nachrichtenbasierte Kommunikation fehleranfällig (Latenz bei der Übermittlung)
+\end{itemize}
+
+
+
+%===============
+%  Subsection
+%===============
+
+\subsection{Aktormodell} \label{aktm}
+
+\begin{itemize}
+\item Aktoren (aktiv/passiv): Einfache, beschreibbare Programme (single Threads) die sequentiell und deterministisch arbeiten
+\begin{itemize}
+\item aktiv: Verarbeitet, verändert Zustände, verschickt Nachrichten etc. Kann sich selbst in Passivmodus versetzen
+\item passiv: kein Ressourcenverbrauch. Nur wieder aktivierbar durch Nachricht von Außen
+\end{itemize}
+\item Kommunikation über Nachrichten
+\begin{itemize}
+\item Jede Nachricht, die Versendet wird kommt an (Latenz kann aber beliebig sein). 
+\end{itemize}
+\item Terminierung eines Programms
+\begin{itemize}
+\item Problem: Viele Aktoren im Verteilten System
+\item Terminiert, wenn alle Aktoren passiv sind \textbf{und} keine Nachricht unterwegs ist, die andere Aktoren aufwecken (schwierig zu überprüfen)
+\item Trick: Jeder Aktor hat Ein und Ausgangzähler (funktioniert nur wenn es eine globale Zeit gäbe)
+\end{itemize}
+\item[$\Rightarrow$] Einschränkungen (kein neuer Thread, kann sich nicht selbst aufwecken) sorgt für Einfachheit der Lösung.
+\item[$\Rightarrow$] Multi-Aktorlösung nicht so effizient, wie Mutil-Threadedlösung
+\item Beispiele Go, Clojure
+\end{itemize}
+\paragraph{Single-System-Image} \label{ssi} Mehrere Rechner agieren als ein einzelnes System. Verwendung verteilter Software (Beispiel: Data-Center mit schnellem Verbindungsnetz im räumlich begrenzten Umfang)
+
+
+%===============
+%
+%  Section
+%
+%===============
+
+
+
+\newpage
+\section{Internet of Trust} \label{cap}
+\paragraph{CAP-Theorem} Ein Verteiltes System kann bestimmten Grad erreichen. $\Rightarrow$ nur 2 der 3 Möglichkeiten kombinierbar
+\begin{itemize}
+\item Consistency: Replikate von Datensätzen müssen gleich sein
+\item Availability: Zuverlässige Antwort
+\item Partitioned Tolerance: Auslagerung, Ausfalltoleranz eines Knotens
+\end{itemize}
+Beispiele:
+\begin{itemize}
+\item CA: Datenbanksystem
+\item AP: zB verschiedener Cache
+\item CP: Bankautomat
+\end{itemize}
+
+
+%===============
+%
+%  Section
+%
+%===============
+
+\section{Synchronisation}
+
+\paragraph{Problem} Es gibt keine global genau gleiche Zeit, weil sich Information nur mit endlicher Geschwindigkeit bewegt.
+\paragraph{Idee} Entweder ein Rechner hat die exakte Uhr oder jeder Rechner hat eine ungefähr exakte Uhr. 
+\paragraph{Grundannahme} Uhren haben eine lineare Abweichung von der Idealzeit.\\
+ Abweichung $\exists p > 0: 1-p < \frac{dC}{dt}<1+p $
+
+
+%===============
+% Subsection
+%===============
+
+\subsection{Pragmatische Uhrensynchronisation}
+
+\paragraph{Idee} Uhren werden 'gezwungen' sich zu synchronisieren
+\begin{itemize}
+\item F. Cristian: passiver Zeitserver, der auf Anfrage Timestamps liefert
+\item Berkeley: aktiver Zeitserver synchronisiert die Clients
+\item NTP (Network Time Protocol): \ref{ntp}
+\item DCF77: Zentraler Zeitserver in Braunschweig, Sender in Frankfurt. Senden per Funk (1500 km Reichweite)
+\end{itemize}
+
+
+%===============
+%  Subsection
+%===============
+
+\subsubsection{NTP} \label{ntp}
+
+\begin{itemize}
+\item Verwendet UDP
+\item Baumstruktur aus Stratum Servern mit Atomuhren: Jeder Stratum Server synchronisiert sich mit kleinerem S-Server (Stratum$_2$ mit Stratum$_1$, Stratum$_3$ mit Stratum$_2$...). Kann mit GPS-Synchro auf eigenem Gerät simuliert werden.
+\item Vorteile eines eigenen Stratum$_1$-Servers: Sehr geringe Zeitbasis für sehr genaue Netzwerkmessungen
+\item ntpq = lokaler Dienst auf Unix-Geräten
+\end{itemize}
+
+
+
+%===============
+%  Subsection
+%===============
+
+\subsection{Theoretische, logische Uhrensynchronisation}
+
+\paragraph{Idee} Aus kausaler Abhängigkeit folgt zeitliche. Vergleichbare Zeitstempel $\Rightarrow$ Ereignis$_1$ ist vor Ergeignis$_2$. 
+
+\begin{itemize}
+\item Alles was einen Einfluss auf die Ausführung des Programms hat ist ein \textbf{Ereignis}
+\begin{itemize}
+\item Lokale Ereignis
+\item Kommunikationsereignisse
+\end{itemize}
+\item Zwischen 2 Ereignissen gibt es immer ein weiteres Ereignis
+\item Kausalität
+\begin{itemize}
+\item Ursache findet vor der Wirkung statt
+\item Kausalitätskette: aufeinander folgende Ereignisse sind voneinander abhängig
+\item Kausalunabhängig: Ereignisse bedingen sich nicht gegenseitig
+\end{itemize}
+\item[$\Rightarrow$] Ereignisse erhalten Zeitstempel wo die Kausalität aus dem Vergleich gezogen wird. 
+\item[$\Rightarrow$] \textbf{Uhrenbedingung}
+\begin{itemize}
+\item $e_n <_k e_m \Rightarrow LC(e_n) < LC(e_m)$ ($LC$ ist Zeitstempel) 
+\end{itemize}
+\item Lamport-Zeit \ref{lamp}
+\item Vektor-Zeit \ref{vekt}
+\end{itemize}
+
+
+
+%===============
+%  Subsection
+%===============
+
+\subsubsection{Lamport-Zeit } \label{lamp}
+\paragraph{Idee} Einfachste logische Uhr. Jeder Rechner erhält n Bit-Zähler. Passiert ein Ereignis, wir die Uhr erhöht.
+
+\begin{itemize}
+\item Lokales Ereignis: Erhöhe Clock um 1
+\item Sendeereignis: Erhöhe Clock um 1, sende eigenen $LC$
+\item Empfangsereignis: Maximum aus eigenem und empfangenen $LC$ ist neuer $LC$, $LC + 1 \Rightarrow$ garantiert größerer Zeitstempel für Empfangsereignis
+\item Nicht injektiv: sind 2 Zeitstempel gleich, folgt daraus nicht, dass die Ereignisse gleich sind
+\end{itemize}
+
+\paragraph{Uhrenbedingung?} Klar für lokale Ereignisse; Empfangsereignis immer größer, als Sendeereignis\\
+Umkehrung gilt nicht
+
+\paragraph{Erweiterte Lamport-Zeit} Zusatzkriterium um Vergleichbarkeit total zu machen
+\begin{itemize}
+\item Jedes Gerät hat eine eindeutige Adresse (zB IP-Adresse)
+\item Zeitstempel werden mit Adresse versehen
+\item Totale Ordnung
+\begin{itemize}
+\item Sind 2 Zeitstempel gleich, wird auf die Ordnung auf den Adressen zurückgegriffen (willkürlich) 
+\end{itemize}
+\item Lamport-Zeit funktioniert nur bei geeigneter Größe für den Zähler $\Rightarrow$ Muss bei jeder Nachricht übermittelt werden
+\end{itemize}
+
+%===============
+%  Subsection
+%===============
+
+\subsubsection{Vektor-Zeit} \label{vekt}
+\paragraph{Idee} Zeitstempel ist ein Vektor. $|Vektor|$ = Menge an Rechnern im System.
+\begin{itemize}
+\item Jeder Rechner $k$ hat eine Vektorclock $VC_k$
+\item Lokales Ereignis: $VC_k[k]++$
+\item Sendeereignis: $VC_k[k]++$, sende $VC_k$
+\item Empfangsereignis: Empfänger erhöht seinen Wert im $VC_k$, nimm komponentenweise das Maximum
+\item Kausal abhängig: ein Vektor ist komponentenweise $\leq$ als der vorherige
+\item Kausal unabhängig: keiner der Vektoren ist größer als der andere
+\end{itemize}
+
+
+
+%===============
+%
+%  Section
+%
+%===============
+
+\section{Mutex - Verteilter Wechselseitiger Ausschluss} \label{mutex}
+\paragraph{Idee} Nur ein Gerät darf in die Critical Section. Anwendung: Primary schmiert ab $\Rightarrow$ Nur einer der Backups wird neuer Primary. \\
+
+\begin{center}
+\begin{tabular}{l|l|c}
+	\multicolumn{1}{c|}{\textbf{Theorie}} & 
+	\multicolumn{1}{c|}{\textbf{Nachteile}} & 
+	\multicolumn{1}{l}{\textbf{Komplexität}} \\ 
+\hline
+Zentraler Ansatz/Server & SPOF & $O(1)$ \\
+Token-Ring Le Lann& Token kann hängen bleiben & $O(1 \ldots \infty)$ \\
+Verteilte Queue Lamport &  & $O(3n)$ \\
+Maekawa & Deadlockgefahr & $O(\sqrt{n})$ \\
+Raymond & & $O(log_k n)$
+\end{tabular}
+\end{center}
+
+\paragraph{Symmetrie} In einer symmetrischen Lösung führen alle beteiligten exakt die selben Operationen aus, um ein Problem zu löse: Lamport; Maekawa eher symmetrisch 
+\paragraph{Asymetrie} Führt schnell zum SPOF: Zentraler Server; Raymond eher asymmetrisch (Blätter haben fast keine Funktion)
+\paragraph{Fazit} Jeder Algorithmus ist Optimal für seine Symmetrieklasse
+%===============
+%  Subsection
+%===============
+
+\subsection{Zentraler Ansatz}
+\begin{itemize}
+\item Zentraler Server serialisiert die Anfragen
+\item Request des Clients an Server
+\item Erster Client in der Queue bekommt das Grant
+\item Release von Client an Server 'bin fertig'
+\item Pop Queue
+\item[\Lightning] SPOF, 3 Nachrichten (minimum), Bottleneck bei Server möglich
+\end{itemize}
+
+
+%===============
+%  Subsection
+%===============
+
+\subsection{Token-Ring - Le Lann}
+Le Lann's Algorithmus
+\begin{itemize}
+\item Rechner sind in einem physischen Ring angeordnet
+\item Nur wer das Token hat, kann senden
+\item Wer in den kritischen Abschnitt will, wartet auf das Token
+\item \Lightning Token kann hängen bleiben
+\end{itemize} 
+
+
+%===============
+%  Subsection
+%===============
+
+\subsection{Verteilte Warteschlange - Lamport}
+Lamport, Verhinderung des SPOF eines zentralen Servers
+\begin{itemize}
+\item Anfragen sind in Warteschlange serialisiert
+\item alle Rechner haben eine Kopie der Warteschlange
+\item[$\Rightarrow$] Einigkeit über Reihenfolge der Requests in der Warteschlage durch \textbf{Agreementprotokoll}, zB Blockchain
+\begin{itemize}
+\item aus Unicast für Anfrage wird Multicast an alle
+\item erweiterte Lamport-Zeitstempel als Ordnung auf den Queues
+\item \Lightning einige Requests möglicherweise noch unterwegs
+\item[$\Rightarrow$] Zwischen zwei Nachrichten besteht eine FIFO Ordnung: Nachricht$_2$ kommt nie vor Nachricht$_1$ an.
+\begin{itemize}
+\item Alle die ein Request empfangen, senden ein Acknowledge zurück
+\item Ack ist kausale Folge aus Request (größerer ZS)
+\item Min über alle Acks $\Rightarrow$ Requester bekommt keinen kleineren Zeitstempel als Min(Acks) mehr
+\item Queue wird in 2 Hälften geteilt: Ab dem Minimum ist die Queue statisch, da sich nichts mehr davor einreihen kann. Der Rest kann sich weiterhin verändern.
+\end{itemize}
+\end{itemize}
+\end{itemize}
+
+\paragraph{Laufzeit}
+\begin{itemize}
+\item Request an alle: $0(n)$ oder $0(1)$, je nach Multicastfähigkeit
+\item Acks von allen: $O(n)$, n-1 Unicasts
+\item Release als Muticast an alle $O(n)$
+\item[$\Rightarrow$] Verbesserung der Laufzeit durch Verzögerung unnötiger Acks
+\end{itemize}
+
+
+%===============
+%  Subsection
+%===============
+
+\subsection{Maekawa} \label{maek}
+\paragraph{Idee} 
+\begin{itemize}
+\item $n = m^2$ Knoten werden im Gitter angeordnet
+\item Will ein Knoten in die Critical Section wird das Lamport-Verfahren mit den Knoten in derselben Spalte und Zeile gestellt, also $2m = 2 \sqrt{n}$ Unicasts
+\item Es gibt immer 2 Schnittknoten, die beide Requests sehen $\Rightarrow$ einer von beiden ist kleiner und erhält Ack
+\item \Lightning Deadlockgefahr: die Schnittknoten senden verschiedene (falsche) Grants $\Rightarrow$ Revoke nach vergleich der Lamport-Zeit
+\end{itemize}
+
+
+%===============
+%  Subsection
+%===============
+
+\subsection{Raymond} \label{raym}
+
+\begin{itemize}
+\item Essentiell ein Token-Ring
+\item Ausbalancierte Baumstruktur mit logaritmischer Tiefe und gerichteten Kanten
+\item Kanten zeigen auf Knoten mit dem Token
+\item Request wird mit ZS in Tokenrichtung geschickt
+\item \Lightning Der Knoten mit dem Token darf nicht ausfallen 
+\item Je höher der Grad der Kanten, desto mehr nähert sich die Baumstruktur dem zentralen Server. $k\leq n-1$
+\end{itemize}
+
+
+%===============
+%
+%  Section
+%
+%===============
+
+\section{RPC - Remote Procedure Call}
+\paragraph{Idee} Unterprogramme kommunizieren mit Remotegerät, ohne dass der Aufrufer dies mitbekommt $\Rightarrow$ Verbergen von Send/Receive
+
+
+%===============
+%  Subsection
+%===============
+
+\subsection{State-Variable}
+\begin{itemize}
+\item Lokale Variablen: lokal auf Heap allokiert
+\item State-Variablen: Zugriff auf Variable nach außen/für andere geöffnet
+\begin{itemize}
+\item Anfrage nach Content an Gerät mit Variable. Zurücklieferung des Wertes
+\item Gefahr in Polling-Schleife zu geraten
+\end{itemize}
+\end{itemize}
+
+\paragraph{Bäckerei-Algorithmus} Array mit $|Array| = |beteiligte\ Prozesse|$. Jeder Prozess hat seinen Eintrag im Array und nimmt das Max(Array) + 1 für seinen Wert
+
+
+
+
+%===============
+%
+%  Section
+%
+%===============
+
+\section{Verteilte Terminierung}
+\paragraph{Frage} Ist das Programm fertig? $\Rightarrow$ Trivial für sequentiellen Fall
+\begin{itemize}
+\item Ergebnisorientierte Terminierung: Ist ein Prädikat true, ist das System terminiert $\Rightarrow$ Komplexität im Prädikat: UND sind gleichzeitig zu überprüfen. Erfüllbarkeit ist nicht immer gegeben
+\item Kommunikationsbasierte Terminierung: Aktormodell $\Rightarrow$ alle Aktoren passiv und keine Nachricht unterwegs. Nachrichten zählen und Observer für Aktoren
+\begin{itemize}
+\item Basisnachrichten
+\item Kontrollnachrichten: Nachrichten des Koordinators. Fragt Zustandsinformationen ab. $|Empfangen| = |Gesendet|$ bedeutet Terminierung
+\end{itemize}
+\end{itemize}
+
+
+%===============
+%  Subsection
+%===============
+
+\subsection{Kommunikationsbasierte Terminierung}
+\paragraph{Doppelzählverfahren} Koordinator fragt erneut nach $|Empfangen|$ und $|Gesendet|$ nachdem von allen die Antwort kam $|Empfangen_1| = |Gesendet_1| = |Empfangen_2| = |Gesendet_2|$
+
+
+%===============
+%  Subsection
+%===============
+
+\subsection{Vektormethode}
+\paragraph{Idee} Wie bei Vektorzeit $\Rightarrow$ Vektor mit $n$ Einträgen für $n$ Aktoren.
+\begin{itemize}
+\item Senden: addieren, Empfangen: subtrahieren 
+\item Kein Koordinator 
+\item Null-Vektor $\Leftrightarrow$ terminiert
+\end{itemize}
+
+\paragraph{Nachlaufender Kontrollvektor} Warte bis Aktor passiv und wandere dann zu Aktor mit Wert $\neq$ 0
+
+
+
+\newpage
+%===============
+%
+%  Section
+%
+%===============
+
+\section{Election}
+
+\begin{itemize}
+\item Fainess wird nicht verlangt $\Rightarrow$ es darf mehrfach der selbe 'gewinnen'
+\item (Bei Mutex immer ein anderer)
+\item \Lightning Brechen von Symmetrie erzeugt SPOF
+\item Verteilte Minimum/Maximumsuche
+\end{itemize}
+\paragraph{Anwendungsfall} Backup übernimmt, falls Primary versagt (Check via Heartbeat oder Watchdog-Timer)
+\begin{itemize}
+\item Mehrere Backups $\Rightarrow$ einer muss gewählt werden
+\end{itemize}
+
+%===============
+%  Subsection
+%===============
+
+\subsection{Einfacher Election-Algorithmus}
+Funktioniert für kleine Graphen
+\begin{itemize}
+\item Prozessidentifikator $M$ wird bei allen Prozessen vermerkt 
+\item Eigener Wert wird an alle Nachbarn geschickt
+\item Ist eigener Wert < Nachricht $\Rightarrow M$ aktualisieren
+\item[$\Rightarrow$] Alle haben Maximum der anfragenden Prozesse
+\end{itemize}
+
+
+
+\newpage
+%===============
+%
+%  Section
+%
+%===============
+
+\section{Schnappschüsse}
+Liefert konsistente Schnitte
+\begin{itemize}
+\item Foto vom Systemzustand $\Rightarrow$ Entscheidungen im Algorithmus
+\item Koordinator
+\item \textbf{Konsistenz eines Schnitts}: Ist ein Ereignis links des Schnitts $\Rightarrow$ dann ist das kausalabhängige Ereignis auch im Schnitt
+\item Gummibandtransformation, um Abfrage gleichzeitig zu habe
+\end{itemize}
+
+
+
+%===============
+%  Subsection
+%===============
+
+\subsection{Einfärben}
+\paragraph{Idee} Garantieren eines konsistenten Schnitts
+\begin{itemize}
+\item Koordinator fragt Zustand ab: alle Prozesse und Nachrichten rot
+\item Hat ein Prozess die Antwort zurückgesandt wird er schwarz
+\item Erhält ein roter Prozess eine schwarze Nachricht vor der Nachricht des Koordinators $\Rightarrow$ Koordinatornachricht ist auf dem Weg. Schicke Nachricht an Koordinator und ändere Farbe
+\item Erhält ein schwarzer Prozess eine rote Nachricht $\Rightarrow$ schicke weiter an Koordinator
+\end{itemize}
+
+
+
+\newpage
+%===============
+%
+%  Section
+%
+%===============
+
+\section{Lastverteilung} \label{last}
+\paragraph{Kreative Lastverteilung} Programmierung: sehr komplex
+\paragraph{Mechanische Lastverteilung} Lastpakete werden automatisch an Rechner verteilt. Entscheidung, welches Gerät geeignet ist. Je aufwändiger die Suche, desto geringer ist der Speedup
+\begin{itemize}
+\item Proaktiv: Rechner melden Last regelmäßig
+\item Reaktiv: Last muss angefragt werden
+\item Systemspezifisch: Prozesse
+\item Anwendungsspezifisch: Verteilbare Berechnungsabschnitte
+\item Probleme:
+\begin{itemize}
+\item Paketgröße muss stimmen
+\item Trägheit des Systems: Veraltete Informationen können zu Überlastung führen
+\end{itemize}
+\end{itemize}
+
+\paragraph{Lastmetrik} Vergleichbarkeit der Lastverteilung
+\begin{itemize}
+\item Prozessorauslatung: zB Ready Queue
+\item Speicherauslastung
+\item Kommunikationslast
+\end{itemize}
+
+\paragraph{Verteilung der Lastwerte}Push: Verteile Info über eigene Last; Pull: Frage nach Last der anderen
+\begin{itemize}
+\item Alle n-1 fragen
+\item Random
+\item n-Hop
+\end{itemize}
+Lösungsansatz
+\begin{itemize}
+\item Lokale Informationen über Lasten anderer merken
+\item Keine großen Pakete
+\item Last fällt Exponentiell ab
+\item Statisch: Vor der Ausführung wird eine Lastverteilung bestimmt
+\item Dynamisch: Reaktion auf Lastpakete im Enstehungsmoment (Mit/Ohne Migration)
+\begin{itemize}
+\item Mit Migration: Während der Ausführung kann die Last neu verteilt werden
+\item Wechseln des Ausführenden kann teuer sein
+\item[$\Rightarrow$] Copy-On-Reference: Wird eine Seite erzeugt, wird die Seitentabelle dupliziert. Die Kopie zeigt auf die Urseite. Duplikat wird erst bei Referenzierung erstellt.
+\end{itemize}
+\end{itemize}
+
+\paragraph{Beispiele}
+\begin{itemize}
+\item Nutzung inaktiver Workstations
+\item Condor
+\item SetiAtHome
+\item Boinc: Plattform für verteilte Berechnung
+
+\end{itemize}
+
+
+
+
+
+\newpage
+%===============
+%
+%  Section
+%
+%===============
+
+\section{Fehlertoleranz} \label{fehl}
+Redundante Ausführung des Codes $\Rightarrow$ Ausfallwahrscheinlichkeit durch Menge der Replikate steuerbar $p^n$ 
+\paragraph{Fehlermodele} Hierarchie: Kann man schwere Fehler lösen, kann man auch einfache Lösen. Maskieren eines Fehlers = Ausblenden/Bearbeitungs eines Fehlers. Hardware 1. - 3. Software 4. - 5.
+\begin{enumerate}
+\item Crash: Beobachtbar, Rechner antwortet nicht mehr, Rechner wird auf Eis gelegt (Fail-and-Stop/Fail-Silent), Watchdog überprüft Ausführung
+\item Ommission: Auslassung, Nachricht geht verloren
+\item Timing: Nachrichten kommen zu früh oder zu spät an
+\item Arbitrary: Beliebiger Fehler, Nachricht hat falschen Inhalt aber nicht böswillig (Softwarefehler)
+\item Byzantinisch: Nachrichten können absichtlich verfälscht werden (Authentifizierung)
+\end{enumerate}
+Um 1-3 zu kompensieren/maskieren braucht man n+1 Geräte \\
+Um 4 zu kompensieren/maskieren eine falsche Antwort muss durch 3 überprüft werden $\Rightarrow$ Mehrheitsentscheid über Korrektheit 2k+1 Geräte nötig. Für 5 3k+1 (Mehrheitsentscheid + Authentifizierung)
+
+\paragraph{Redundanz} \label{redu}
+\begin{itemize}
+\item passiv: \textbf{Primary-Backup-Approach} Nächste Instanz übernimmt bei Fehler
+\begin{itemize}
+\item Backups warten, solange Server antwortet
+\item Funktioniert nur bis Fehlerklasse 3, weil Fehlerhafter Code weiterhin ausgeführt wird
+\item Hot Standby: Jedes Kommando wird bei den Backups aktualisiert
+\item Warm Standby: periodische Aktualisierung
+\item Cold Standby: Reaktion auf Ausfall
+\item[$\Rightarrow$] Umsetzung SCSI-Bus
+\end{itemize}
+\item aktiv: Mehrere Server, die das gleiche tun
+\begin{itemize}
+\item sehr teuer und daher nur in Bereichen, wo in Milisekunden entschieden wird
+\item Replikatgruppe
+\item Alle Fehlerklassen maskierbar
+\item Lösung durch State-Machine-Approach \ref{sma}
+\end{itemize}
+\end{itemize}
+
+
+\paragraph{Byzantinisches General-Problem}
+Nur bei mehreren Angriffen kann die Burg erobert werden. Einzelne Angriffe abgewehrt werden
+\begin{itemize}
+\item[$\Rightarrow$] Absprache eines gemeinsamen Angriffs
+\item Keine 100\%ige Sicherheit in der Nachrichtenübermittlung
+\item Fehler in der Übermittlung:
+\begin{itemize}
+\item Byzantiner ersetzen Nachricht mit böswilligem Inhalt
+\end{itemize}
+\end{itemize}
+
+
+%===============
+%  Subsection
+%===============
+
+\subsection{State-Machine-Approach} \label{sma}
+\begin{itemize}
+\item Beteiligte Server sind Zustandsmaschinen
+\item Server hat einen Zustand, der durch Kommandos geändert werden kann
+\item Deterministisch und Atomar 
+\item \textbf{Idempotenz:} gleiche Eingabe erzeugt immer die gleiche Ausgabe, unabhängig der Vorgeschichte
+\item Beispiel: File Server fängt in Initialzustand an und arbeitet die Aufgaben squentiell ab. Kollidieren Clients, entsteht Inkonsistenz
+\item[$\Rightarrow$] Seiteneffekte schränken Determinismus ein
+\item \textbf{Ensemble}: Mehrere State-Machines entscheiden über Mehrheit, welche Antwort richtig sind.
+\item Nur wenn die Aufträge in der selben Reihenfolge ankommen, sind die Antworten idempotent
+\item Geordneter Muticast für Ensemble (Reihenfolge der Anfragen)
+\item Fehlerhafte Clients können Ensemble stören
+\end{itemize}
+
+\paragraph{Arbitrary} Einfache Replizierung einer State-Machine reicht nicht. N-Version-Programmierung/Verschiedene Sprachen. 
+
+\subsection{Multicast} Nachricht an eine Gruppe
+\begin{itemize}
+\item Multicastgruppe = Liste von Empfängern (naiv)
+\item Empfänger/Mitglieder einer Multigruppe sind vertelt auf Netze
+\item Eventuell Flutung des Netzwerks nötig um alle Empfänger zu erreichen
+\item Zuverlässigkeitsgrad
+\begin{itemize}
+\item Keine Garantie
+\item K-Zuverlässigkeit: min k Empfänger erhalten die Nachricht, nicht unbedingt die gleichen
+\item Atomar: Alle oder kein Empfänger erhalten die Nachricht
+\end{itemize}
+\item Ordnungsgrad
+\begin{itemize}
+\item FIFO
+\item Kausale Ordnung
+\item Totale Ordnung
+\end{itemize}
+\end{itemize}
+
+
+
+
+%===============
+%  Subsection
+%===============
+
+\subsubsection{Amoeba} \label{amoe}
+\begin{itemize}
+\item Verteiltes OS
+\item Verteilte Computer sollen wie ein einzelner Computer agieren (Single-System-Image)
+\item Nutzer verwenden plattenlose Rechner
+\item Dateiserver/Verzeichnisdienste etc laufen auf speziellen Rechnern (RPV-basierte Kommunikation)
+\item Sequencer übernimmt Hauptaufgabe
+\item Beim Ausfall nächster Teilnehmer in der totalen Ordnung
+\item Multicast: nur innerhalb Multicast-Gruppe
+\begin{enumerate}
+\item Anfrage an Amoeba-Kern
+\item Kern blockiert SEND
+\item Kern fragt Sequencer per RPC
+\item Sequencer nummeriert die Nachricht und sendet
+\item Kern erhält die Nachricht zurück und deblockiert SEND
+\end{enumerate}
+\end{itemize}
+
+
+
+%===============
+%  Subsection
+%===============
+
+\subsubsection{Raft} \label{raft}
+\begin{itemize}
+\item Verteilen einer State-machine auf verschiedene Rechner
+\item Alle Beteiligten sind in einem Zustand
+\item[$\Rightarrow$] Leader-State-Machine aktualisiert den Status der anderen Maschinen
+\item Leader übernimmt die Hauptaufgabe
+\item Election, welcher Rechner der Leader ist
+\end{itemize}
+\begin{enumerate}
+\item Timer eines Teilnehmers läuft aus, vote me
+\item Empfängt ein Teilnehmmer eine Nachricht bevor sein Timer abläuft, wähle ihn (FIFO)
+\end{enumerate}
+
+
+%===============
+%  Subsection
+%===============
+\subsubsection{Netzwerkflutung} \label{echo}
+\paragraph{Idee} Nachricht enthält Info über Multicastgruppe und Nachricht
+\begin{itemize}
+\item Erhält ein Knoten eine MC-Anfrage, sende an alle Nachbarn außer den Sender
+\item $\Rightarrow$ Redundante Kanten; Spannbaum entsteht (alle Knoten sind ohne Zyklen enthalten)
+\item Verkleinerung durch logisches Netz über physischem Netz (Overlaynetze)
+\end{itemize}
+
+\paragraph{Echo-Algorithmus} 
+\begin{itemize}
+\item Blätter des Spannbaums antworten in Richtung des Senders
+\item Innere Knoten warten, bis sie von allen Knoten, denen Sie zuvor geschickt haben einee Antwort erhalten haben
+\item Fügen ihre eigenen Infos hinzu und schicken weiter
+\end{itemize}
+
+
+\newpage
+%===============
+%
+%  Section
+%
+%===============
+
+\section{Dateisysteme}
+Wurde bisher nicht in Klausuren abgefragt (daher Mut zur Lücke)
+
+%
+\newpage
+%===============
+%
+%  Section
+%
+%===============
+
+\section{Häufig abgefragte Begriffe}
+\begin{itemize}
+\item Raft-Protokoll \ref{raft}
+\item Amoeba \ref{amoe}
+\item Vor/Nachteile Verteilter Systeme \ref{prob} \ref{vort}
+\item Idempotenz \ref{sma}
+\item Aktor-Modell \ref{aktm}
+\item State-Machine-Approach \ref{sma}
+\item Speedup \ref{vort}
+\item Vektorzeit $\rightarrow$ Uhrenbedingungen zeigen \ref{vekt}
+\item erweiterte Lamportzeit $\rightarrow$ Uhrenbedingungen zeigen \ref{lamp}
+\item Fehlerklassen (Crash, Omission, Timing...) \ref{fehl}
+\item Raymond/Maekewa/Verteilte Warteschlange/Zentraler Ansatz \ref{mutex}
+\item SSI (Single-System-Image) \ref{ssi}
+\item Echo-Verfahren \ref{echo}
+\item CAP-Theorem  \ref{cap}
+\item Aktive/Passive Toleranz \ref{redu}
+\item Lastverteilung - Copy-on-Reference \ref{last}
+\end{itemize}
+
+
+
+%===============
+%
+%  Section
+%
+%===============
+
+\end{document}
+
+
+%===============
+%
+% END  Document
+%
+%===============

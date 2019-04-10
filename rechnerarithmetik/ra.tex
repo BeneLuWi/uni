@@ -1,0 +1,202 @@
+\documentclass{scrartcl}
+
+% Change font and reload config
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+\usepackage{hyperref}
+
+\usepackage{amsfonts,amsmath,amssymb,amsthm} 
+\usepackage{marvosym}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+
+\title{Rechnerarithmetik \\Zusammenfassung}
+\author{Benedikt Lüken-Winkels}
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+%===============
+%
+%  Section
+%
+%===============
+
+\section{Grundlagen}
+
+\subsection{Grundproblem}
+\begin{itemize}
+\item Große Zahlen laufen über 
+\end{itemize}
+
+\subsection{Darstellung Natürlicher Zahlen}
+Codierung von natürlichen, ganzen Zahlen und rationalen Zahlen
+\begin{itemize}
+\item analog (nicht praktikabel)
+\item R-adische Notation
+\item[$\Rightarrow$] binär in Rechnern
+\item 8 - 64 Bit Darstellung in Rechnerhardware
+\end{itemize}
+
+\paragraph{Notation endlicher Alphabete}
+Blockcodes:
+\begin{itemize}
+\item passendes $k$ mit $n \leq 2^k$
+\item Wort wird zerlegt und jeder Block einzeln notiert.
+\item Bits reichen für die Notation von Zahlen
+\end{itemize} 
+
+%===============
+%
+%  Section
+%
+%===============
+
+\section{r-adische Zahlen}
+Mit der r-adischen Notiation kann man jede bel Zahl von $0,...,r^k - 1$ darstellen. Für ein $k\rightarrow \infty$ bedeutet das also jede Zahl ist darstellbar, also $(\cdot)_r$ ist surjektiv.
+\begin{itemize}
+\item Äquivalenz der r-adischen Notationen
+\item[$\Rightarrow$] Funktion $f$ ist berechenbar, wenn es eine TM $M$ gibt, mit $f=f_M$
+\item Ideelle Ebene: Ebene der Zahlen als Konzept 
+\item Reale Ebene: Zahlen als Strings
+\item TMs agieren auf Strings, nicht auf Zahlen
+\end{itemize}
+
+
+%===============
+%  Subsection
+%===============
+
+\subsection{Rechenoperationen}
+\paragraph{Idee für Mehrstellige Operationen} Kodieren der Eingabe in einer Kette, wo jeder Teil unabhängig ist
+\begin{itemize}
+\item Aus einem Bitmuster werden k Bitmuster verschiendener Länge $pr^k$ 
+\item In die andere Richtung $pr^*$
+\item Das Teilen des Bitmusters in solche Blöcke sorgt dafür, dass die $pr_i^k$ unabhängig voneinander sind.
+\item Der Zugriff auf das 2. Wort wäre bei der Verwendung eines Trennsymbols in der Komplexität abhängig von der des 1. Wortes
+\end{itemize}
+
+
+%===============
+%  Subsection
+%===============
+
+\subsubsection{Binäres Zählen}
+Abschätzung der Laufzeit durch nächst höhere 2er-Potenz. 
+\begin{itemize}
+\item Eingabe der Länge $n$: Naiv: $\log_n$ stellige Binärschreibweise, iterieren über gesamte Eingabe $\Rightarrow$ $O(n \log_n)$
+\item $k = \log_2(n)$. Aufwandsabschätzung beschränkt durch zählen bis $2^k$
+\begin{itemize}
+\item Es wird immer nur das k-te Zeichen 1. $\log_n$- Teil der Abschätzung wird konstant
+\end{itemize}
+\item Übertrag kann beliebig weit in die Zahl reinlaufen
+\end{itemize}
+
+%===============
+%  Subsection
+%===============
+
+\subsubsection{Addition}
+$((\cdot)_r^2, (\cdot)_r)$
+\begin{itemize}
+\item Notation
+\begin{itemize}
+\item 2 Komponenten müssen zerlegt werden
+\item Aufteilen auf 2 Bänder der TM
+\end{itemize}
+\item Algorithmus = Veralgemeinerung des Schulalgorithmusses
+\begin{itemize}
+\item Gleiche Länge der Eingaben $\Rightarrow$ Führende 0en einfügen
+\item i-ten Übertrag und i-te Komponenten aus Eingabe verrechnen
+\item Summe mod r ergibt die i-te Stelle des Ergebnisses
+\item Summe div r ergibt den Übertrag (= wie oft passt es rein: 0 wenn $w_i$ kleiner r)
+\item Summe $\leq 2r-1$, also ist Summe div r immer < 2
+\item[$\Rightarrow$] 1 Bit Übertrag reicht
+\end{itemize}
+\item TM speichert mögliche Ergebnisse Summe in Tabelle (Zustände) $\Rightarrow$ konstante Zeit für jede Berechnung, also \textbf{linear}
+\end{itemize}
+
+
+%===============
+%  Subsection
+%===============
+
+\subsubsection{Subtraktion}
+Algorithmus
+\begin{itemize}
+\item 2 Komponenten werden subtrahiert und Übertrag addiert
+\item Übertrag und i-tes Ergebnis wie bei Addition
+\end{itemize}
+
+%===============
+%  Subsection
+%===============
+
+\subsubsection{GMP-Bibliothek, Gnu Multiple Prescision}
+Zahlen schnell addieren/subtrahieren
+\begin{itemize}
+\item r = 32 (möglichst schnell laden)
+\item limb := digit
+\item Addition kann zu Carry-Over führen $\Rightarrow$ muss abgefangen werden
+\item 
+\end{itemize}
+
+
+%===============
+%  Subsection
+%===============
+
+
+\subsubsection{Multiplikation}
+
+\begin{itemize}
+\item
+\end{itemize}
+
+
+%===============
+%  Subsection
+%===============
+
+\subsubsection{Division}
+
+\begin{itemize}
+\item
+\end{itemize}
+
+
+
+
+%===============
+%
+%  Section
+%
+%===============
+
+\section{Natürliche und ganze Zahlen}
+
+%===============
+%  Subsection
+%===============
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
+%===============
+%
+%  END
+%
+%===============

@@ -1,0 +1,253 @@
+%\documentclass[aspectratio=169]{beamer}
+\documentclass{beamer}
+%\geometry{paperwidth=140mm,paperheight=105mm}
+\usetheme{metropolis}           % Use metropolis theme
+%\usetheme{CambridgeUS}
+\usepackage{ngerman}
+\usepackage[utf8]{inputenc}
+\title{Kraft-McMillan-Ungleichung}
+\subtitle{Verlustfreie Kompression}
+\date{12. Juni 2018}
+\author{Benedikt L{\"u}ken-Winkels}
+\institute{Universit{\"a}t Trier}
+
+%Matheumgebung
+\usepackage{amsthm}
+
+%Tabelle neben Inhalt
+\usepackage{caption,stackengine}
+
+%Pause ausgrauen
+\setbeamercovered{transparent}
+
+\usepackage{graphicx}
+%Footer
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.4\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}Benedikt L{\"u}ken-Winkels
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.6\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle\hspace*{3em}
+    \insertframenumber{} / \inserttotalframenumber\hspace*{1ex}
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+%Farbe für Block
+\definecolor{amber}{rgb}{1.0, 0.75, 0.0}
+\setbeamercolor{block title}{use=text,
+    fg=amber,
+    bg=gray}
+\setbeamercolor{block body}{use={block title , text},
+    fg=text.fg,
+    bg=lightgray}
+     
+    
+    
+\makeatletter    
+    
+\mode<presentation>{}
+\begin{document}
+\nocite{*}
+\maketitle
+\section{Bedeutung}
+\begin{frame}{Bedeutung}
+Bedingung für die Dekodierbarkeit eines Codes\pause
+\begin{itemize}
+\item[ $\rightarrow$] Code nur eindeutig dekodierbar, wenn die Schlüssellängen die Kraft-McMillan-Ungleichung erfüllen.\pause
+\item[$\rightarrow$] Erfüllen die Schlüssellängen die Kraft-McMillan-Ungleichung, existiert eine eindeutige Codierung.\pause
+\item[$\Rightarrow$] Für jede Schlüssellänge gibt es einen eindeutig dekodierbaren Präfix-Code.
+\end{itemize}
+
+\end{frame}
+
+\section{Definition}
+\begin{frame}{Definition}
+
+\begin{center}
+\begin{minipage}{.65\textwidth}
+\begin{block}{Erinnerung: Code}
+Abbildung von Worten aus $X$ auf \textit{Codeworte} aus $\Sigma^{*}$ \pause
+\begin{align*}
+\text{Code } C:X \rightarrow \Sigma^{*}
+\end{align*}
+\end{block}
+\end{minipage}
+\end{center}
+
+\end{frame}
+
+\begin{frame}{Definition}
+
+\begin{center}
+\begin{minipage}{.9\textwidth}
+\begin{block}{Erinnerung: Präfixcode}
+Eindeutig dekodierbarer Code bei dem kein Codewort ein Präfix eines anderen Codewortes ist.\pause
+\begin{align*}
+Beispiel\ 1&: \{0, 01, 11\} \pause \textbf{ Kein Präfixcode}\\ \pause
+Beispiel\ 2&: \{10, 01, 11\} \pause \textbf{ Präfixcode}
+\end{align*}
+\end{block}
+\end{minipage}
+\end{center}
+
+\end{frame}
+
+\begin{frame}{Definition}
+
+\begin{center}
+\begin{minipage}{.9\textwidth}
+\begin{block}{Kraft-McMillan-Ungleichung}
+Sei Code $C:X \rightarrow \Sigma^{*}$ über einem Alphabet $\Sigma$ mit $|\Sigma| = q$, Länge der Codewörter $ l_{1},...,l_{n}$ und $n$ Wörtern ein eindeutig dekodierbarer Präfix(freier)-Code, dann gilt: \pause
+\begin{align*}
+KM(C)&= \sum_{i=1}^{n} \frac{1}{q^{l_{i}}} \leq 1
+\end{align*}
+\end{block}
+\end{minipage}
+\end{center}
+
+\end{frame}
+
+\section{Anwendung}
+
+\begin{frame}{Anwendung}
+\begin{center}
+\begin{minipage}{.8\textwidth}
+\begin{block}{Beispiel}
+Alphabet $\Sigma$, Größe des Alphabets der Codierung $q$, abzubildende Wörter $X$\pause
+\begin{align*}
+\Sigma & = \{0,1\} \\
+& \Rightarrow q = 2\\
+X & = \{a, b, c, d\}
+\end{align*}
+\end{block}
+\end{minipage}
+\end{center}
+
+\end{frame}
+
+\begin{frame}{Anwendung}
+\begin{minipage}{0.49\textwidth}
+\begin{table}[htb]
+\caption{Beispiel für eindeutige Codierung\label{tab:example1}}
+\vspace*{1em}
+\centering
+
+\bgroup
+\def\arraystretch{1.3}%  1 is the default, change whatever you need
+
+\begin{tabular}[c]{l|l|l}
+	
+	\multicolumn{1}{c|}{\textbf{$X$}} & 
+	\multicolumn{1}{c|}{\textbf{$C(x)$}} & 
+	\multicolumn{1}{c}{\textbf{$l_{C(x)}$}} \\ 
+	
+	\hline
+
+	a & 110 & 3\\
+	b & 111 & 3\\
+	c & 0 & 1\\
+	d & 10 & 2\\
+	
+\end{tabular}
+\egroup
+
+\end{table}
+
+\end{minipage}\pause
+\hfill
+\begin{minipage}{0.49\textwidth}
+\begin{align*}
+KM(C) &= \sum_{i=1}^{n} \frac{1}{2^{l_{i}}} \\\pause
+& = \frac{1}{2^{3}} + \frac{1}{2^{3}} + \frac{1}{2^{1}} + \frac{1}{2^{2}}\\\pause
+& = 1
+\end{align*}
+
+\end{minipage}
+
+
+
+\end{frame}
+
+\begin{frame}{Anwendung}
+
+\begin{minipage}{0.49\textwidth}
+
+\begin{table}[htb]
+\caption{Beispiel für nicht-eindeutige Codierung\label{tab:example2}}
+\vspace*{1em}
+\centering
+
+\bgroup
+\def\arraystretch{1.3}%  1 is the default, change whatever you need
+
+\begin{tabular}[c]{l|l|l}
+	
+	\multicolumn{1}{c|}{\textbf{$X$}} & 
+	\multicolumn{1}{c|}{\textbf{$C(x)$}} & 
+	\multicolumn{1}{c}{\textbf{$l_{C(x)}$}} \\ 
+	
+	\hline
+
+	a & 11 & 2\\
+	b & 111 & 3\\
+	c & 0 & 1\\
+	d & 10 & 2\\
+	
+\end{tabular}
+\egroup
+
+\end{table}
+
+\end{minipage}\pause
+\hfill
+\begin{minipage}{0.49\textwidth}
+\begin{align*}
+KM(C) &= \sum_{i=1}^{n} \frac{1}{2^{l_{i}}} \\\pause
+& = \frac{1}{2^{2}} + \frac{1}{2^{3}} + \frac{1}{2^{1}} + \frac{1}{2^{2}}\\\pause
+& > 1
+\end{align*}
+\end{minipage}
+
+\end{frame}
+
+\section{Zusammenfassung}
+
+\begin{frame}{Zusammenfassung}
+\begin{minipage}{0.39\textwidth}
+\begin{align*}
+& \sum_{i=1}^{n} \frac{1}{p^{l_{i}}} \leq 1\\
+\end{align*}
+\end{minipage}\pause
+\hfill
+\begin{minipage}{0.6\textwidth}
+\begin{itemize}
+\item Obere Schranke der Summe als 'Budget'\pause
+\begin{itemize}
+\item[$\rightarrow$] je länger die Codeworte, desto kleiner die Summe\pause
+\item[$\rightarrow$] nicht viele kurze Codeworte verfügbar.\pause
+\end{itemize}
+\item Beispiel: Morsecode
+\end{itemize}
+
+\end{minipage}
+
+\end{frame}
+\begin{frame}[allowframebreaks]
+        \frametitle{Quellen}
+         % nur angeben, wenn auch nicht im Text zitierte Quellen 
+           % erscheinen sollen
+\bibliographystyle{ieeetran}
+        \bibliography{sources}
+\end{frame}
+
+\end{document}
+
+
+%========================
+%
+% END
+%
+%========================

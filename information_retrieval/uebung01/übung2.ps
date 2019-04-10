@@ -1,0 +1,52 @@
+%!
+%%Creator: Benedikt Lüken-Winkels
+%%Title: Übung 2 Information Retrieval
+/Helvetica findfont
+12 scalefont
+setfont
+newpath
+100 700 moveto
+(Benedikt L) show /udieresis glyphshow (ken-Winkels, 1138844) show
+newpath
+%
+% Definition of parameters
+%
+/a -5 def
+/b 5 def
+%
+% Begin comparison
+%
+a b add 0 eq
+{ % draw red dude
+1 0 0 setrgbcolor
+1 setlinewidth
+300 500 20 0 360 arc % Head
+300 480 moveto
+300 420 lineto % Body
+300 420 moveto
+270 390 lineto
+300 420 moveto
+330 390 lineto % Legs
+300 460 moveto
+270 500 lineto
+300 460 moveto
+330 500 lineto % Arms
+stroke
+}
+{ %draw green dude
+0 1 0 setrgbcolor
+1 setlinewidth
+300 500 20 0 360 arc % Head
+300 480 moveto
+300 420 lineto % Body
+300 420 moveto
+270 390 lineto
+300 420 moveto
+330 390 lineto % Legs
+300 460 moveto
+270 500 lineto
+300 460 moveto
+330 500 lineto % Arms
+stroke
+}
+ifelse

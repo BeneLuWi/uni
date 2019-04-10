@@ -1,0 +1,159 @@
+\documentclass[aspectratio=169]{beamer}
+\usetheme{metropolis}           % Use metropolis theme
+%\usetheme{CambridgeUS}
+\title{Simulation von Turing Maschinen}
+\subtitle{Unm{\"o}glichkeit einer universellen Turing Maschine mit nur einem Zustand}
+\date{12. Juni 2018}
+\author{Benedikt L{\"u}ken-Winkels}
+\institute{Universit{\"a}t Trier}
+
+
+%Deutsche Symbole möglich
+\usepackage{ngerman}
+\usepackage[utf8]{inputenc}
+
+%Matheumgebung
+\usepackage{amsthm}
+
+\usepackage{graphicx}
+
+%Pause ausgrauen
+\setbeamercovered{transparent}
+
+%Footer
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.4\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}Benedikt L{\"u}ken-Winkels
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.6\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle\hspace*{3em}
+    \insertframenumber{} / \inserttotalframenumber\hspace*{1ex}
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+%Farbe für Block
+\definecolor{amber}{rgb}{1.0, 0.75, 0.0}
+\setbeamercolor{block title}{use=text,
+    fg=amber,
+    bg=gray}
+\setbeamercolor{block body}{use={block title , text},
+    fg=text.fg,
+    bg=lightgray}
+    
+\makeatletter    
+    
+\mode<presentation>{}
+\begin{document}
+\maketitle
+
+\nocite{*}
+
+\begin{frame}{Begriffserkl{\"a}rung}
+\begin{block}{Beschreibungsnummer} \pause
+\begin{itemize}
+\item auch Gödelnummer 
+\item Kodierung einer Turing Maschine auf einer universellen Turing Maschine (UTM)
+\end{itemize}
+\end{block}
+\end{frame}
+
+
+\begin{frame}
+\begin{block}{Voraussetzungen}
+TM $M = ( Q, \Sigma, \Gamma, \delta, q, \square, F)$ mit \pause
+\begin{itemize}
+\item $Q = \{q\}$,
+\item einem Band, \pause
+\item endl. Beschreibungsnummer einer TM, die eine bel. berechenbare (irrationale) Zahl berechnen kann auf dem Band.
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Beweis}
+\begin{block}{Idee}
+Berechnung der Ziffern von $\sqrt{2}$ durch $M$ ist nicht möglich, wenn entweder \pause
+\begin{itemize}
+\item[*$_{1}$] eine endliche Anzahl von Zellen auf dem Band verarbeitet wurden und auf dem Rest des Bandes das gleiche Symbol steht , oder \pause
+\item[*$_{2}$] außer einer endlichen Anzahl von Zellen wird jede Zelle unendlich oft geändert.
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Beweis (1)}
+\begin{align*}
+& B:= \text{ Zellen des Bandes mit der Beschreibungsnummer der TM, die } \sqrt{2} \text{ berechnet} \\
+& A:= \text{ Unendliche Folge von Blanksymbolen, links von } B \\
+& C:= \text{ Unendliche Folge von Blanksymbolen, rechts von } B \\
+\end{align*}
+\end{frame}
+
+\begin{frame}{Beweis (2)}
+$\text{Bei } \delta(q, \square) \text{ muss } M \overbrace{\text{stehen bleiben}}^{\text{Fall 1}} \text{ oder } \overbrace{\text{nach links/rechts gehen.}}^{\text{Fall 2}}$ \pause
+\begin{align*}
+\text{Fall 1:} &\ \text{alles außer einem endl. Teil des Bandes hat das Blanksymbol}\Rightarrow *_{1} \\ \pause
+\text{Fall 2.1:} &\ (a)\ A \text{ wird nie erreicht oder }\pause (b) \text{ alle Zellen von } A \text{ werden mit dem gleichen} \\ &\text{ Zeichen kodiert.}\\\pause
+&\ (a)\Rightarrow A \text{ kann ignoriert werden}\\ \pause
+&\ (b)\Rightarrow A \text{ wird konstant und } C \text{ bleibt Blank}\\ \pause
+& \Rightarrow \sqrt{2} \text{ kann nicht dargestellt werden} \\
+\text{Fall 2.2:} &\ analog.\pause
+\end{align*}
+$\Rightarrow$ rechtsseitig unendliches Band ist ausreichend.
+\end{frame}
+
+\begin{frame}{Beweis (3)}
+\begin{block}{Reflection number der TM $R$} \pause
+\begin{enumerate}
+\item Setze Lesekopf auf die erste Zelle von $C$ \pause
+\item Sobald der Lesekopf auf $B$ wandert, setzte ihn auf die erste Stelle von $C$ \pause
+\item[$\rightarrow$] $R:=$ Anzahl der Wiederholungen der Schritte 1. und 2. \pause
+\item[$\rightarrow$] $R \in \{1,2,...,\infty\}$
+\end{enumerate}
+\end{block}
+\end{frame}
+
+\begin{frame}{Beweis (4)}
+\begin{block}{Reflection number der $\sqrt{2}$-Beschreibung $S$} \pause
+\begin{enumerate}
+\item Setze Lesekopf auf die erste Zelle von $B$ \pause
+\item Sobald der Lesekopf auf $C$ wandert, setzte ihn auf die letzte Stelle von $B$ \pause
+\item[$\rightarrow$] $S:=$ Anzahl der Wiederholungen der Schritte 1. und 2. \pause
+\item[$\rightarrow$] $S \in \{1,2,...,\infty\}$ 
+\end{enumerate}
+\end{block}
+\end{frame}
+
+\begin{frame}{Beweis (5)}
+\begin{align*}
+\underline{\text{1.Fall}}&:  S \text{ ist endlich und } R > S \\ \pause
+& \Rightarrow M \text{ loopt nach endlich vielen Schritten nur noch über } C\\ \pause
+& \Rightarrow \text{nur ein endlicher Teil von } C \text{ wurde geändert} \\ \pause
+\underline{\text{2.Fall}}&: S \text{ und } R \text{ sind beide unendlich} \\ \pause
+& \Rightarrow \text{Lesekopf wird unbegrenzt oft auf } B \text{ aus } C \text{ zurückkehren:} \\ \pause
+& \Rightarrow (a) \text{ Exkursionen in } C \text{ ist begrenzt } (b) \text{ oder unbegrenzt.}\\ \pause
+& (a) \Rightarrow \text{ nur ein endlicher Teil von C wurde geändert}\\ \pause
+& (b) \Rightarrow \text{ alles bis auf einen endlichen Teil des Bandes ändert sich dauerhaft} \qed
+\end{align*}
+\end{frame}
+
+\begin{frame}
+        \frametitle{Quellen}
+         % nur angeben, wenn auch nicht im Text zitierte Quellen 
+           % erscheinen sollen
+\bibliographystyle{acm}
+        \bibliography{sources}
+\end{frame}
+
+
+
+\end{document}
+
+
+
+%========================
+%
+% END
+%
+%========================

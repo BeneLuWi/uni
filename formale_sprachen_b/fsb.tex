@@ -1,0 +1,150 @@
+\documentclass[ngerman]{scrartcl}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+
+
+\title{Formale Sprachen B\\ Beschreibungskomplexit{\"a}t}
+\author{Benedikt L{\"u}ken-Winkels}
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+\section{Allgemeines}
+\subsection{Chomsky Hierarchie}
+\begin{itemize}
+\item Typ-0: rekursiv (aufzählbar) (beliebige formale Grammatik)
+\item Typ-1: Kontextsensitive Grammatik
+\item Typ-2: Kontextfreie Grammatik (CFG)
+\item Typ-3: Reguläre Grammatik
+\end{itemize}
+\subsection{Begriffsklärung}
+\subsubsection{rekursiv (aufzählbar) Typ-0}
+\begin{itemize}
+\item $L$ ist \textit{rekursiv aufzählbar} bzw. \textit{semientscheidbar}, wenn es eine Turingmaschine gibt, die alle $w \in L$ akzeptiert, aber keine Wörter, die nicht in $L$ liegen.
+\item $L \subseteq \Sigma^{*}$ ist \textit{rekursiv} bzw. \textit{entscheidbar}, wenn es eine Turingmaschine gibt, die für jede Eingabe $w \in \Sigma^{*}$ hält und jedes $w$ genau dann akzeptiert, wenn $w \in L$.
+\end{itemize}
+Beispiel: Das Halteproblem ist rekursiv aufzählbar, aber nicht rekursiv. \\
+\begin{align*}
+Beweisskizze
+\end{align*}
+
+\subsubsection{kontextsensitiv Typ-1}
+\begin{itemize}
+\item  $G$ ist \textit{kontextsensitiv}, wenn die Regeln der Form $\alpha A \beta \rightarrow \alpha \gamma \beta $ sind (wobei $\gamma$ entweder NT oder T sein muss; $\alpha, \beta$ dürfen leer sein) oder $S \rightarrow \varepsilon $ (dann darf $S$ allerdings nicht auf eine rechten Regelseite auftauchen), also
+\begin{itemize}
+\item NT-Symbole auf der linken Regelseite,
+\item keine Produktionsregel außer das Startsymbol darf  $\varepsilon$ erzeugen.
+
+\end{itemize}
+\end{itemize}
+
+\subsubsection{kontextfrei Typ-2}
+\begin{itemize}
+\item $G$ ist \textit{kontextfrei}, wenn die Regeln der Form $A \rightarrow \alpha $ (wobei $A \in NT$ und $\alpha$ eine beliebige Folge von NT und T) oder $S \rightarrow \varepsilon$  (dann darf $S$ allerdings nicht auf eine rechten Regelseite auftauchen) sind 
+\end{itemize}
+
+
+\subsection{Pumping Lemma}
+
+\subsection{Push Down Automate (PDA)}
+
+\section{1. Vorlesung}
+\subsection{Ziel von Beschreibungskomplexität}
+\begin{itemize}
+\item Wie kompakt können 'Gegenstände' oder 'Objekte' ausgedrückt werden?
+
+\begin{itemize}
+\item DEA als Beispiel mit kleinstmöglicher Zustandsmenge
+\item Minimierungsalgortihmen für Automaten
+\item Datenkomprimierung (Lempel-Ziv-Welch-Algorithmus, verlustfreies Komprimierungsverfahren)
+\end{itemize}
+\item[$\Rightarrow$] knappe Beschreibung für Objekte für effizientere Arbeit
+\end{itemize}
+\subsection{Beschreibungssystem}
+Ein \underline{Beschreibungssystem}  $S$ besteht aus einer Menge endlicher \underline{Deskriptoren}, sodass jeder Deskriptor $D\in S$ eine formale Sprache $L(D)$ beschreibt. Aus $D$ kann man $alph(D)$ ablesen, sodass $L(D) \subseteq (alph(D))*$. Die durch $S$ beschriebene Sprachfamilie $\ell(S)$ umgekehrt $L:S(L)$ beschreibt $L$.
+\\
+Es existieren verschiedene Beschreiber für eine Sprache, eventuell abzählbar unendlich viele Möglichkeiten.
+\begin{itemize}
+\item Umsetzung einer Aufgabe/Funktion hat beliebig viele Implementierungen
+\item Verschiedene reguläre Ausdrücke für die selbe Sprache
+\end{itemize}
+
+\subsection{Beschreibungsmaße}
+Natürliches Maß:
+\# Bits einer Beschreibung \\
+ $\rightarrow$ Frage: Wie wird kodiert? \\
+Alternativ: Betrachte die Struktur der Deskriptoren \\
+Ist $S_{mass}$ ein Beschreibungsmaß für $S_{sys}$, so meint \\$S_{mass}(L)=min\{ S_{mass}(D) | D \in S_{sys}, L(D) = L$
+
+\subsubsection{\textbf{Beispiel} reguläre Ausdrücke}
+\begin{itemize}
+\item $\emptyset, \lambda, a\in \sum$ reguläre Ausdrücke
+\item Wenn $r,s$ reguläre Ausdrücke, so auch $(r+s),(r \cdot s),(r*)$
+\end{itemize}
+
+\textbf{Größenmaße}
+\begin{itemize}
+\item Länge des Strings $|(\emptyset)*| = 4 > 1 = |\lambda|$
+\item $rpn(n)$ reversed polish notation
+\begin{itemize}
+\item $r = ((0+((1 \cdot 0)*)) \cdot (1 + \lambda))$
+\item[$\rightarrow$] $rpn(r) = |010\cdot * + 1 \lambda + \cdot| = 10$
+\end{itemize}
+\item $a-width(r)$: Anzahl von Vorkommen von Zeichen aus $\sum$ in $r$
+\item Ressourcen: Nonterminalsymbole zählen zum Beispiel
+\end{itemize}
+
+\section{2. und 3. Vorlesung}
+\subsection{Typ-0 Grammatiken}
+$G = (N,T,P,S)$\\
+\textit{N} = non-Terminalsymbole; \textit{T} = Terminalsymbole; \textit{S} Startsymbole \\
+$P \subseteq (N \cup T)* N (N \cup T)* \times (N \cup T)*$\\
+Wenn alle Regeln bis auf Eine kontextfrei sind können alle rekursiv aufzählbaren formalen Sprachen dargestellt werden.
+Typ-0 Grammatiken können durch durch Turingmaschinen dargestellt werden.\\
+Natürliche Maße für Turingmaschinen
+\begin{itemize}
+\item Laufzeit als Maß kann unentscheidbar sein, weil dynamisch
+\item Bandalphabet
+\item Anzahl der Bänder
+\item Grad des Nichtdeterminismus, zB wie oft gibt es nichtdeterministische Übergänge?
+\end{itemize}
+Fragen: In wie weit können Maßzahlen eingeschränkt werden, ohne das Modell zu ändern?\\
+Was sagen die Maße über die Mächtigkeit der Maschine aus?
+\subsubsection{Universelle Turingmaschine mit 2 Zuständen}
+Die Übergänge teilen sich in eine Kopierphase und einen Simulationszyklus: '+' bedeutet, dass der Simulationszyklus läuft; '$\alpha$' beendet die Kopierphase.\\
+Zu den Regeln: Es existiert eine Bouncing-Regel zwischen den Regeln 1, 3 und Regeln 2,4, die für die Codierung auf dem Band sorgt.
+\subsection{Begriffseinführungen}
+Ziel ist eine minimale Beschreibung von Typ-0 Grammatiken
+\subsubsection{1-a-Transitor}
+Ein 1-a-Transitor $\tau = (Q, \sigma, \delta, H, q_{I}, q_{F})$ ist ein endlicher übersetzender Automat.\\
+$\sigma$ = Eingabe, $\delta$ = Ausgabe, Q = Zustandsmenge, $H \subseteq Q \times \sigma \times \delta \times Q \Rightarrow$ nicht deterministisch.
+\begin{itemize}
+\item Allgemeiner, als Mealy und Moore Automaten
+\end{itemize}
+
+\subsubsection{G-Systeme}
+Ein $G$-System $G = (N,T,P,S)$ wobei $P = (K,V,V,H,q_{I}, q_{F})$ ein 1-a-Transitor ist und das Eingabe gleich dem Ausgabealphabet ist mit $V=N\cup T$.\\
+Typ-0-Sprachen können durch G-Systeme simuliert werden.
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+%========
+%
+%
+%
+%
+%========
