@@ -10,3 +10,4 @@ Mitschriften, Zusammenfassungen und Projekte im Master an der Universität Trier
 [Approximative Algorithmen](approximative_algorithmen/main.pdf)  
 [Transaktionale Informationssysteme](transaktionale_infsysteme/main.pdf)
 [Informations Visualisierung](informations_visualisierung/main.pdf)
+[Berechenbare Analysis](berechenbare_analysis/main.pdf)
