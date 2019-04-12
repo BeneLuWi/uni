@@ -1,0 +1,69 @@
+\documentclass[ngerman]{scrartcl}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+
+\usepackage{hyperref}
+
+\title{Berechenbare Analysis \\ SoSe 19}
+\author{Benedikt Lüken-Winkels}
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+
+\section{1. Vorlesung}
+\section{2. Vorlesung}
+
+\subsection{Berechenbarkeit}
+!NACHHÖREN!
+
+
+\subsection{Entscheidbarkeit}
+\paragraph{Diagonalisierung} Wären die Reellen Zahlen abzählbar, wäre die Diagonalzahl darin enthalten (!Widerspruch).
+\begin{table}
+  \caption{Diagonialisierungsbeispiel}
+  \label{tab:diagonal}
+  \begin{center}
+    \begin{tabular}{cc}
+       a & b \\
+       c & d \\
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\paragraph{Definition}
+ Menge A Entscheidbar, wenn eine Funktion $ f_{A}(x) $ ,die entscheidet, ob $ x \in A $ berechenbar ist.
+
+\subsection{Berechenbare Reelle Zahlen}
+
+\paragraph{Konstruktive Mathematik}
+Formulierung algorithmischen Rechnens: zB $ \exists $ neu definiert als "es existiert ein Algorithmus". Nicht mehr für "klassische Mathematiker" lesbar
+
+\paragraph{Definition}
+Für $ x \in \mathbb{R} $ sind die Bedingungen äquivalent (wenn eine Bedingung erfüllt ist, sind alle Erfüllt):
+\begin{enumerate}
+  \item Eine TM erzeugt eine unendlich lange binäre Representation von $ x $ auf dem Ausgabeband
+  \item \textbf{Fehlerabschätzung} Es gibt eine TM, die Approximationen liefert. Formal: $ q:\mathbb{N}\rightarrow \mathbb{Q} $ $ (q_{i})_{i \in \mathbb{N}} $ ist Folge rationaler Zahlen, die gegen $ x $ konvergiert. Bedeutet, dass alle $ q_i $ innerhalb eines bestimmten beliebig kleinen Bereichs um $ x $ liegen. 
+  \item \textbf{Intervalschachtelung} Es gibt eine berechenbare Intervallschachtelung: Angabe zweier Folgen rationaler Zahlen mit der Aussage, dass $ x $ dazwischen liegt. Ziel: Abstände von linker und rechter Schranke soll gegen null gehen.
+  \item \textbf{Dedekindscher Schnitt}Menge $ \{q \in \mathbb{Q} | q < x \} $ ist entscheidbar. Beispiel $ \sqrt{2} $ ist berechenbar. $ \{ q | q < \sqrt{2} \} = \{ q | q^2 < 2\}$ 
+  \item $ z \in \mathbb{Z} $ $ A \subseteq \mathbb{N} $, $ x_A = \sum{i \in A} 2^-1-i $, $ x = z + x_A $
+  \item Es exisitert eine Kettenbruchentwicklung
+ \end{enumerate}
+ \paragraph{Folgerungen}
+\begin{itemize}
+  \item $ \Rightarrow $ Für Berechenbarkeit muss nur eine der Bedingungen bewiesen werden. Menge der berechenbaren reelen Zahlen = $ \mathbb{R}_c $
+  \item Nicht berechenbare reele Zahlen durch Diagonalisierung konstruierbar
+  \item $ e $ berechenbar, weil die Fehlerabschätzung (2) existiert
+  \item $ \pi $ (Notiert als alternierede Reihe) berechenbar, weil Intervalschachtelung existiert
+  \item $ \sqrt{2} $ berechenbar, weil Dedekindscher Schnitt existiert.
+ \end{itemize}
+
+\paragraph{Implementierung}
+Ziel: zB Berechnung von Differentialgleichungen 
+
+
+\end{document}
