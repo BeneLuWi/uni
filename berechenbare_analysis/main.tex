@@ -3,6 +3,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
+\usepackage{graphicx}
 
 \usepackage{hyperref}
 
@@ -17,20 +18,28 @@
 
 \section{1. Vorlesung}
 \section{2. Vorlesung}
-
 \subsection{Berechenbarkeit}
-!NACHHÖREN!
-
-
+Es gibt einen Algorithmus, der die Zahl angeben kann (es gibt nur eine abzählbar unendliche Anzahl an Algorithmen, aber überabzählbar viele reelle Zahlen)
+\begin{figure}[h!]
+  \centering
+  \caption{ g ist $ (\nu_x, \nu_y) berechenbar $, wenn g von einer berchenbaren Funktion f realisiert wird}
+  \includegraphics[width=0.5\textwidth]{berechenbarkeit}
+\end{figure}
 \subsection{Entscheidbarkeit}
 \paragraph{Diagonalisierung} Wären die Reellen Zahlen abzählbar, wäre die Diagonalzahl darin enthalten (!Widerspruch).
-\begin{table}
-  \caption{Diagonialisierungsbeispiel}
+\begin{table}[h!]
+  \caption{Diagonialisierungsbeispiel: $ x_\infty $ kann nicht in der Liste enthalten sein}
   \label{tab:diagonal}
   \begin{center}
     \begin{tabular}{cc}
-       a & b \\
-       c & d \\
+       $ x_0 $ & 0.500000 \\
+       $ x_1 $ & 0.411110 \\
+       $ x_2 $ & 0.312110 \\
+       $ x_3 $ & 0.222220 \\
+       $ x_4 $ & 0.233330 \\
+       ... & ... \\
+       \hline\\
+       $ x_\infty $ & 0.067785....
     \end{tabular}
   \end{center}
 \end{table}
@@ -47,13 +56,13 @@ Formulierung algorithmischen Rechnens: zB $ \exists $ neu definiert als "es exis
 Für $ x \in \mathbb{R} $ sind die Bedingungen äquivalent (wenn eine Bedingung erfüllt ist, sind alle Erfüllt):
 \begin{enumerate}
   \item Eine TM erzeugt eine unendlich lange binäre Representation von $ x $ auf dem Ausgabeband
-  \item \textbf{Fehlerabschätzung} Es gibt eine TM, die Approximationen liefert. Formal: $ q:\mathbb{N}\rightarrow \mathbb{Q} $ $ (q_{i})_{i \in \mathbb{N}} $ ist Folge rationaler Zahlen, die gegen $ x $ konvergiert. Bedeutet, dass alle $ q_i $ innerhalb eines bestimmten beliebig kleinen Bereichs um $ x $ liegen. 
+  \item \textbf{Fehlerabschätzung} Es gibt eine TM, die Approximationen liefert. Formal: $ q:\mathbb{N}\rightarrow \mathbb{Q} $ $ (q_{i})_{i \in \mathbb{N}} $ ist Folge rationaler Zahlen, die gegen $ x $ konvergiert. Bedeutet, dass alle $ q_i $ innerhalb eines bestimmten beliebig kleinen Bereichs um $ x $ liegen. Größter möglicher Fehler $ 2^0 = 1 $
   \item \textbf{Intervalschachtelung} Es gibt eine berechenbare Intervallschachtelung: Angabe zweier Folgen rationaler Zahlen mit der Aussage, dass $ x $ dazwischen liegt. Ziel: Abstände von linker und rechter Schranke soll gegen null gehen.
-  \item \textbf{Dedekindscher Schnitt}Menge $ \{q \in \mathbb{Q} | q < x \} $ ist entscheidbar. Beispiel $ \sqrt{2} $ ist berechenbar. $ \{ q | q < \sqrt{2} \} = \{ q | q^2 < 2\}$ 
+  \item \textbf{Dedekindscher Schnitt}Menge $ \{q \in \mathbb{Q} | q < x \} $ ist entscheidbar. Beispiel $ \sqrt{2} $ ist berechenbar. $ \{ q | q < \sqrt{2} \} = \{ q | q^2 < 2\}$. $ \Rightarrow $ Es gibt einen Test, ob die Zahl kleiner ist.
   \item $ z \in \mathbb{Z} $ $ A \subseteq \mathbb{N} $, $ x_A = \sum{i \in A} 2^-1-i $, $ x = z + x_A $
   \item Es exisitert eine Kettenbruchentwicklung
  \end{enumerate}
- \paragraph{Folgerungen}
+ \paragraph{Folgerungen / Beispiele}
 \begin{itemize}
   \item $ \Rightarrow $ Für Berechenbarkeit muss nur eine der Bedingungen bewiesen werden. Menge der berechenbaren reelen Zahlen = $ \mathbb{R}_c $
   \item Nicht berechenbare reele Zahlen durch Diagonalisierung konstruierbar
@@ -65,5 +74,33 @@ Für $ x \in \mathbb{R} $ sind die Bedingungen äquivalent (wenn eine Bedingung 
 \paragraph{Implementierung}
 Ziel: zB Berechnung von Differentialgleichungen 
 
+\section{3. Vorlesung}
+\paragraph{Implementierung in C++}
+Ziel: shared pointer für temporäre Variablen verstecken (durch wrapper)
+\begin{itemize}
+  \item (binary sequence) bs: ein Bit nach dem anderen wird ausgegeben. binseq gibt zur natürlichen Zahl n und liefert das n-te Bit der reellen Zahl (Vorzeichen, 0 oder 1).
+  \item (rational approximations) ra: Fehler beliebiger Größe (Gnaze Zahlen). approx rationale Approximation mit einem beliebig großem Fehler. (Abänderung der Definition, weil ganze Zahlen zulässig)
+  \item ni: Untere und obere Schranke. lower/upperbound gibt n-te Schranke
+  \item (Dedekind cut) dc: Ist eine Zahl kleiner. smaller entscheidet, ob die angegebene Rationale Zahl kleiner ist.
+  \item ds: decide ist das n-te Bit gesetzt oder nicht
+  \item cf: cont_fraction n-tes Folgenglied
+\end{itemize}
+
+\subsection{Binary Sequ ence}
+\begin{itemize}
+  \item make_node erzeugt den shared pointer auf das node Objekt
+  \item DAG (directed achiclic graph) als Stuktur für Operatoren
+\end{itemize}
+
 
 \end{document}
+
+
+
+
+
+
+
+
+
+

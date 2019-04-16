@@ -28,7 +28,7 @@ Foliensatz 1
 \end{itemize}
 
 \subsection{Einführung}
-\subsubsection*{Motivation}
+\subsubsection{Motivation}
 \begin{itemize}
   \item wenn P $ \neq $ NP, kan man keinen guten oder schnellen Algorithmus schreiben
   \item Zeigt man, dass ein Problem NP-schwer ist, kann kein schneller Algorithmus geschrieben werden  
@@ -42,21 +42,21 @@ Herangehensweisen
   \item Näherungsverfahren: Heuristiken mit Leistungsgarantie
 \end{itemize}
 Klasse von Problemen die zur Betrachtung stehen. \\
-\textbf{Quatrupel} $ (I\rho, S\rho, m\rho , opt\rho) $ zur Beschreibung eines Optimierungsproblems
+\textbf{Quatrupel} $ (I_\rho, S_\rho, m_\rho , opt_\rho) $ zur Beschreibung eines Optimierungsproblems
 \begin{itemize}
-  \item $ I\rho $: geeignete Instanz eines Problems, genauer: "geeignet binär-codierte formale Sprachen".
-  \item $ S\rho $: Bildet auf Menge der möglichen Lösungen ab
-  \item $ m\rho $: x Instanz und y eine Lösung. Abbildung auf Maßzahl
-  \item $ opt\rho $: Möglichst kleines Ergebnis oder möglichst großes
+  \item $ I_\rho $: geeignete Instanz eines Problems, genauer: "geeignet binär-codierte formale Sprachen".
+  \item $ S_\rho $: Bildet auf Menge der möglichen Lösungen ab
+  \item $ m_\rho $: x Instanz und y eine Lösung. Abbildung auf Maßzahl
+  \item $ opt_\rho $: Möglichst kleines Ergebnis oder möglichst großes
 \end{itemize}
 \begin{itemize}
-  \item $ S*\rho: I\rho \rightarrow $ Menge der bestmöglichen Lösungen
-  \item $ m*\rho $ Wert oder Grenzwert einer bestmöglichen Lösung
+  \item $ S_\rho^*: I_\rho \rightarrow $ Menge der bestmöglichen Lösungen
+  \item $ m_\rho^* $ Wert oder Grenzwert einer bestmöglichen Lösung
   \item * bedeutet idR bestmöglich
 \end{itemize}
 $\Rightarrow$ \textbf{Ziel}: Leistungsgröße (Folie 15) ist 1, wenn Lösung optimal ist
 
-\subsubsection*{Beispiel: Knotenüberdeckung}
+\subsubsection{Beispiel: Knotenüberdeckung}
 Möglichst wenige Knoten, um alle Kanten abzudecken
 \begin{itemize}
   \item Zuordnung zu den Optimierungsparametern Folie 17
@@ -99,7 +99,7 @@ Suchbaumverfahren ohne Fallunterscheidung. (Faktor 2-Approximations-Verfahren)
 Näherung gibt Schranke für die minimale Lösung dadurch, dass Heuristik eine Faktor 2 Lösung zeigt.
 $\Rightarrow$ (Folie 31) Lösung mit 22 Knoten zeigt eine optimale Lösung mit 11 Knoten
 
-\subsubsection*{Beispiel: MAXSAT (Folie 32)}
+\subsubsection{Beispiel: MAXSAT (Folie 32)}
 $ m\rho $ = Anzahl der Klauseln, die die Formel erfüllen
 \paragraph*{Einfacher Ansatz}
 \begin{itemize}
@@ -107,10 +107,91 @@ $ m\rho $ = Anzahl der Klauseln, die die Formel erfüllen
   \item $\Rightarrow$ liefert 2-Approximation
 \end{itemize}
 
-\subsubsection*{Beispiel: Unabhängige Knotenmengen (Folie 34)}
+\subsubsection{Beispiel: Unabhängige Knotenmengen (Folie 34)}
 Sehr schwer approximierbar
 
-\subsubsection*{Beispiel: Unabhängige Kantenmengen (Folie 35)}
+\subsubsection{Beispiel: Unabhängige Kantenmengen (Folie 35)}
 Lösung in Polinomialzeit, um eine untere Schranke für die Knotenüberdeckung zu finden
 
+
+\section{2. Vorlesung}
+2.Foliensatz
+
+\subsection{Definition Gewichtsreduktionsfunktion}
+Eine Reduktion verringert die Gewichtsfunktion: $ \forall x \in X : 0 \leq \delta(x) \leq w(x) $ \\
+Eine Reduktion ist \textbf{r-effektiv}, wenn $ \delta(X) \leq r \cdot  OPT(\delta) $
+\subsection{Allgemeines (gewichtetes) Überdeckungsproblem}
+\begin{itemize}
+  \item Grundmenge $ X $
+  \item Monotone Abbildung (Bewerung: 1 = Überdeckung oder 0) $ f: 2^X \rightarrow \{0,1\} $
+  \item Gewichtsfunktion $ w \rightarrow \mathbb{R}^+ $ weist den Knoten ein Gewicht zu
+  \item $ \Rightarrow $ Überdeckung mit kleinstmöglichem Gewicht
+  \item Gewichtsreduktionsfunktion $ \delta $
+  \item $ OPT(w) = w(C^*) $ $ C^* $ ist optimale Überdeckung
+\end{itemize}
+Einfachere Problemanalyse durch Zerlegung von Gewichtsfunktionen in Untergewichtsfunktionen
+\paragraph{Grundnäherungsalgorithmus FOLIE 10 EINTRAGEN}
+\begin{itemize}
+  \item
+\end{itemize}
+
+\subsection{Reduktion Bar-Yehuda, Even Folie 13}
+\textbf{2-Approximation}, Reduktion für jede Kante $ \delta_e (v) $ wird angewandt auf jeden anliegenden Knoten
+\begin{itemize}
+  \item Wähle das Minimum der Knoten als Gewicht für die Kante
+  \item Nehme eine Kante und ziehe das Gewicht der Kante von den Knoten ab $ \Rightarrow $ einer der Knoten hat Grad 0 und damit Teil einer Überdeckung
+  \item Nächster Schritt $ w - \delta_e $, bedeutet, dass die Gewichtsfunktion verändert wird und eine neue Iteration beginnt
+\end{itemize}
+
+\subsection{Reduktion Clarkson Folie 22}
+\textbf{2-Approximation}, Gewichtsreduktion über Knoten
+\begin{itemize}
+  \item $ \varepsilon (v) = \frac{w(v)}{d(v)}$
+  \item Anliegende Knoten von v erhalten Gewicht $ \varepsilon(v) $
+  \item $ \Rightarrow w - \delta_v $
+\end{itemize} 
+
+\subsection{Randomiesierte Verfahren}
+\textbf{2-Approximation}, Gewichtsreduktion über Knoten
+\begin{itemize}
+  \item Zufallsalgorithmus gemäß r-effektiver Verteilung (nicht immer Faktor r, aber im Mittel erreicht)
+  \item Implementierung der Intuition, dass großgradige Knoten interessant sind
+  \item Bei ungewichteten Graphen:
+  \begin{itemize}
+    \item ($ w(v) = 1 $)
+    \item Wahrscheinlichkeit einen Knoten zu wählen, $ \frac{d(v)}{2|V|} $ ($ 2|V| $, weil alle Kanten Doppelt abgezählt werden)
+    \item Knoten mit großem Grad werden häufig, aber \textbf{nicht immer} in die Überdeckung aufgenommen
+  \end{itemize}
+\end{itemize}
+
+
+\subsection{$\Delta$-Hitting-Set}
+$\Delta$ = maximaler Grad der Kanten (Wieviele Knoten hängen an einer Kante). $ \Delta = 2 $ quasi Knotenüberdeckungsproblem
+\paragraph{Sonderfälle}
+\begin{itemize}
+  \item leere Kante (keine Knoten) $ \Rightarrow $ keine Überdeckung möglich
+  \item Kante mit nur einem Knoten $ \Rightarrow $ automatisch hinzufügen
+\end{itemize}
+\subsubsection{Beispiel "Smart Home"}
+\paragraph{System}
+\begin{itemize}
+  \item Systembestandteile C
+  \item Systembeschreibung SD (wie das System sein sollte)
+  \item beobachtetes Systemverhalten OBS
+\end{itemize}
+Ist ein Widerspruch in der Annahme, dass das System fehlerfrei funktioniert 
+
+\subsubsection{Datenreduktion}
+\begin{itemize}
+  \item Kante f ist echte Teilmenge von Kante e $ \Rightarrow $ entferne e
+  \item Kante e ist gleich Knoten v $ \Rightarrow $ Knoten ist in der Überdeckung
+  \item Konten x hat ist nur in einer Kante mit Knoten y $ \Rightarrow $ entferne x
+\end{itemize}
+
 \end{document}
+
+
+
+
+
+
