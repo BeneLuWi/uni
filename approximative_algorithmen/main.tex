@@ -42,16 +42,16 @@ Herangehensweisen
   \item Näherungsverfahren: Heuristiken mit Leistungsgarantie
 \end{itemize}
 Klasse von Problemen die zur Betrachtung stehen. \\
-\textbf{Quatrupel} $ (I_\rho, S_\rho, m_\rho , opt_\rho) $ zur Beschreibung eines Optimierungsproblems
+\textbf{Quatrupel} $ (I_P, S_P, m_P , opt_P) $ zur Beschreibung eines Optimierungsproblems
 \begin{itemize}
-  \item $ I_\rho $: geeignete Instanz eines Problems, genauer: "geeignet binär-codierte formale Sprachen".
-  \item $ S_\rho $: Bildet auf Menge der möglichen Lösungen ab
-  \item $ m_\rho $: x Instanz und y eine Lösung. Abbildung auf Maßzahl
-  \item $ opt_\rho $: Möglichst kleines Ergebnis oder möglichst großes
+  \item $ I_P $: geeignete Instanz eines Problems, genauer: "geeignet binär-codierte formale Sprachen".
+  \item $ S_P $: Bildet auf Menge der möglichen Lösungen ab
+  \item $ m_P $: x Instanz und y eine Lösung. Abbildung auf Maßzahl
+  \item $ opt_P $: Möglichst kleines Ergebnis oder möglichst großes
 \end{itemize}
 \begin{itemize}
-  \item $ S_\rho^*: I_\rho \rightarrow $ Menge der bestmöglichen Lösungen
-  \item $ m_\rho^* $ Wert oder Grenzwert einer bestmöglichen Lösung
+  \item $ S_P^*: I_P \rightarrow $ Menge der bestmöglichen Lösungen
+  \item $ m_P^* $ Wert oder Grenzwert einer bestmöglichen Lösung
   \item * bedeutet idR bestmöglich
 \end{itemize}
 $\Rightarrow$ \textbf{Ziel}: Leistungsgröße (Folie 15) ist 1, wenn Lösung optimal ist
@@ -64,7 +64,6 @@ Möglichst wenige Knoten, um alle Kanten abzudecken
   \begin{itemize}
     \item Zwei Knoten im Dreieck gehören dazu
     \item Bei Knoten mit Grad 1 wird immer der Nachbar genommen
-    \item 
   \end{itemize}
   \item Auswählen eines Knotens bedeutet, dass diese Teile abgeschnitten werden
   \item $\Rightarrow$ Vereinfachung des Graphen, zB neue Grad 1 Knoten
@@ -100,7 +99,7 @@ Näherung gibt Schranke für die minimale Lösung dadurch, dass Heuristik eine F
 $\Rightarrow$ (Folie 31) Lösung mit 22 Knoten zeigt eine optimale Lösung mit 11 Knoten
 
 \subsubsection{Beispiel: MAXSAT (Folie 32)}
-$ m\rho $ = Anzahl der Klauseln, die die Formel erfüllen
+$ mP $ = Anzahl der Klauseln, die die Formel erfüllen
 \paragraph*{Einfacher Ansatz}
 \begin{itemize}
   \item Alles 0 und alles 1 setzen, dann das bessere Ergebnis zurückliefern
@@ -174,7 +173,7 @@ $\Delta$ = maximaler Grad der Kanten (Wieviele Knoten hängen an einer Kante). $
   \item Systembeschreibung SD (wie das System sein sollte)
   \item beobachtetes Systemverhalten OBS
 \end{itemize}
-Ist ein Widerspruch in der Annahme, dass das System fehlerfrei funktioniert 
+Ist ein Widerspruch in der Annahme, dass das System fehlerfrei funktioniert, finde die größte Menge an Systembestandteilen, sodass der Widerspruch verschwindet. (Schneide den defekten Teil des Systems ab)
 
 \subsubsection{Datenreduktion}
 \begin{itemize}
@@ -183,10 +182,55 @@ Ist ein Widerspruch in der Annahme, dass das System fehlerfrei funktioniert
   \item Konten x hat ist nur in einer Kante mit Knoten y $ \Rightarrow $ entferne x
 \end{itemize}
 
+\section{3. Vorlesung}
+\subsection{Problemvarianten}
+
+\paragraph{$ P_C $ Konstruktionsproblem} Zur Instanz eines Problems soll eine bestmögliche Lösung und deren Wert geliefert werden. Häufig existieren mehrere beste Lösungen mit gleichem Wert.
+
+\paragraph{$ P_E $ Auswertungsproblem} Zur Instanz eines Problems wird nur der Wert der bestmögl Lösung benötigt.
+
+\paragraph{$ P_D $ Entscheidungsproblem} Ist der Wert einer optimalen Lösung größer $ k $ oder kleiner.
+
+\subsection{Klassen}
+\subsubsection*{NPO}
+\begin{itemize}
+  \item Finden der Lösung, Entscheidung, ob die Lösung gültig ist und Maßzahl/Messfunktion sind in Polinomialzeit lösbar.
+  \item Größe der Lösung ist durch die Größe der Instanz gedeckelt
+  \item Lösen des NP Problems in nicht deterministischer Weise (Raten)
+\end{itemize}
+\paragraph{Turing-Reduzierbarkeit} Aufteilung des Problems in $ P_1 $ und $ P_2 $. $ P_2 $ ist ein Unterprogramm, das bei der Lösung einer Probleminstanz von $ P_1 $  hilft.
+Bei einem NPO-Problem: $ P_D =^P P_E \leq^P P_C $. Ist P NP-Hart, gilt $ P_C \leq^P P_D $
+\paragraph{MAXCLIQUE} (Lösung als Konstruktionsproblem mit Hilfe des Auswertungsproblems) Durch den Wert des Auswertungsproblems ($ P_E $) kann die größte Clique gefunden werden. Die \textbf{Orakelfunktion} liefert die Größe der Lösung.  
+
+\subsection*{MinSAT}
+\begin{itemize}
+  \item Boolsche Formel als Instanz
+  \item Maß ergibt sich aus all den Klauseln, die true ergeben
+  \item Erfüllte Klauseln möglich gering halten. 
+\end{itemize}
+\paragraph{Lösung} Vertex Cover kann in MinSAT überführt werden und umgekehrt. Lösung für das eine Problem ist eine Lösung für das Andere Porblem
+
+\subsection{Grundtechniken}
+\subsubsection{Greedyverfahren (Maximierung) Folie 29}
+\begin{itemize}
+  \item Maximale Lösung finden
+  \item Leer Menge ist eine zulässige Lösung
+  \item Kann der Lösungsmenge kein weiteres Element hinzugefügt werden, gib das die Menge aus
+\end{itemize}
+\paragraph*{Ruchsackproblem (NP-vollständig)}
+\begin{itemize}
+  \item Möglichst viele schwere Gegenstände/möglichst voller Rucksack (Profitfunktion maximal)
+  \item Komplexität ergibt sich aus Kodierung der Zahlen (mit Unärkodierung liegt das Problem in P)
+\end{itemize}
+\textbf{Heuristiken}
+\begin{itemize}
+  \item Gegenstände nach Verhältnis von Gewicht und Profit geordnet. dann einräumen, solange es geht
+  \item Gegenstände nach Profit absteigend geordnet
+\end{itemize} 
+$ \Rightarrow $ Kombination beider Heuristiken liefert ein gutes Ergebnis. Zunächst die eine, dann die Andere Heuristik anwenden. Danach wähle das bessere Ergebnis.\\
+FOLIE 40 EINFÜGEN
+
 \end{document}
-
-
-
 
 
 

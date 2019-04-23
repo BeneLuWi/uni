@@ -111,4 +111,74 @@ Data Server: Datendatendarstellung
   \item DB Seiten (Folie 37)
 \end{itemize}
 
+
+\section{2.Vorlesung}
+Transaktion ist eine Sequenz von Operationen
+
+\subsection*{Partiell geordnete Transaktionen}
+\begin{itemize}
+  \item Reflexiv
+  \item Antisymmetrisch
+  \item Transitiv
+\end{itemize}
+\subsection{Objekt-Modell}
+Baumdarstellung einer Transaktion (welche Methode ruft welche Methode auf)
+\begin{itemize}
+  \item Baum mit endlicher Höhe
+  \item Innere Knoten sind Namen und Parameter von Operationen
+  \item Blätter sind Seitenoperationen
+  \item Besteht eine Ordung auf einer Ebene, so ist die höhere Ebene auch geordnet
+\end{itemize}
+
+\subsection{Concurrency Control}
+\subsubsection*{Klassische Synchprobleme}
+Verlust von ACID Eigenschaften, wenn Transaktionen unkontrolliert ausgeführt werden.
+\begin{itemize}
+  \item Lost Update Problem: Keine Kommunikation zwischen Prozessen während eines Updates
+  \item Inconsistent Read Problem: Transaktion$ _1 $ liest während Transaktion$ _2 $ läuft $ \Rightarrow $ Änderungen nicht abgeschlossen 
+  \item Dirty Read Problem: Ein Zwischenwert einer Transaktion wird für andere Transaktionen lesbar $ \Rightarrow $ Abbruch der Transaktion sorgt für Fehler durch gelesenen Wert 
+\end{itemize}
+
+\subsubsection*{Schedules}
+Modell für verschränke/parallele Ausführung von Transaktionen
+\begin{itemize}
+  \item Transaction Manager entscheidet endgültig über die Reihenfolge in der Ausführung der Transaktionen verschiedener Prozesse
+  \item Abort einer Transaktion: Rückführung aller Effekte
+  \item Commit einer Transaktion
+  \begin{itemize}
+    \item Abgeschlossen und Effekte für andere Transaktionen sichtbar 
+    \item Muss atomar durchlaufen (ganz oder gar nicht)
+  \end{itemize}
+\end{itemize} 
+\paragraph*{Historie}
+\begin{itemize}
+  \item Vollständige Darstellung aller Transaktionen (mit Information über Commit und Abort) 
+  \item In der Praxis ist nur der erste Ausschnitt (Präfix) sichtbar $ \Rightarrow $ Schedule
+  \item Serielle Historie: Transaktionen werden hintereinander ausgeführt (nicht parallel)
+  \item Nicht-serielle Historie: Verschränkte Ausführung von Transaktionen 
+\end{itemize}
+\paragraph*{Shuffle Produkt} Mischen von Transaktionen, die verschiedene Ausführungsreihenfolgen ergeben. Shuffle Produkt ist gültig, wenn 
+\begin{itemize}
+  \item Reihenfolge der Operationen beibehalten
+  \item Keine Operationen hinzufügen
+  \item Keine Operation entfernen
+\end{itemize} 
+Aus der Menge der gültigen Produkte muss der Scheduler ein Element (eine Ausführungsmöglichkeit) wählen.
+
+\paragraph*{Total geordneter Schedule}
+Entscheidungen werden auf Grund des Wissens aus den Präfixen einer Historie getroffen.
+
+\paragraph*{Partiell geordnete Historien}
+Für Histoire S gilt:
+\begin{itemize}
+  \item S ist vollständig: Transaktionen und Ergebnis (commit/abort)
+  \item Eine Transaktion in S ist entweder commited oder aborted
+  \item Ist eine Transaktion geordnet, so ist sie es auch in S
+  \item Ordnung verschiedener Transaktionen auf dem gleichen Objekt
+\end{itemize}
+
+
+
+
 \end{document}
+
