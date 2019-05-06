@@ -230,7 +230,38 @@ Bei einem NPO-Problem: $ P_D =^P P_E \leq^P P_C $. Ist P NP-Hart, gilt $ P_C \le
 $ \Rightarrow $ Kombination beider Heuristiken liefert ein gutes Ergebnis. Zunächst die eine, dann die Andere Heuristik anwenden. Danach wähle das bessere Ergebnis.\\
 FOLIE 40 EINFÜGEN
 
-\end{document}
+\section{4. Vorlesung}
+\subsection{Max Independent Set}
+Liegt in NP weil der Algorithmus eine Lösung rät und die Lösung dann in Polynomialzeit auf Korrekthei überprüft werden kann
+\subsubsection*{Greedy zur Lösung}
+Beispiel Folie 6
+\begin{enumerate}
+  \item Nimm klein-gradige Knoten $ w \Rightarrow$ alle $ u $ fallen weg
+  \item Nimm ein $ v \Rightarrow$ alle anderen $ v $ fallen weg (Clique)
+  \item Ind Set = 2  $ \Rightarrow $ belibig schlechtes Ergebnis
+\end{enumerate}
+Das Verhältnis zwischen $ m^* $ und $ m_Gr $ lässt sich durch die (beschränkte) Dichte des Graphen abschätzen
 
+\begin{itemize}
+  \item Greedy Liefert bei Bäumen immer eine Optimallösung 
+  \item Gleiche Schwierigkeit wie MaxClique
+  \begin{itemize}
+    \item Independent Set des Komplementärgraphen ist Lösung. 
+    \item oder Justierung des Alogrithmus: Nimm höchstgradigen Knoten, dann entferne alle nicht-Nachbarn
+  \end{itemize}
+  \item Bei Knotenfärbung bildet jede Farbe ein Independent Set. 
+\end{itemize}
+
+\subsection*{Geschäftsreisenproblem}
+\begin{itemize}
+  \item gerichtete Abstandsfunktion
+  \item LÖsungen sind Permutationen der Städte
+  \item $ m $, die Summe der Abstände sind die Kosten/Länge der Tour
+\end{itemize}
+Greedy Algorithmus nimmt eine Stadt und wählt die nächste mit dem kleinsten Abstand und entfernt diese
+
+
+
+\end{document}
 
 
