@@ -1,0 +1,46 @@
+Exercise 1:
+
+d_0         <- start directory
+
+do
+    rec(d_0)
+od
+
+define rec(d):
+    do
+        depth       <- relative directory depths from d_0
+        prev_d      <- upper directory
+
+        color       <- blue-red-gradient * age of d / current_timestamp
+        total_size  <- sum all files in all subdirectories of d or file size if d is a file
+
+
+        # Alternating rectangle orientation
+        # a is the vertical line
+        # b is the horizontal line
+        if depth %2 === 0
+            do
+                side_a <- (total_size/prev_d.total_size) * prev_d.side_a
+                side_b <- prev_d.side_b
+            od
+        else
+            do
+                side_a <- prev_d.side_a
+                side_b <- (total_size/prev_d.total_size) * prev_d.side_b
+            od
+        fi
+
+        if d is a file
+            do
+                draw rectangle(side_a, side_b, color)
+            od
+        else
+            do
+                draw rectangle(side_a, side_b)
+                for each subdirectory and file d
+                do
+                    rec(d)
+                od
+            od
+        fi
+    od
