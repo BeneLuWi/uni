@@ -260,7 +260,55 @@ Das Verhältnis zwischen $ m^* $ und $ m_Gr $ lässt sich durch die (beschränkt
 \end{itemize}
 Greedy Algorithmus nimmt eine Stadt und wählt die nächste mit dem kleinsten Abstand und entfernt diese
 
+\section{Vorlesung}
+\subsection{Partitionsheuristik}
+Eine gewisse Art von Heuristik für Probleme, die Partitionen produzieren
+\subsubsection*{Greedy Heuristik für Partitionsprobleme}
+Teile die Problemteile in Kategorien (Partitionen) auf.
+\subsubsection{Scheduling}
+Beispiel Stundenplanung. \\
+Scheduling auf identischen Maschinen
+\begin{itemize}
+  \item I: Menge von Tasks T auf p identische Maschinen
+  \item S: Partitionierung der Tasks in p "Kisten"
+  \item m: Maßzahl ist die längste Ausführungszeit unter den Maschinen
+  \item opt: min 
+\end{itemize}
+Voraussetzung: Tasks sind nicht unterbrechbar, sonst leicht lösbar
 
+\paragraph{List-Scheduling} Task wird an die als nächstes fertige Maschine gegeben. Je mehr Maschinen (je größer das p) desto mehr nähert sich das Verfahren an eine Faktor-2-Approximation. Bei p=1, wird eine Optimallösung geliefert. Reihenfolge der Tasks hat einen großen Einfluss auf die Lösungsgröße. Im schlimmsten Fall 2p-1
+
+\paragraph{Largest Processing Task} Große Tasks werden zunächst bearbeitet, indem die Tasks zunächst der Größe nach sortiert werden. Approximation $ \frac{4}{3} - \frac{1}{3p} $
+
+\subsubsection{Bin Packing}
+So wenige Partitionen, wie möglich
+\begin{itemize}
+  \item I: Objekte A
+  \item S: Partition (Behälter B) der Objekte A
+  \item m: Anzahl an Containern k = |B|
+  \item opt: min
+\end{itemize}
+
+\paragraph{NextFit}
+Nimm Element a und packe es in Behälter aktuellen $ B_j $. Wenn es nicht passt, öffne neuen Behälter $ B_j+1 $  
+
+\paragraph{FirstFit}
+Es wird nur ein neuer Behälter geöffnet, wenn Objekt a nicht mehr in geöffnete Behälter passt. $ \Rightarrow $ Einfach zu beweisende obere Schranke (1.5), wenn alle Behälter zu 2/3 aufgefüllt werden. 
+\\
+FirstFitDecreasing mit geordneter Objektmenge, verbessert die Approximation auf $ \frac{11}{9} $
+
+\subsubsection{Graphfärbung als Partitionsproblem}
+Partition: finde möglichst wenige Unabhängige Knotenmengen (Färbungen)
 
 \end{document}
+
+
+
+
+
+
+
+
+
+
 
