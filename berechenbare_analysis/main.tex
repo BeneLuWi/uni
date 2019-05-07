@@ -16,8 +16,8 @@
 \newpage
 
 
-\section{1. Vorlesung}
-\section{2. Vorlesung}
+\section{Vorlesung}
+\section{Vorlesung}
 \subsection{Berechenbarkeit}
 Es gibt einen Algorithmus, der die Zahl angeben kann (es gibt nur eine abzählbar unendliche Anzahl an Algorithmen, aber überabzählbar viele reelle Zahlen)
 \begin{figure}[h!]
@@ -74,7 +74,7 @@ Für $ x \in \mathbb{R} $ sind die Bedingungen äquivalent (wenn eine Bedingung 
 \paragraph{Implementierung}
 Ziel: zB Berechnung von Differentialgleichungen 
 
-\section{3. Vorlesung}
+\section{Vorlesung}
 \paragraph{Implementierung in C++}
 Ziel: shared pointer für temporäre Variablen verstecken (durch wrapper)
 \begin{itemize}
@@ -89,12 +89,68 @@ Ziel: shared pointer für temporäre Variablen verstecken (durch wrapper)
 \subsection{Binary Sequence}
 \begin{itemize}
   \item make-node erzeugt den shared pointer auf das node Objekt
-  \item DAG (directed achiclic graph) als Stuktur für Operatoren
+  \item DAG (directed acyclic graph) als Stuktur für Operatoren
 \end{itemize}
 
+\section{Vorlesung}
+Programmierung
+
+
+\section{Vorlesung}
+\subsection*{(2) $ \Rightarrow $ (1)}
+Umsetung von Approximation zur Binärfolge für die gesuchte Zahl x:
+\begin{itemize}
+  \item Bereich zwischen 2 ganzen Zahlen aproximieren (ist x eine 2er-Potenz, schlägt dieser Schritt fehl)
+  \item Binärsequenzen eignen sich nicht zum Rechnen
+\end{itemize}
+
+\subsection*{$ \mathbb{R}_c $ ist ein Körper}
+\begin{itemize}
+  \item Sind 2 Zahlen berechenbar, so auch das Ergebnis aus + - * / $ \Rightarrow $ gilt für Intervallschachtelungen (Lemma 3.8)
+  \begin{itemize}
+    \item + : untere/obere Grenze addieren
+    \item - : untere/obere Grenze subtrahieren
+    \item * , / : min und max des Kreuzproduktes
+  \end{itemize}
+  \item Ein Polynom mit berechenbaren Koeffizienten hat berechenbare Nullstellen
+\end{itemize}
+
+\section{Vorlesung}
+
+\subsection*{DAG}
+Interne Datenstruktur der Zahlen
+\begin{itemize}
+  \item Auswertung der Zahlenwerte nur bei Bedarf (lazy eval)
+  \item Bei einer Berechnung wird ein neuer "Rechenknoten" mit Pointer auf die Variable erstellt
+  \begin{itemize}
+    \item Ein Knoten pro Operation (sehr Speicherintensiv)
+    \item Lösung: Komplexere Rechenknoten
+  \end{itemize}
+\end{itemize}
+
+\subsection*{Berechenbare reelle Folgen}
+\paragraph{Berechenbarkeit einer Folge} 
+\begin{itemize}
+  \item Berechenbare Folge berechenbarer Zahlen
+  \item Das n-te Folgenglied der Folge kann mit Fehler $ 2^-i $ durch eine berechenbare Folge rationaler Zahlen approximiert werden
+  \item Nicht alle reellen Zahlen können durch eine berechenbare reelle Folge berechnet werden
+  \begin{itemize}
+    \item Wähle eine rationale Folge $ q_n $, die $ x_n $ approximiert
+    \item Wähle $ x_n $ so, dass es außerhalb dem approximierten Bereich von $ q_n $ liegt (Diagonalisierung)
+  \end{itemize}
+\end{itemize}
+
+
+\section{General Stuff}
+\begin{itemize}
+  \item Abzählbar unendlich, wenn Bijektion zu $ \mathbb{N} $ $ \Rightarrow $ So viele berechenbare reelle Zahlen, wie Programme
+  \item Entscheidbar:
+  \item Berechenbar: 
+  \item Diagonialisierung
+\end{itemize}
+
+
 \end{document}
-
-
 
 
 
