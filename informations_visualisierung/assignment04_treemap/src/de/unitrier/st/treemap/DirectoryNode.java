@@ -49,9 +49,15 @@ class DirectoryNode extends Node {
 
     private void paint(Graphics g, int outerWidth, int outerHeight, boolean splitHorizontal) {
         // TODO: recursively draw child nodes
+
+        // if height > width, the current rect has a vertical orientation
+        // => split it horizontally
+
+        splitHorizontal = outerHeight > outerWidth;
+
         for (Node child: childNodes) {
-            int width =     splitHorizontal ? outerWidth : (int) (child.getSize()/getSize()) * outerWidth;
-            int height =    splitHorizontal ? (int) (((double)child.getSize()/(double) getSize()) * (double) outerHeight) : outerHeight;
+            int width =     splitHorizontal ? outerWidth : (int) (((double) child.getSize() / (double) getSize()) * (double) outerWidth);
+            int height =    splitHorizontal ? (int) (((double) child.getSize() / (double) getSize()) * (double) outerHeight) : outerHeight;
             child.paint(g, width, height);
         }
 

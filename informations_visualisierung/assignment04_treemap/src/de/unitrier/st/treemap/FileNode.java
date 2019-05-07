@@ -56,22 +56,21 @@ class FileNode extends Node {
 
     private void drawRect(Graphics g, int outerWidth, int outerHeight, boolean highlight) {
         // TODO: draw file node as rectangle (fill color should be determined using getAgeColor(), border should be Color.gray for highlighted nodes, otherwise Color.black)
+        // Draw rectangle filled with certain color
         g.setColor(getAgeColor());
         g.fillRect((int)getXPos(),(int)getYPos(), outerWidth, outerHeight);
 
+        // Draw the border on top of the rectangle
+        g.setColor(highlight? Color.gray : Color.black);
+        g.drawRect((int)getXPos(),(int)getYPos(), outerWidth, outerHeight);
     }
 
     private Color getAgeColor() {
         // TODO: find suitable mapping
 
-        long time_since_2015 = now - 1420066800000L;
-        double scale = ((double)age / time_since_2015);
+        
 
-        // Normalize
-        while (scale > 1) scale = scale/10;
-        while (scale < 0.01) scale = scale*10;
-
-        return LinearOptimalColorScale.map((int) (scale * (double)255));
+        return LinearOptimalColorScale.map((int) (Math.random() * (double)255));
     }
 
     @Override
