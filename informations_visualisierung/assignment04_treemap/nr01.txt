@@ -44,3 +44,9 @@ define rec(d):
             od
         fi
     od
+
+
+
+Exercise 3:
+
+To have the (sub-)triangle equally seperated, divide the base line of the triangle according to the portion of the total size, the file/directory has. Then draw a line to the upper corner.
