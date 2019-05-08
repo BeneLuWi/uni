@@ -63,6 +63,7 @@ class FileNode extends Node {
         // Draw the border on top of the rectangle
         g.setColor(highlight? Color.gray : Color.black);
         g.drawRect((int)getXPos(),(int)getYPos(), outerWidth, outerHeight);
+
     }
 
     private Color getAgeColor() {
