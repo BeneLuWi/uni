@@ -68,7 +68,7 @@ class FileNode extends Node {
     private Color getAgeColor() {
         // TODO: find suitable mapping
 
-        
+
 
         return LinearOptimalColorScale.map((int) (Math.random() * (double)255));
     }
