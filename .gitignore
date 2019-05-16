@@ -1,6 +1,6 @@
 ## C++ :
 Makefile
-
+.idea/
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof

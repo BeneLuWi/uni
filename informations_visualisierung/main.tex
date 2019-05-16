@@ -162,10 +162,96 @@ Different elements perform similar motions
 \end{itemize}
 
 
+\section{Lecture}
+Visualization of Graphs: \textbf{Graph drawing}
+\paragraph{Application}
+\begin{itemize}
+  \item Map-drawing: indicate multiple data sets in one map (London Underground)
+  \item Ego(-centric) network: graph with personal connections 
+\end{itemize}
+
+\paragraph{Visual Encoding}
+\begin{itemize}
+  \item Thickness, color of edges
+  \item Color of nodes
+\end{itemize}
+
+\paragraph{Asthetic Criteria}
+Readability does not induce asthetic
+\begin{itemize}
+  \item min edge crossings
+  \item min drawing
+  \item min edge length
+  \item min number of bends
+  \item max symmetry
+  \item uncover clusters
+  \item max continuity amongst paths
+\end{itemize}
+
+\subsection{Layouting algorithms}
+Radial Layout
+\begin{itemize}
+  \item fair node weight, every node's representation is equal
+  \item lots of edge crossings
+  \item applicable, if there is no further info about the data
+\end{itemize}
+Force-Directed Layout
+\begin{itemize}
+  \item force edges to a certain length
+  \item reorder nodes
+  \item try to find equilibrium, where the forces cancel out each other
+\end{itemize}
+Hierarchical Layout
+\begin{itemize}
+  \item for cyclic structures: flip the edges that close the cycle while drawing the graph
+  \item depth first search provides a topological ordering of the nodes
+  \item sort nodes on the lower layer until the bottom is reached, then go back to start
+  \item to have a clean layout, put in dummy nodes as a spacer
+\end{itemize}
+Orthogonal Layout
+\begin{itemize}
+  \item edges follow grid (orthogonal paths)
+  \item shape metrics
+  \begin{itemize}
+    \item describe the path the edges take by turns
+    \item evaluate the paths 
+  \end{itemize}
+\end{itemize}
+Edge Bundling
+\begin{itemize}
+  \item structured radial layout
+  \item bundle edges with the same direction
+\end{itemize}
+
+\subsection{Matrix visualization of Graphs}
+Adjacency Matrix
+\begin{itemize}
+  \item indicate an edge in a matrix
+  \item uncovering clusters is hard
+\end{itemize}
+\subsubsection*{Layouting}
+Compound graphs
+
+\section{Lecture}
+\subsection{Visualization of dynamic graphs}
+Dynamic graph: sequence of graph states
+\paragraph{Animation} see difference between layout and data changes to preserve the mental map of the graph. Examples:
+\begin{itemize}
+  \item TimeLine, horizontal development of the graph, vertical orientation of the graph  
+  \item TimeSpiderTrees, cirular layout, each ring is one graph
+  \item TimeRadarTrees, cicular layout, outer circles are a representation of the inner. The inner circle shows incoming edges, the outer shows outgoing
+\end{itemize}
+
+\subsection{Multivariate data and time series}
+\paragraph{Boxplots} box showing 50 percent of data, outer borders not standardized
+\paragraph{Fan Chart} wide part shows the mean (similar to the box plot) 
+\paragraph{Histogram} bar represents a range of values (value ragne split into intervals)
+\subsubsection{Dimensionality Reduction}
+\paragraph{}
+
+
+
 \end{document}
-
-
-
 
 
 
