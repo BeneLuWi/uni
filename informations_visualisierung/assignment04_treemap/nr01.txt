@@ -49,4 +49,4 @@ define rec(d):
 
 Exercise 3:
 
-To have the (sub-)triangle equally seperated, divide the base line of the triangle according to the portion of the total size, the file/directory has. Then draw a line to the upper corner.
+To seperate the (sub-)triangle equally, divide the base line of the triangle according to the portion of the total size, the file/directory has. Then draw a line to the upper corner.
