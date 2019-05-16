@@ -100,7 +100,11 @@ Programmierung
 \subsection*{(2) $ \Rightarrow $ (1)}
 Umsetung von Approximation zur Binärfolge für die gesuchte Zahl x:
 \begin{itemize}
-  \item Bereich zwischen 2 ganzen Zahlen aproximieren (ist x eine 2er-Potenz, schlägt dieser Schritt fehl)
+  \item Bereich zwischen 2 ganzen Zahlen aproximieren (ist x eine 2er-Potenz, schlägt dieser Schritt fehl). Fallunterscheidung:
+  \begin{itemize}
+    \item Ist die Zahl ein endlicher Binärbruch schreibe diesen auf
+    \item ,sonst appoximiere und schreibe dann den endlichen Binärbruch
+  \end{itemize}
   \item Binärsequenzen eignen sich nicht zum Rechnen
 \end{itemize}
 
@@ -150,10 +154,39 @@ Interne Datenstruktur der Zahlen
 \end{itemize}
 
 
+\section{1. Übung}
+\subsection*{Aufgabe 1}
+\begin{itemize}
+  \item Ziel: Finden des richtigen n für den Fehler
+  \item Die Größe des Unterschieds zwischen x und y muss größer sein, als die Summe der Fehler
+  \item Gleichheit testen geht nicht mit einer totalen Funktion
+\end{itemize}
+\subsection*{Aufgabe 2}
+$ (4) \Rightarrow (3) $
+\begin{itemize}
+  \item Menge der kleineren Zahlen ist entscheidbar
+  \item Durchtesten der Integers ob die Zahlen innerhalb oder außerhalb der Menge liegen  
+  \item Aus der Entscheidbarkeit der Menge werden die Folgen für die Schranken
+\end{itemize}
+$ (3) \Rightarrow (2) $
+\begin{itemize}
+  \item Differenz zwischen den Schranken ergibt Fehlergröße
+  \item Folge q ist die die Folge, die sich aus der Mitte $ \frac{a + b}{2} $
+\end{itemize}
+$ (2) \Rightarrow (3) $
+\begin{itemize}
+  \item Schranken a, b ergeben sich aus Folge +/- Fehler
+  \item $ a_k = max(q_k + 2^-k - \frac{1}{k}, a_k-1) $
+  \item $ b_k = min(q_k - 2^-k - \frac{1}{k}, a_k-1) $
+\end{itemize}
+$ (2/3) \Rightarrow (4) $ \\
+Zusätzlicher Test, wenn die Zahl rational ist, weil der Test auf Gleichheit eine Endlosschleife
+
+\subsection*{Aufgabe 3}
+$ x_A bb \Rightarrow A_{entscheidbar} $\\
+Tablemakers dilemma
+
 \end{document}
-
-
-
 
 
 
