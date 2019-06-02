@@ -97,7 +97,7 @@ Programmierung
 
 
 \section{Vorlesung}
-\subsection*{(2) $ \Rightarrow $ (1)}
+\subsection{(2) $ \Rightarrow $ (1)}
 Umsetung von Approximation zur Binärfolge für die gesuchte Zahl x:
 \begin{itemize}
   \item Bereich zwischen 2 ganzen Zahlen aproximieren (ist x eine 2er-Potenz, schlägt dieser Schritt fehl). Fallunterscheidung:
@@ -108,7 +108,7 @@ Umsetung von Approximation zur Binärfolge für die gesuchte Zahl x:
   \item Binärsequenzen eignen sich nicht zum Rechnen
 \end{itemize}
 
-\subsection*{$ \mathbb{R}_c $ ist ein Körper}
+\subsection{$ \mathbb{R}_c $ ist ein Körper}
 \begin{itemize}
   \item Sind 2 Zahlen berechenbar, so auch das Ergebnis aus + - * / $ \Rightarrow $ gilt für Intervallschachtelungen (Lemma 3.8)
   \begin{itemize}
@@ -121,7 +121,7 @@ Umsetung von Approximation zur Binärfolge für die gesuchte Zahl x:
 
 \section{Vorlesung}
 
-\subsection*{DAG}
+\subsection{DAG}
 Interne Datenstruktur der Zahlen
 \begin{itemize}
   \item Auswertung der Zahlenwerte nur bei Bedarf (lazy eval)
@@ -132,7 +132,7 @@ Interne Datenstruktur der Zahlen
   \end{itemize}
 \end{itemize}
 
-\subsection*{Berechenbare reelle Folgen}
+\subsection{Berechenbare reelle Folgen}
 \paragraph{Berechenbarkeit einer Folge} 
 \begin{itemize}
   \item Berechenbare Folge berechenbarer Zahlen
@@ -144,13 +144,87 @@ Interne Datenstruktur der Zahlen
   \end{itemize}
 \end{itemize}
 
+\section{Vorlesung}
+NACHTRAGEN
 
+
+\section{Vorlesung}
+\subsection{Struktur berechenbarer Funktionen}
+\subsubsection{Orakel-Turingmaschine OTM}
+\begin{itemize}
+  \item Turingmaschine mit Zugriff auf eine Orakelfunktion $ \phi $
+  \item Ein Zustand ist Orakelzustand $ s_O $
+  \item Ein Band ist Orakelband
+  \item Geht die Maschine in den Zustand $ s_O \Rightarrow$ (partielle) Orakelfunktion wird aufgerufen:
+  \begin{itemize}
+    \item Eingabe auf Orakelband wird evaluiert = 'Anfrage an das Orakel'
+    \item $ v \in Def(\phi) $: Orakelfunktion schreibt Antwort auf Orakelband in einem Schritt
+    \item $ v \not\in Def(\phi) $: Orakelfunktion endet mit Fehler
+  \end{itemize}
+  \item Orakel kann zB benutzt werden, um das Halteproblem entscheiden. Das richtige Orakel, kann P=NP simulieren.
+  \item $ f^\phi _M $ Berechnete Funktion 
+  \item $ T^\phi _M(w) $ Anzahl der Rechenschritte 
+  \item $ A^\phi _M(w) $ Menge der Angfragen    
+\end{itemize} 
+Menge der von OTM berechenbaren Funktionen ist $ \mathbb{F} $. Typ-2-Mengen zB $ \mathbb{R}\ \mathbb{N}^\mathbb{N} \Rightarrow$ Überabzähbar. Typ-1-Mengen $ \Rightarrow $ abzählbar unendlich
+
+\subsubsection{Typ-2-Turingmaschinen}
+\begin{itemize}
+  \item spezielles Ein/Ausgabeband (Eingabe: read-only, Ausgabe: one-way = Ausgabe nicht mehr modifizierbar)
+  \item Arbeitsweise wie eine normale TM
+  \item Eingabe darf unendlich lang sein
+  \item Ausgabe endlich, wenn die Maschine hält oder läuft unendlich 
+  \item $ T_M(p)(n) $ Anzahl der Rechenschritte bis Ausgabe des Zeichens $ q_n $ 
+  \item $ A_M(p)(n) $ Anfragenlänge zur Berechnung bis zum Zeichen von $ q_n $    
+\end{itemize}
+
+\subsubsection{Zusammenhände OTM und Typ-2-TM}
+Unendliche Eingabe aus Typ-2-TM wird durch Orakel zu einer Näherung, um von OTM verarbeitet werden zu können. So kann eine OTM eine Typ-2-TM simulieren. 
+
+
+\section{Vorlesung}
+NACHTRAGEN vom 24.05.
+\begin{itemize}
+  \item Darstellung für unendl Folgen von Zeichen oder Wortfunktionen von Strings auf Strings
+\end{itemize}
+
+
+\section{Vorlesung}
+\subsection{Cauchy-Darstellung}
+$ M = [ \mathbb{N} \rightarrow \mathbb{Q} ] $
+\begin{itemize}
+  \item Implementierung Folgen rationaler Zahlen mit gewissen Näherungen
+  \item Cauchy-Folge: der Abstand zweier Folgeglieder ist kleiner, als ein Schwellenwert
+  \item $ \rho $ sind die schnell konv rationalen Folgen
+  \item Enthält unberechenbare Folgen
+  \item Erfasst alle berechenbaren reelen Zahlen über berechenbare Namen 
+\end{itemize}
+\paragraph{Beispiel Notation von $ f(x) = 3x $}
+Die Typ-2-TM M kann einen der Namen für die Eingabe ausgeben. Namen für 1: 0.9999... und 1.0000... . Fallunterscheidung:
+\begin{enumerate}
+  \item Ab einem bestimmten Punkt ist p'=w999... und ergibt 1.00..2000
+  \item Ab einem bestimmten Punkt ist p'=w000... und ergibt 0.99..9000
+\end{enumerate}
+$ \Rightarrow $ Nicht berechenbar, wenn $ \delta_{dez} \rightarrow \delta_{dez} $ Abgebildet wird. Berechenbarkeit kann nur durch andere Abbildungsmenge erreicht werden, wie Cauchy ($ [\mathbb{N}\rightarrow\mathbb{Q}]$)
+
+
+
+
+
+%=======================================
+%
+% ENDE VORLESUNGEN
+%
+%=======================================
 \section{General Stuff}
 \begin{itemize}
   \item Abzählbar unendlich, wenn Bijektion zu $ \mathbb{N} $ $ \Rightarrow $ So viele berechenbare reelle Zahlen, wie Programme
   \item Entscheidbar:
   \item Berechenbar: 
   \item Diagonialisierung
+  \item Isomorphismus
+  \item Homomorphismus
+  \item Berechenbarkeits-Typen
 \end{itemize}
 
 
@@ -187,7 +261,4 @@ $ x_A bb \Rightarrow A_{entscheidbar} $\\
 Tablemakers dilemma
 
 \end{document}
-
-
-
 
