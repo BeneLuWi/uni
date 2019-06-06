@@ -246,11 +246,27 @@ Dynamic graph: sequence of graph states
 \paragraph{Boxplots} box showing 50 percent of data, outer borders not standardized
 \paragraph{Fan Chart} wide part shows the mean (similar to the box plot) 
 \paragraph{Histogram} bar represents a range of values (value ragne split into intervals)
-\subsubsection{Dimensionality Reduction}
-\paragraph{}
 
+\section{Lecture}
+\subsection{Software Visualization: Architecture}
+\paragraph{Pipes and Filters} Input stream providing data, putting it into a pipe of filters
+\paragraph{Layered Systems} Layers provide functionality of upper layers (radial or stacked). Radial: small core, Pyramid: neutral representation 
+\paragraph{Blackboard-driven} Different processes share info on one blackboard
+\subsubsection{Reverse Engineering}
+Create higher level of abstraction for a given system and automatically create architecture visualization. The detection of design patterns is non-trivial. To detect, the program is run and traced. 
+\subsubsection{Enriched Node-Link Diagrams} 
+Visuialize/Encode software metrics. Aggregation of information to simplify.
+\paragraph{Class Blueprint}
+Categorize methods by name and access attributes (public/protected/private...)
+\paragraph{Depenecies Viewer}
+Visualize package graph and dependencies between packages and methods
+\paragraph{Dependency Structure Matrix DSM}
+Detect cycles and indirect cycles with highlighting
+\paragraph{Software Citites and Maps}
+2D plane represents system. Hierarchy shown with trees/dimesions. 3rd dimension can be used to show other metrics, like evolution/age/dependencies
+\paragraph{Summary}
+Ad-hoc diagrams hard to understand without explanation. With reverse engineering automatic creation for specific techniques are possible 
 
 
 \end{document}
-
 
