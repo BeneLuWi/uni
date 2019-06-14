@@ -16,9 +16,8 @@
 \begin{abstract}
 \end{abstract}
 
-\section{1. Vorlesung}
-Foliensatz 1
-\subsection*{Orga}
+\section{Vorlesung}
+	
 \begin{itemize}
   \item \textbf{Vorlesung} Di, 14:15-15:45, H11
   \item \textbf{Übung} Mo, 13-14
@@ -176,9 +175,201 @@ Für Histoire S gilt:
   \item Ist eine Transaktion geordnet, so ist sie es auch in S
   \item Ordnung verschiedener Transaktionen auf dem gleichen Objekt
 \end{itemize}
-S 
+
+\subsection{ Reads-from Relation}
+
+\subsection{ FSR}
+
+\subsection{View-Serialisierbarkeit VSR}
 
 
+\section{Vorlesung}
+\subsection{Monotonie von Historien}
+Eine Klasse von Historien ist monoton, wenn Schedules, die nicht in der Klasse E sind, nicht so verändert werden können, sodass sie zu E gehören. Projektionen von Historien aus E sind auch wieder in E.
+
+\subsection{Konfliktserilisierbarkeit CSR}
+Polynomiell entscheidbar
+\paragraph{Konflikt} Verschiedene Transaktionen greifen auf dasselbe Datenobjekt zugreifen und mindestens eine ist eine Schreiboperation.
+\paragraph{Konfliktäquivalent} Operationsanzahl und Konfliktmengen sind gleich.  
+\paragraph{Konfliktserialisierbar} Ist die Reihenfolge, die sich aus den Konflikten ergibt nicht zyklisch, ist der Schedule Konfliktserialisierbar. 
+\paragraph{Beobachtung} $ CSR \subset VSR \subset FSR $
+\paragraph{CSR ist monoton} Wenn eine Transaktion einen Schedule nicht mehr in CSR
+
+\subsubsection{Serialisierbarkeitstheorem}
+\begin{itemize}
+  \item bei einer Zyklische Konfliktrelationen kann es keine konflikt-äquivalente serielle Historie geben.
+  \item Sind die Konfliktrelationen azyklisch, ist die Historie in CSR
+\end{itemize}
+
+\subsection{Kommutativität}
+Vertauschen von Operationen ohne die Semantik zu verändern
+\begin{itemize}
+  \item Alle Operationen ohne Konflikt können bearbeitet/vertauscht werden
+  \item Benachbarte Leser verschiedener Transaktionen können vertauscht werden
+  \item Leser und Schreiber auf verschiedenen Objekten und von verschiedenen Transaktionen können vertauscht werden
+  \item Schreiber auf verschiedenen Objekten und von verschiedenen Transaktionen können vertauscht werden
+\end{itemize}
+$ \Rightarrow $ Eine Histore ist kommutativitäts-basiert reduzibel, wenn sie in CSR ist.
+
+
+
+\subsection{Alogrithmen für Scheduler}
+\paragraph{Aktionen eines Schedulers}
+Für jede Transaktion muss entschieden werden:
+\begin{itemize}
+  \item Output, Anfügen ans Ende des Schedules
+  \item Reject, führt zum Fehler, also abort
+  \item Block, funktioniert ggf, aber erst später
+\end{itemize}
+
+\paragraph{Arten von Schedulern}
+\begin{itemize}
+  \item Optimistische Scheduler
+  \begin{itemize}
+    \item Vermeiden Block aktionen
+    \item Erst kurz vor Commit wird auf Korrektheit überprüft
+  \end{itemize}
+  \item Pessimistische Scheduler
+  \begin{itemize}
+    \item in der Praxis häufig verwendet, da Abort immer teuer
+    \item Bei Konflikt wird blockiert
+    \item Weniger Aborts, aber auch weniger Parallelität bis hin zum seriellen Schedule
+  \end{itemize}
+\end{itemize}
+
+\subsubsection{Sperrende Scheduler}
+Lesesperre $ rl_T (x) $(keine andere Transaktion kann schreiben), Schreibsperre $ wl_T (x) $ (keine andere Transaktion kann lesen)
+
+\paragraph{Wohlgeformtheitsregeln für Sperranfragen}
+\begin{enumerate}
+  \item Wenn gelesen wird muss vorher ein read lock ausgeführt worden sein (Schreiben analog)  
+  \item Folie 190 
+  \item S enthält keine unnötigen Sperranfragen
+  \item Sperren auf einem Obejkt darf nicht auf ein Objekt angewendet werden, wenn die Transaktionen in Konflikt stehen.
+\end{enumerate}
+
+\paragraph{2-Phasen Sperrprotokoll 2PL-Scheduler} 
+Erst alle Sperren anfordern, bevor sie geschlossen werden. Nach einem Unlock, kann nicht wieder gelockt werden 
+\paragraph{Korrektheit bei Konflikt}
+\begin{itemize}
+  \item Bei Konflikt muss die Sperrfreigabe der ersten Transaktion vor der Anforderung der zweiten erfolgen
+  \item Folie ~200
+  \item Konfliktgraph muss zyklenfrei sein
+  \item Deadlock möglich, da Transaktionen endlos auf eine Sperre warten können
+  \item Unerwartetes Einfügen von Tupeln (nur Sperren von Tupeln). Phantom-Problem. Lösung:
+  \begin{itemize}
+    \item Index Locking: Zugriff auf die Tabelle wird gesperrt
+    \item Predicate Locking: Sperren eines logischen Ausdrucks (Ergebnis einer Anfrage)
+  \end{itemize}
+\end{itemize}
+
+\section{Vorlesung}
+\subsection{2Pl Protokollvarianten}
+Konservative C2PL
+\begin{itemize}
+  \item Alle Sperren einer Transaktion wird anfangs gesetzt
+  \item Wenn nicht alle Sperren erfolgreich gesetzt sind, werden die Konflikttransaktionen abgelehnt (nicht geblockt) $ \Rightarrow $ keine Deadlocks
+  \item Nachteil: Am Anfang müssen alle Zugriffe bekannt sein
+\end{itemize}
+Strikt S2PL
+\begin{itemize}
+  \item Alle Schreibsperren werden erst beim Commit freigegeben (nicht Lesesperren)
+  \item Starke SS2PL: Alle Sperren werden erst beim Transaktionsende freigegeben
+\end{itemize}
+
+\subsection{Deadlocks in 2PL}
+\begin{itemize}
+  \item Verkantung
+  \item Sperrkonvertierung
+\end{itemize}
+\paragraph{Lösung}
+\begin{enumerate}
+  \item Erkennen eines Deadlocks
+  \begin{itemize}
+    \item Zyklus im Graph für Wartebeziehungen
+    \item Warten auf Timeout (Rückschluss auf Deadlock)
+  \end{itemize}
+  \item Eine der Zyklentransaktionen wird aborted (zB die mit am wenigsten bisher geleisteten Arbeit)
+\end{enumerate}
+
+\subsection{Sperrgranularität}
+\paragraph{Tradeoff} mehr Sperren, weniger Synchronisationsaufwand. Weniger Sperren. mehr Parallelität.
+\subsubsection{Intention Reading}
+MGL-Protolkoll = Wie werden Anforderungen bearbeitet.
+\begin{itemize}
+  \item IR 
+  \item IX
+  \item RIX
+  \item Miteinander im Sperrbaum kombinierbar
+  \item Verschiedene Sperranfragen, je nach Tiefe im Baum (I-Sperren = Warnsperre)
+\end{itemize}
+\subsubsection{Tree Locking (TL) Protokoll}
+Zugriff auf Tupel nur über Indexbaum (geeignet für Hierarchische Datenzugriffe). 
+\paragraph{Write Only TL WTL}
+\begin{enumerate}
+  \item Wohlgeformheitsregeln werden eingehalten
+  \item Folie 230 
+  \item
+\end{enumerate}
+Lock Coupling ist nicht zweiphasig.  Elternknoten wird solange gesperrt, bis alle benötigten Kindknoten gesperrt sind. WTL ist Deadlockfrei
+
+\subsection{Nicht-sperrende Scheduler}
+\paragraph{Timestamp Ordering} 
+\begin{itemize}
+  \item Keine Wartebeziehung, keine Deadlock
+  \item Ordnung nach Zähler oder Timestamp TS(T) (Zeitstempel ist einzigartig)
+  \item Zeitstempel der Transaktionen geben Serialisierungsreihenfolge vor
+  \item Konflikttransationen werden nach Zeitstempel gepordnet
+\end{itemize}
+TO-Regel: Konflikttransaktionen sind nach ihren Timestamps (TS) geordnet. 
+
+\section{Vorlesung}
+\subsection{Mulitversionsserialisierbar: MVSR}
+\begin{itemize}
+  \item Wenn die Graphen äquivalent sind, haben sie auch den gleichen Konfliktgraphen
+\end{itemize}
+\subsubsection{Versionsordnung}
+In einem seriellen Monoversionsschedule liegen die Zugriffe auf die Datenobjektje, wie in der Ordnung angegeben. Liegt ein MVS vor, lege eine Ordnung fest 
+\subsubsection{Multiversions-Serialisierungsgraph MVSG}
+Um den Graphen aufzulösen und einen seriellen Monoversionsschedule aus einem MVS zu machen, nimm einen Knoten ohne eingehende Kanten und lösche alle ausgehenden Kanten usw. Wenn eine passende Versionsordnung gefunden ist, kann der Graph leicht gefunden werden
+
+\section{Vorlesung}
+\subsection{Multiversion Conflict Serialisierbarkeit: MCSR}
+Jeder Schreiber generiert eine neue Version
+
+\subsubsection{Multiversion Conflict}
+\begin{itemize}
+  \item nur Read-Write Konflikte
+  \item Umsortierung ohne Read-Write Konflikte führt zu Fehlern
+\end{itemize}
+
+\subsubsection{Multiversion Conflict Graph}
+
+\subsection{Mulitversionprotokolle}
+Protokolle, die mehr, als eine Versionen verwenden
+\subsubsection{Multiversions-Timestamp-Ordering MVTO}
+
+\begin{itemize}
+  \item First come, first serve.
+  \item Leser: Letze Version vorm Zeitstempel des Lesers wird gelesen
+  \item Schreibschritt generiert neue Version: Schreiben wir verhindert, wenns zu spät kommt (bereits eine vorherige Version gelesen) 
+  \item Versionsordnung = Zeitstempelordnung
+  \item Commit wird erst ausgeführt, wenn alle Schreiber für die aktuelle Version Committed haben.
+  \item Transaktion kann sich nicht selbt lesen.
+\end{itemize}  
+
+\subsubsection{MV2PL}
+Unterscheindung von Datenpbjekten
+\begin{itemize}
+  \item Freigegebene Version (committed)
+  \item aktuelle Verison (current)
+  \item nicht freigegebene Version  (uncommitted)
+\end{itemize}
+Nicht Commit-Operation lesen immer die vorherige Version. Immer nur einer darf ein Objekt schreiben (nur eine nicht freigegebene Version). Verzögerung des Commits, bis alle Transaktionen, die die aktuelle Version gelesen haben fertig sind. Bei Commit wird die aktuelle Version zu neuen Version für zukünfitge Operationen. 
+
+\subsubsection{2V2PL}
+Für Recovery sinnvoll beim Abort: Before Image (BFIM), After Image (AFIM). BFIM ist aktuelle Version, AFIM die Version nach der nächsten Transaktion. Commit darf nur ausgeführt werden, wenn Andere Schreiber fertig sind. Leser können aktuelle Version lesen während, Schreiber eine neue Version schreiben 
 
 \end{document}
+
 
