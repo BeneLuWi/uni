@@ -207,24 +207,76 @@ Die Typ-2-TM M kann einen der Namen für die Eingabe ausgeben. Namen für 1: 0.9
 \end{enumerate}
 $ \Rightarrow $ Nicht berechenbar, wenn $ \delta_{dez} \rightarrow \delta_{dez} $ Abgebildet wird. Berechenbarkeit kann nur durch andere Abbildungsmenge erreicht werden, wie Cauchy ($ [\mathbb{N}\rightarrow\mathbb{Q}]$)
 
+\section{Vorlesung}
+NACHTRAGEN
+linksberechenbare/rechtsberechenbare Zahlen
 
+\section{Vorlesung}
+Stetig berechenbare Funktionen
+\subsection{Metrischer Raum}
+\begin{itemize}
+  \item d(x,y) Abstand zweier Punkte. Nahegelegene Punkte finden. Hilfreich für Cauchy-Darstellung um andere genäherte Zahlen zu finden, die sich auch innerhalb des Fehlers liegt.
+  \item $ B(x,\epsilon) $ Formale Kugel: Mittelpunkt, Radius: Gibt alle Punkte mit Abstand kleiner, als der Radius. 
+  \item $ B^n $ alle Formale Kugeln, wo Zentrum und Radius $ \in\mathbb{Q} $. Zahl in 3 Komponenten als Kantorsche Zerlegung: (Zentrum, Radius)
+\end{itemize}
 
+\paragraph{Effektiv stetig} 
+$ S \subseteq \mathbb{N} $ ist rekursiv aufzählbar. Eine Funktion ist genau dann berechenbar, wenn sie effektiv stetig ist. 07.06. NACHHÖREN für den Beweis
+\begin{enumerate}
+  \item $ <i,j> \in S\ mit\ f(B^n(x))\subseteq B^1(j) $ erzeugt Rechtecke, durch die die Funktion laufen muss. Die Funktion liegt innerhalb der Schläuche.
+  \item für jedes $ x\in Def(f) $ kann man ein $ <i,j> \in S $ finden. Die Schläuche werden beliebig fein.
+\end{enumerate}
+
+\paragraph{Folgerungen} Vorzeichenfunktion ist nicht stetig. $ sign: \mathbb{R} \rightarrow \mathbb{R}  $ ist nicht implementierbar (nicht berechenbar). Berechenbarkeit wird durch sign' erreicht, indem die Funktion partiell wird, indem sign' bei $ x=0 $ in eine Endlosschleife läuft. $ \overline{sign} $ ist total und bb, wenn, wenn x um 0 liegt $ \overline{sign} $ 0 oder 1 ausgibt.  
+
+\section{Vorlesung}
+\subsection{Mehrwertige Funktionen}
+Mehrwertige Funktion $ f: \subseteq X \rightrightarrows  Y $ ist eine Funktion, die für ein x mehrere Werte für y haben kann. Ein Funktionswert eines x sind alle möglichen Werte aus Y.
+
+\paragraph{Komposition von mehrwertigen Funktionen} In allen Fällen, muss das Ergebnis definiert sein. Definitionsbereich  der Komposition $ f \cdot g $ sind die x und y, die in beiden Funktionen im Definitionsbereich liegen. Außerhalb des Definitionsbereichs dürfen die Funktionen 'machen was sie wollen'. Beispiele:
+\begin{itemize}
+  \item In der Implementierung: Approx von 2 und $ \sqrt{2} * \sqrt{2} $.
+  \item Konversion von $ \mathbb{R} $ in Dezimalzahlen. Rundung mit erlaubter Schwankung ergibt verschiedene Ausgaben. Eindeutige Umwandlung (Rundung) ist nicht berechenbar, aber mehrwertig bb.
+\end{itemize}
+
+\paragraph{Konstruierte Folgen $ (x_n)_n $} nicht-bb Grenzwert, aber monoton wachsend. Nicht berechenbarer Konvergenzmodul. \\
+Die Funktion f ist auf den bb reellen Zahlen stetig, aber nicht bb mit einer nicht-bb kleinsten Nullstelle. Definitionsbereich von f ist $ \mathbb{R} ohne \{x_A \} $, also nicht stetig auf $ x_A $. Eigenschaften von f sind abhängig von A :
+\begin{itemize}
+  \item Ist A entscheidbar und der Definitionsraum ohne $ x_A $ ist berechenbar. (Sonst ist A ist so kompliziert, wie das Halteproblem und $ x_A $ kodiert das Halteproblem in einer reellen Zahl)
+  \item A ist rekursiv-aufzählbar, aber nicht entscheidbar. f bildet die bb reellen Zahlen auf die bb reellen Zahlen ab. 
+\end{itemize}
+ 
 
 
 %=======================================
 %
+%
 % ENDE VORLESUNGEN
+%
 %
 %=======================================
 \section{General Stuff}
 \begin{itemize}
   \item Abzählbar unendlich, wenn Bijektion zu $ \mathbb{N} $ $ \Rightarrow $ So viele berechenbare reelle Zahlen, wie Programme
-  \item Entscheidbar:
-  \item Berechenbar: 
+  \item Entscheidbar: Eine Funktion gibt aus, ob ein Element aus einer Menge ist.
+  \item Rekursiv Aufzählbar: Es gibt eine TM, die anhält, wenn ein Element aus der Menge ist.
+  \item Berechenbarkeit $ (\rho, \rho)-bb $ '(Approximation, Approximation)-bb'
+  \begin{itemize}
+    \item Eine Funktion $ f: \subseteq \mathbb{R}^n \rightarrow \mathbb{R} $ ist genau dann berechenbar, wenn sie effektiv stetig ist.
+    \item Aus Stetigkeit, Berechenbarkeit. Aus nicht Stetigkeit folgt nicht Berechenbarkeit
+    \item Um nicht-Berechenbarkeit zu zeigem, zeigt man nicht-Stetigkeit 
+    \item Aus nicht-effektiver Stetigkeit folgt nicht-Berechenbarkeit. Bsp $  f(x) = 1, x \geq 0; 0, x < 0 $ ist nicht stetig und nicht berechenbar
+  \end{itemize}
+  \item Konvergenzmodul
+  \item Effektiv stetig
   \item Diagonialisierung
   \item Isomorphismus
   \item Homomorphismus
   \item Berechenbarkeits-Typen
+  \item Cantorsche Zerlegung/Cantorsche Paarungsfunktion
+  \item Aus effektiver Stetigkeit folgt Stetigkeit. 
+  \item Cauchy-Darstellung
+  \item Warum kann nicht auf 0 geprüft werden.
 \end{itemize}
 
 
@@ -260,5 +312,12 @@ Zusätzlicher Test, wenn die Zahl rational ist, weil der Test auf Gleichheit ein
 $ x_A bb \Rightarrow A_{entscheidbar} $\\
 Tablemakers dilemma
 
-\end{document}
+\section{3. Übung}
+\subsection*{1. Aufgabe}
+\paragraph{Identität auf den reellen Zahlen ist nicht $ (\rho, \delta_{dez}') $-berechenbar} 
+\paragraph{Identität auf den reellen Zahlen ist $ (\delta_{dez}', \rho) $-berechenbar} Nimm eine Kommastelle nach der Anderen und Formuliere die Rationale Zahl
 
+\subsection*{2.Aufgabe} 
+\paragraph{max} Problem bei Gleichheit
+
+\end{document}
