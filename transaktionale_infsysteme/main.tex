@@ -370,6 +370,82 @@ Nicht Commit-Operation lesen immer die vorherige Version. Immer nur einer darf e
 \subsubsection{2V2PL}
 Für Recovery sinnvoll beim Abort: Before Image (BFIM), After Image (AFIM). BFIM ist aktuelle Version, AFIM die Version nach der nächsten Transaktion. Commit darf nur ausgeführt werden, wenn Andere Schreiber fertig sind. Leser können aktuelle Version lesen während, Schreiber eine neue Version schreiben 
 
+\subsubsection{Read-Only Multiversions-Protokoll ROMV}
+Beim Beginn muss gesagt werden, ob die Transaktion schreiben wird. 
+\begin{itemize}
+  \item Änderungstransaktionen: S2PL oder SSPL
+  \item Lesetransaktion: Werden nie blockiert und nicht gesperrt. Alle Änderungen, die zum \textbf{Transkationsbeginn} committed sind, werden gelesen.
+\end{itemize} 
+Garbage collection durch Löschen nicht zuletzt freigegebenen Versionen. Lesezugriffe auf zu alte Versionen werfen dann einen Fehler. 
+
+
+
+\section{Vorlesung}
+\subsection{Korrektheit von Schedules mit Abbrüchen}
+Um Dirty Read Fehler zu verhindern, Verzögerung des Commits, bis alle anderen committed sind. Ein Schedule ist \textbf{recoveryfähig/rücksetzbar}, wenn voneinander lesende Transaktionen  nacheinander committen. CSR impliziert nicht Recoveryfähigkeit
+
+\paragraph{Vermeiden von kaskadenartigem Rücksetzen ACA} 
+WR-Konflikt. Zum Beispiel durch Halten von Schreibsperren bis zum Commit. Recoveryfähigkeit impliziert nicht das Vermeiden von kaskadenartigen Aborts
+
+\paragraph{Striktheit ST} 
+WR und WW Konflikte. Lesen oder schreiben nur von NACHLESEN . ACA impliziert keine Striktheit.
+
+\paragraph{Rigorose Schedules RG}
+Alle Sperren werden bis zum Transaktionsende gehalten. ST impliziert nicht RG. Starker 2PL\\
+$ RG \subset ST \subset ACA \subset RC $\\
+$ RG \subset CSR $
+
+\subsubsection{Schedules mit Undo-Aktionen}
+Undo von schreibenden Transaktionen, die mit Abort enden: $ w_T ^{-1} (x) $ invertiert den vorherigen Schreibschritt $ w_T(x) $. Beim Abort einer Transaktion, werden alle aktiven, im Schedule bereits gemachten Operationen invertiert. Die Reihenfolge der Inversen ist umgekert zur Reihenfolge der zu invertierenden Transaktionen.
+
+\subsubsection{Reduzierbarkeit RED}  
+\begin{enumerate}
+  \item Kommutativität \textbf{CR}:
+  \item Undo-Regel \textbf{UR}: Benachbarte Inverse können entfernt werden.
+  \item Null-Aktions-Regel \textbf{NR}: Kein Effekt auf die Datenbank (Leseaktionen)
+  \item Ordnungs-Regel \textbf{OR}: Ungeordnete Operationen können bel geordnet werden.
+\end{enumerate}
+Kann man mit den Regeln einen Schedule in einen seriellen Schedule umwandeln, ist er serialisierbar
+
+\paragraph{Präfix-Reduzierbarkeit PRED} Jedes Präfix S' von S, muss reduzierbar sein.
+
+ 
+
+
+
+%==============================
+%
+%
+% ENDE VORLESUNGEN
+%
+%
+%==============================
+
+\section{General Stuff}
+\begin{itemize}
+  \item Serialiserung
+  \item CSR
+  \item Beweis $ \in MVSR $
+  \item Phaselocking (xPL)
+  \item Probleme/Fehlerfälle
+  \begin{itemize}
+    \item Dirty Read
+  \end{itemize}
+\end{itemize}
+
+
+
 \end{document}
+
+
+
+
+
+
+
+
+
+
+
 
 
