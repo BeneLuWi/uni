@@ -245,15 +245,58 @@ Die Funktion f ist auf den bb reellen Zahlen stetig, aber nicht bb mit einer nic
   \item Ist A entscheidbar und der Definitionsraum ohne $ x_A $ ist berechenbar. (Sonst ist A ist so kompliziert, wie das Halteproblem und $ x_A $ kodiert das Halteproblem in einer reellen Zahl)
   \item A ist rekursiv-aufzählbar, aber nicht entscheidbar. f bildet die bb reellen Zahlen auf die bb reellen Zahlen ab. 
 \end{itemize}
- 
+Funktion bildet bb Zahlen auf bb Zahlen ab oder eine Funktion ist überall stetig, springt aber trotzdem. $ \Rightarrow $ Typ-2 bb-Modell wird bevorzugt um solche Probleme zu umgehen.   
 
+\section{Vorlesung}
+\subsection{Berechenbare Mengen reeller Zahlen}
+Für eine Teilmenge aus $ \mathbb{R} $ wird eine Funktion benötigt, um herauszufinden, wo die Werte dieser Menge liegen. 
+\begin{itemize}
+  \item entscheidbare Teilmengen von $ \mathbb{N}^k $
+  \item rekursiv-aufzählbare Teilmengen von $ \mathbb{N}^k $
+\end{itemize}
+\paragraph{Funktion $ \chi_A $}  $ A \subseteq X $ mit Darstellung $ \delta_X $ auf $ \mathbb{R} $ ab. $ \chi_A $ gibt 0 aus, wenn $ x \in A $, sonst 1.
+
+\paragraph{Bemerkung} Gleicheit reeller Zahlen sind mit Typ-2-TMs nicht entscheidbar, unanhängig von der Darstellung der Zahl.
+
+\paragraph{Infimum der Abstände} Funktion ist 0, wenn man sich im Berech der Menge befindet, sonst ist der Wert der Funktion der Abstand zu einem Bereich. $ d_A(x) $ ist kleinster möglicher (Infimum) Abstand von einem x zu einem $ y \in A $. Der Abstand ist 0, wenn x auf dem Rand der Menge oder innerhalb liegt. 
+
+\paragraph{Berechenbarkeit einer Menge}
+ \begin{itemize}
+   \item Eine abgeschlossene Menge, also der ist Rand ein Teil der Menge, ist bb leer ist oder der Abstand zur Menge bb ist.
+   \item Eine offene Menge, der ist Rand kein Teil der Menge, ist bb, wenn das Komplement der Menge bb ist.
+ \end{itemize}
+Eine Menge aus $\mathbb{N}$ ist entscheidbar wenn die Menge aus $\mathbb{R}$ berechenbar ist.
+
+\subsubsection{Darstellung/Plotten einer Menge}
+Ist $ A \in \mathbb{R}^k $ bb, dann gibt es eine Funktion $ f : \mathbb{N} x \mathbb{Z}^k \rightarrow \{ 0, 1\}$, wobei N die Schrittweite und Z das Gitter, auf das abgebildet wird. f ist 0, wenn der Abstand $ d(\frac{d}{2^n}) $zur Menge kleiner $ 2^{-n} $ ist und 1, falls der Abstand größer $ 2 \cdot 2^{-n} $ und 0 oder 1, falls der Abstand dazwischen liegt. Ein größeres n verfeinert die Darstellung und macht sie genauer
+
+\paragraph{$ \delta $-rekursiv-aufzählbar}
+wenn eine Orakel TM M existiert wenn die TM anhält, sobald das Element in der Menge ist. Wenn M anhält, kennt M einen endlichen Teil des Namens und es liegt auch eine Umgebung von Element in der Menge.
+
+\subsubsection{Lemma 5.10}
+U ist eine offene Menge, A ist das abgeschlossene Komplement von U dann ist äquivalent
+\begin{enumerate}
+  \item Es gibt eine OTM, die Anhält, wenn ein x aus U ist.
+  \item Wir finden eine rekursiv-aufzählbare Menge S, sodass sich U als Vereinigung der durch S aufgespannten Kreise darstellen lässt. (Menge wird von innen aufgezählt)
+  \item Menge aller der Kreise, die innnen liegen. Komplette Menge mit Rand. und eine Teilmenge von U 
+  \item A = $ f^{-1}(\{0\}) $. A ist das Urbild der 0, also alle Werte, die von f auf 0 abgebildet werden.
+  \item Das Komplement ist die leere Menge, oder der Abstand zum Komplement ist $ (\rho, \rho_<) $-bb (Approximation von unten)
+\end{enumerate}
+\begin{itemize}
+  \item Ist $ d_A (\rho, \rho_<) $-bb
+  \item Ist $ d_A (\rho, \rho_>) $-bb
+\end{itemize}
+
+\subsection{Darstellung von Funktionen}
+Darstellung durch Abstandsfunktionen. Ähnliche Darstellungsstruktur bei den reellen, komplexen Zahlen und den stetigen Funktionen mit Argumenten 0 und 1.
+(X, d) = Menge X und Anstandsfunktion d ergeben einen Metrischen Raum.
 
 %=======================================
 %
 %
 % Übungen
 %
-%
+%	
 %=======================================
 
 \section{1. Übung}
@@ -309,29 +352,88 @@ Tablemakers dilemma
 %
 %
 %=======================================
-\section{General Stuff}
+\newpage
+\section{Zusammenfassung}
+
+\subsection{Abzählbar unendlich} 
+Es besteht eine Bijektion zu $ \mathbb{N} $. 
+\paragraph{Bemerkung} Es gibt so viele berechenbare reelle Zahlen, wie Programme
+
+\subsection{Entscheidbar} 
+Eine Menge M ist entscheidbar, wenn eine Funktion $ f_A : \mathbb{N} \rightarrow \mathbb{N} $ berechenbar ist und angibt, ob ein Element in der Menge ist, oder nicht. Bzw eine TM bei jeder Eingabe anhält.
+
+\subsection{Rekursiv aufzählbar} 
+Eine Menge M ist rekursiv aufzählbar, wenn eine Funktion $ f_A : \subseteq \mathbb{N} \rightarrow \mathbb{N} $ berechenbar ist und angibt, ob ein Element in der Menge ist, aber sonst undefiniert ist. Bzw eine TM bei einer korrekten Angabe anhält und sonst in eine Endlosschleife läuft.
+
+\subsection{$ \delta $-rekursiv-aufzählbar} wenn eine Orakel TM existiert wenn die TM anhält.
+
+\subsection{$ \mathbb{F} $}
+
+\subsection{Berechenbarkeit} 
+
+\subsubsection{Berechenbarkeit einer reellen Zahl}
+Eine reelle Zahl ist dann berechenbar, wenn eine der \textbf{äquivalenten} Bedingungen erfüllt ist:
+
+\begin{enumerate}
+  \item Es gibt eine TM, die eine unendlich lange binäre Representation von $ x $ auf dem Ausgabeband erzeugt.  
+  \item \textbf{Fehlerabschätzung} Es gibt eine TM, die Approximationen liefert. Formal: $ q:\mathbb{N}\rightarrow \mathbb{Q} $ $ (q_{i})_{i \in \mathbb{N}} $ ist Folge rationaler Zahlen, die gegen $ x $ konvergiert. Bedeutet, dass alle $ q_i $ innerhalb eines bestimmten beliebig kleinen Bereichs um $ x $ liegen. Größter möglicher Fehler $ 2^0 = 1 $
+  \item \textbf{Intervalschachtelung} Es gibt eine berechenbare Intervallschachtelung mit rationalen Endpunkten: Angabe zweier Folgen rationaler Zahlen mit der Bedingung, dass sie beide gegen $ x $ gehen und $ x $ dazwischen liegt. Ziel: Abstände von linker und rechter Schranke soll gegen null gehen.
+  \item \textbf{Dedekindscher Schnitt}Menge $ \{q \in \mathbb{Q} | q < x \} $ ist entscheidbar. Beispiel $ \sqrt{2} $ ist berechenbar. $ \{ q | q < \sqrt{2} \} = \{ q | q^2 < 2\}$. $ \Rightarrow $ Es gibt einen Test, ob die Zahl kleiner ist.
+  \item Man kann x als endliche Summe von Brüchen darstellen: $ z \in \mathbb{Z} $ $ A \subseteq \mathbb{N} $, $ x_A = \sum_{i \in A} 2^{-i-1} $, $ x = z + x_A $
+  \item Es exisitert eine Kettenbruchentwicklung
+ \end{enumerate}
+ \paragraph{Folgerungen / Beispiele}
 \begin{itemize}
-  \item Abzählbar unendlich, wenn Bijektion zu $ \mathbb{N} $ $ \Rightarrow $ So viele berechenbare reelle Zahlen, wie Programme
-  \item Entscheidbar: Eine Funktion gibt aus, ob ein Element aus einer Menge ist.
-  \item Rekursiv Aufzählbar: Es gibt eine TM, die anhält, wenn ein Element aus der Menge ist.
-  \item Berechenbarkeit $ (\rho, \rho)-bb $ '(Approximation, Approximation)-bb'
-  \begin{itemize}
-    \item Eine Funktion $ f: \subseteq \mathbb{R}^n \rightarrow \mathbb{R} $ ist genau dann berechenbar, wenn sie effektiv stetig ist.
-    \item Aus Stetigkeit, Berechenbarkeit. Aus nicht Stetigkeit folgt nicht Berechenbarkeit
-    \item Um nicht-Berechenbarkeit zu zeigem, zeigt man nicht-Stetigkeit 
-    \item Aus nicht-effektiver Stetigkeit folgt nicht-Berechenbarkeit. Bsp $  f(x) = 1, x \geq 0; 0, x < 0 $ ist nicht stetig und nicht berechenbar
-  \end{itemize}
-  \item Konvergenzmodul
-  \item Effektiv stetig
-  \item Diagonialisierung
-  \item Isomorphismus
-  \item Homomorphismus
-  \item Berechenbarkeits-Typen
-  \item Cantorsche Zerlegung/Cantorsche Paarungsfunktion
-  \item Aus effektiver Stetigkeit folgt Stetigkeit. 
-  \item Cauchy-Darstellung
-  \item Warum kann nicht auf 0 geprüft werden.
+  \item $ \Rightarrow $ Für Berechenbarkeit muss nur eine der Bedingungen bewiesen werden. Menge der berechenbaren reelen Zahlen = $ \mathbb{R}_c $
+  \item Nicht berechenbare reele Zahlen durch Diagonalisierung konstruierbar
+  \item $ e $ berechenbar, weil die Fehlerabschätzung (2) existiert
+  \item $ \pi $ (Notiert als alternierede Reihe) berechenbar, weil Intervalschachtelung existiert
+  \item $ \sqrt{2} $ berechenbar, weil Dedekindscher Schnitt existiert.
+ \end{itemize}
+
+\subsubsection{$ (\rho, \rho)-bb $ '(Approximation, Approximation)-bb'}
+Warum kann nicht auf 0 geprüft werden.
+\begin{itemize}
+  \item Eine Funktion $ f: \subseteq \mathbb{R}^n \rightarrow \mathbb{R} $ ist genau dann berechenbar, wenn sie effektiv stetig ist.
+  \item Aus Stetigkeit, Berechenbarkeit. Aus nicht Stetigkeit folgt nicht Berechenbarkeit
+  \item Um nicht-Berechenbarkeit zu zeigem, zeigt man nicht-Stetigkeit 
+  \item Aus nicht-effektiver Stetigkeit folgt nicht-Berechenbarkeit. Bsp $  f(x) = 1, x \geq 0; 0, x < 0 $ ist nicht stetig und nicht berechenbar
 \end{itemize}
 
+
+\subsection{Konvergenzmodul}
+
+\subsection{Effektiv stetig}
+Aus effektiver Stetigkeit folgt Stetigkeit. 
+\subsection{Diagonialisierung}
+
+\subsection{Isomorphismus}
+
+
+\subsection{Homomorphismus}
+
+
+\subsection{Berechenbarkeits-Typen}
+
+
+\subsection{Cantorsche Zerlegung/Cantorsche Paarungsfunktion} 
+
+
+\subsection{Cauchy-Darstellung}
+
+
+\subsection{Mengenlehre}
+
+
+\subsubsection{Abgeschlossene Menge}
+
+
+\subsubsection{Offene Menge}
+
+\subsubsection{Kompakte Menge}
+
+\subsection{Orakel-Turingmaschine}
+
+abgeschlossen und beschräkt
 
 \end{document}
