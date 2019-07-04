@@ -410,6 +410,95 @@ Kann man mit den Regeln einen Schedule in einen seriellen Schedule umwandeln, is
 \paragraph{Präfix-Reduzierbarkeit PRED} Jedes Präfix S' von S, muss reduzierbar sein.
 
  
+\section{Vorlesung}
+\subsection{Recoveryalgorithmen für das Seitenmodell}
+
+\subsubsection{Fehlerklassen/Toleranz}
+Handling von erwartbaren Fehlern. Fehlerklassifikationen:
+\begin{itemize}
+  \item Transaktionsfehler: Abort wegen fehlerhaften Aktionen, Deadlocks oder Nicht-Serialisierbarkeit. Entscheidung des Schedulers
+  \item Systemfehler (Soft Crash): Neustart erforderlich (zB durch Stromausfall, Bedienungsfehler, CPU-Fehler)
+  \item Gerätefehler (Hard Crash): Festplattenfehler, schwerwiegender Fehler $ \rightarrow $ Verlust von Daten. Recovery durch Einspielen von Backups.
+\end{itemize}
+
+\paragraph{Fehlererkennung} Annahme, dass das System einen Fehler erkennt. 
+
+\paragraph{Verfügbarkeit} Wieviel Prozent der Zeit ist das System für Nutzer verfügbar: $ \frac{MTTF}{MTTF + MFFT} \cdot 100 $. Kürzere Reparaturzeit erhöht die Verfügbarkeit.
+
+\paragraph{Redo-Recovery} Arbeiten im Cache
+
+\paragraph{Undo-Recovery}
+
+\paragraph{Restart} Bist zum Punkt des Fehlers sollen alle committeten Operationen wiederholt werden. Ausführungszeit Sekunden bis Minuten
+
+\paragraph{Archive-Restart, Kaltstart} Wiederherstellung des committed DB state. Ausführungszeit Minuten bis Stunden
+
+\paragraph{Rücksetzen} Es wird angenommen. dass der Scheduler in serialisierbarer und strikter Reihenfolge weitergibt.
+
+\subsubsection{Datenbanken}
+
+\paragraph{stabile Datenbank} 
+nicht-flüchtiger Speicher mit Versionen der Datenbank. Zwei Arten von Änderungen:
+\begin{itemize}
+  \item In-place
+  \item Shadowing: Änderungen in einem Puffer, der mehrere Versionen eines DBobjektes enthält. Erleichtert Abort-Operationen
+\end{itemize}
+
+\paragraph{Datenbank-Cache} Vorstufe zur stabilen Datenbank
+
+
+\subsubsection*{Logging}
+
+\begin{itemize}
+  \item Physiches Log: die kompletten geänderten Seiten werden gespeichert.
+  \item Logisches Log: nur Änderungen werden gespeichert
+\end{itemize}
+Seiten und Log-Einträge haben Sequenznummern. Ist die Seitensequenznummer im Cache ungleich der in der stabilen DB, gibt es Änderungen. Log-Einträge werden durch die Nummern verkettet und ergeben die Historie. 
+Last committed value muss für jedes Objekt verfügbar sein. Konfliktreihenfolge im Schedule muss der Log-Reihenfolge entsprechen. Log muss fehlerfrei sein.
+
+\paragraph{stabiles Log} Log aus Änderungen an der Datenbank auf einer anderen Datenbank, damit die Daten nicht verloren gehen. 
+
+\paragraph{Log-Buffer} Zwischenspeicher für Log-Einträge, um Einträge effizienter zu machen.
+
+\paragraph{Write-Ahead-Log WAL} 
+\begin{itemize}
+  \item \textbf{Redo/Commit-Regel:} Fehlende Änderungen von T die committed wurden müssen wiederholt werden können. 
+  \item \textbf{Log-ahead-Regel Undo-Regel:} Bevor ein Objekt in die stabile Datenbank geschrieben wird, muss zuerst ins Log geschrieben werden, damit sie Rückgängig gemacht werden kann.
+  \item \textbf{Garbage-Collection-Regel:} Sobald ein Eintrag nicht mehr für die Recovery benötigt wird, kann sie entfernt werden.
+\end{itemize}
+
+\subsubsection{Algortihmen}
+\paragraph{Verschiedene Klassifizierungen}
+
+\begin{itemize}
+  \item Undo: geschriebene Datenobjekte müssen verändert werden, weil Abort vor Commit. 
+  \item Redo: veränderte Datenobjekte werden committet, ohne dass sie in der stabilen Datenbank stehen.
+\end{itemize}
+\paragraph{}
+\begin{itemize}
+  \item Undo/Redo-Algorithmen: System ist flexibel und Änderungen können nach Bedarf geschrieben werden.
+  \item Undo/No-Redo-Algorithmen 
+  \item No-Undo/Redo-Algorithmen
+  \item Np-Undo/No-Redo-Algorithmen: ideal im Fehlerfall, aber nicht im Normalfall
+\end{itemize}
+\paragraph{}
+\begin{itemize}
+  \item Force: 
+  \item Steal: Seiten dürfen aus dem Cache auch vor dem Commit geschrieben und aus dem Cache gelöscht werden
+\end{itemize}
+
+\subsubsection{Undo/Redo}
+
+
+  
+
+
+
+
+
+
+
+
 
 
 
@@ -436,7 +525,6 @@ Kann man mit den Regeln einen Schedule in einen seriellen Schedule umwandeln, is
 
 
 \end{document}
-
 
 
 
