@@ -1,0 +1,146 @@
+\documentclass[ngerman]{scrartcl}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{graphicx}
+
+\usepackage{hyperref}
+
+\title{Berechenbare Analysis \\ Zusammenfassung \\ SoSe 19}
+\author{Benedikt Lüken-Winkels}
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+\section{Chomsky Hierarchie}
+
+\begin{itemize}
+  \item Typ-0: Beliebige formale Grammatik. Rekursiv aufzählbar
+  \item Typ-1: Kontextsensitive Grammatik
+  \item Typ-2: Kontextfreie Grammatik
+  \item Typ-3: Reguläre Grammatik
+\end{itemize}
+
+\section{Abzählbar unendlich} 
+Es besteht eine Bijektion zu $ \mathbb{N} $. 
+\paragraph{Bemerkung} Es gibt so viele berechenbare reelle Zahlen, wie Programme
+
+\section{Entscheidbar} 
+Eine Menge M ist entscheidbar, wenn eine Funktion $ f_A : \mathbb{N} \rightarrow \mathbb{N} $ berechenbar ist und angibt, ob ein Element in der Menge ist, oder nicht. Bzw eine TM bei jeder Eingabe anhält.
+
+\section{Rekursiv aufzählbar} 
+Eine Menge M ist rekursiv aufzählbar, wenn eine Funktion $ f_A : \subseteq \mathbb{N} \rightarrow \mathbb{N} $ berechenbar ist und angibt, ob ein Element in der Menge ist, aber sonst undefiniert ist. Bzw eine TM bei einer korrekten Angabe anhält und sonst in eine Endlosschleife läuft.
+
+\section{$ \delta $-rekursiv-aufzählbar} wenn eine Orakel TM existiert wenn die TM anhält.
+
+\section{Berechenbarkeit} 
+
+\subsection{Berechenbarkeit einer reellen Zahl}
+Eine reelle Zahl ist dann berechenbar, wenn eine der \textbf{äquivalenten} Bedingungen erfüllt ist:
+
+\begin{enumerate}
+  \item Es gibt eine TM, die eine unendlich lange binäre Representation von $ x $ auf dem Ausgabeband erzeugt.  
+  \item \textbf{Fehlerabschätzung} Es gibt eine TM, die Approximationen liefert. Formal: $ q:\mathbb{N}\rightarrow \mathbb{Q} $ $ (q_{i})_{i \in \mathbb{N}} $ ist Folge rationaler Zahlen, die gegen $ x $ konvergiert. Bedeutet, dass alle $ q_i $ innerhalb eines bestimmten beliebig kleinen Bereichs um $ x $ liegen. Größter möglicher Fehler $ 2^0 = 1 $
+  \item \textbf{Intervalschachtelung} Es gibt eine berechenbare Intervallschachtelung mit rationalen Endpunkten: Angabe zweier Folgen rationaler Zahlen mit der Bedingung, dass sie beide gegen $ x $ gehen und $ x $ dazwischen liegt. Ziel: Abstände von linker und rechter Schranke soll gegen null gehen.
+  \item \textbf{Dedekindscher Schnitt}Menge $ \{q \in \mathbb{Q} | q < x \} $ ist entscheidbar. Beispiel $ \sqrt{2} $ ist berechenbar. $ \{ q | q < \sqrt{2} \} = \{ q | q^2 < 2\}$. $ \Rightarrow $ Es gibt einen Test, ob die Zahl kleiner ist.
+  \item Man kann x als endliche Summe von Brüchen darstellen: $ z \in \mathbb{Z} $ $ A \subseteq \mathbb{N} $, $ x_A = \sum_{i \in A} 2^{-i-1} $, $ x = z + x_A $
+  \item Es exisitert eine Kettenbruchentwicklung
+ \end{enumerate}
+ \paragraph{Folgerungen / Beispiele}
+\begin{itemize}
+  \item $ \Rightarrow $ Für Berechenbarkeit muss nur eine der Bedingungen bewiesen werden. Menge der berechenbaren reelen Zahlen = $ \mathbb{R}_c $
+  \item Nicht berechenbare reele Zahlen durch Diagonalisierung konstruierbar
+  \item $ e $ berechenbar, weil die Fehlerabschätzung (2) existiert
+  \item $ \pi $ (Notiert als alternierede Reihe) berechenbar, weil Intervalschachtelung existiert
+  \item $ \sqrt{2} $ berechenbar, weil Dedekindscher Schnitt existiert.
+ \end{itemize}
+
+\subsection{$ (\rho, \rho)-berechenbar $ '(Approximation, Approximation)-bb'}
+\begin{itemize}
+  \item Eine Funktion $ f: \subseteq \mathbb{R}^n \rightarrow \mathbb{R} $ ist genau dann berechenbar, wenn sie effektiv stetig ist.
+  \item Aus Stetigkeit, Berechenbarkeit. Aus nicht Stetigkeit folgt nicht Berechenbarkeit
+  \item Um nicht-Berechenbarkeit zu zeigem, zeigt man nicht-Stetigkeit 
+  \item Aus nicht-effektiver Stetigkeit folgt nicht-Berechenbarkeit. Bsp $  f(x) = 1, x \geq 0; 0, x < 0 $ ist nicht stetig und nicht berechenbar
+\end{itemize}
+
+\subsection{$ (\delta, \delta)-berechenbar $ '(Name, Name)-bb'}
+
+\section{Konvergenzmodul}
+
+
+
+\section{Effektiv stetig}
+Aus effektiver Stetigkeit folgt Stetigkeit. 
+
+\section{Diagonalisierung}
+\paragraph{$ \mathbb{R} $ ist überabzählbar}
+
+Beweisidee: Man nimmt eine Folge reeller Zahlen zwischen 0 und 1. Mit der Diagonialisierung zeigt man, dass es eine Zahl gibt, die nicht in dieser Folge enthalten ist. Da dies für eine beliebige Menge geht, kann es keine Folge geben, die alle reellen Zahlen zwischen 0 und 1 enthält.
+
+
+\section{Isomorphismus}
+Ein Isomorphismus ist zum Beispiel eine Funktion zwischen zwei Mengen, die bijektiv ist und ein Homomorphismus ist. Elemente der einen Menge werden auf bedeutungsgleiche Elemente der anderen Menge abgebildet.
+
+\section{Homomorphismus}
+Ein Homomorphismus bildet die Elemente aus der einen Menge so in die andere Menge ab, dass sich ihre Bilder dort hinsichtlich der Struktur ebenso verhalten, wie sich deren Urbilder in der Ausgangsmenge verhalten.
+
+
+\section{Cauchy-Darstellung}
+$ M = [A \rightarrow B] $ ist die Menge aller partiellen Funktionen $ f : \subseteq A \rightarrow B $.
+
+\paragraph{Definition} $ \rho : \subseteq[\mathbb{N}\rightarrow\mathbb{Q}] \rightarrow \mathbb{R}$ 
+
+\begin{center}
+  $ \rho(f) = x \Leftrightarrow (\forall i \in \mathbb{N})|x-f(i)|< 2^{-i}$ \\
+  $ \rho $ = Cauch-Darstellung der reellen Zahlen.
+\end{center} 
+
+\section{Mengenlehre}
+
+
+\subsection{Abgeschlossene Menge}
+
+
+\subsection{Offene Menge}
+
+\subsection{Kompakte Menge}
+
+\section{Turingmaschinen}
+
+\subsection{Typ-2-Turingmaschinen}
+Besonderheiten: Eingabeband ist read-only, Ausgabeband kann nur nach rechts schreiben.
+
+\subsection{Orakel-Turingmaschine OTM}
+\paragraph{$ \mathbb{F} $} 
+ist die Menge aller partiellen Funktionen auf dem Alphabet der OTM: \\ 
+ $ \mathbb{F} = \{ f | f: \subseteq \Sigma^* \rightarrow  \Sigma^* \}$
+
+
+\section{Implementierung}
+
+\subsection{DAG}
+
+
+
+
+
+\section{Fragen}
+\subsection{Warum ist eine reelle Zahl bb, wenn Sie eine endlose Binärdarstellung hat?}
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
