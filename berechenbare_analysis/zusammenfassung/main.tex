@@ -39,13 +39,12 @@ Eine Menge M ist rekursiv aufzählbar, wenn eine Funktion $ f_A : \subseteq \mat
 
 \subsection{Berechenbarkeit einer reellen Zahl}
 Eine reelle Zahl ist dann berechenbar, wenn eine der \textbf{äquivalenten} Bedingungen erfüllt ist:
-
 \begin{enumerate}
   \item Es gibt eine TM, die eine unendlich lange binäre Representation von $ x $ auf dem Ausgabeband erzeugt.  
   \item \textbf{Fehlerabschätzung} Es gibt eine TM, die Approximationen liefert. Formal: $ q:\mathbb{N}\rightarrow \mathbb{Q} $ $ (q_{i})_{i \in \mathbb{N}} $ ist Folge rationaler Zahlen, die gegen $ x $ konvergiert. Bedeutet, dass alle $ q_i $ innerhalb eines bestimmten beliebig kleinen Bereichs um $ x $ liegen. Größter möglicher Fehler $ 2^0 = 1 $
   \item \textbf{Intervalschachtelung} Es gibt eine berechenbare Intervallschachtelung mit rationalen Endpunkten: Angabe zweier Folgen rationaler Zahlen mit der Bedingung, dass sie beide gegen $ x $ gehen und $ x $ dazwischen liegt. Ziel: Abstände von linker und rechter Schranke soll gegen null gehen.
-  \item \textbf{Dedekindscher Schnitt}Menge $ \{q \in \mathbb{Q} | q < x \} $ ist entscheidbar. Beispiel $ \sqrt{2} $ ist berechenbar. $ \{ q | q < \sqrt{2} \} = \{ q | q^2 < 2\}$. $ \Rightarrow $ Es gibt einen Test, ob die Zahl kleiner ist.
-  \item Man kann x als endliche Summe von Brüchen darstellen: $ z \in \mathbb{Z} $ $ A \subseteq \mathbb{N} $, $ x_A = \sum_{i \in A} 2^{-i-1} $, $ x = z + x_A $
+  \item \textbf{Dedekindscher Schnitt} Menge $ \{q \in \mathbb{Q} | q < x \} $ ist entscheidbar. Beispiel $ \sqrt{2} $ ist berechenbar. $ \{ q | q < \sqrt{2} \} = \{ q | q^2 < 2\}$. $ \Rightarrow $ Es gibt einen Test, ob die Zahl kleiner ist.
+  \item Man kann x als Summe von abzählbar unendlich vielen Brüchen darstellen: $ z \in \mathbb{Z} $ $ A \subseteq \mathbb{N} $, $ x_A = \sum_{i \in A} 2^{-i-1} $, $ x = z + x_A $
   \item Es exisitert eine Kettenbruchentwicklung
  \end{enumerate}
  \paragraph{Folgerungen / Beispiele}
@@ -57,6 +56,18 @@ Eine reelle Zahl ist dann berechenbar, wenn eine der \textbf{äquivalenten} Bedi
   \item $ \sqrt{2} $ berechenbar, weil Dedekindscher Schnitt existiert.
  \end{itemize}
 
+
+
+\subsubsection{Übersetzung zwischen unendlichen Binärfolgen und schnell konvergierenden rationalen Folgen}
+\paragraph{Rationale Folge $ \Rightarrow $ Binärfolge}
+Realisiert durch OTM oder Typ-2-TM. Es gibt eine Folge, allerdings kann die Transformation nicht programmiert werden, weil nicht mehr verändert werden kann, was die OTM geschrieben hat (soll mit 1 oder 0 angefangen werden).
+
+
+\subsection{Links/rechtsberechenbare reelle Zahlen}
+Halteproblem kodiert links oder rechtsberechenbare Zahlen. \\
+Links \textbf{und} rechtsberechenbare Zahl ergibt Berechenbarkeit. Approximationsmenge ist \textbf{rekurisv aufzählbar} und nicht entscheidbar.
+
+
 \subsection{$ (\rho, \rho)-berechenbar $ '(Approximation, Approximation)-bb'}
 \begin{itemize}
   \item Eine Funktion $ f: \subseteq \mathbb{R}^n \rightarrow \mathbb{R} $ ist genau dann berechenbar, wenn sie effektiv stetig ist.
@@ -67,12 +78,29 @@ Eine reelle Zahl ist dann berechenbar, wenn eine der \textbf{äquivalenten} Bedi
 
 \subsection{$ (\delta, \delta)-berechenbar $ '(Name, Name)-bb'}
 
-\section{Konvergenzmodul}
+\subsection{Berechenbare Folgen reeller Zahlen}
+
+\paragraph{Konvergenzmodul}
+Wie schnell geht die Folge gegen einen Grenzwert. $ \overline{x} = \lim_{i \rightarrow \infty} x_ i $. 
+\begin{itemize}
+  \item bb Folge + bb Modul $ \Rightarrow $ Grenzwert bb
+  \item bb Folge + \textbf{nicht} bb Modul $ \Rightarrow $ Grenzwert nicht bb. Lemma 4.30. Baue eine linksberechebare reelle Folge. 
+\end{itemize}
 
 
+\subsection{Berechenbare Mengen reeller Zahlen}
+\begin{itemize}
+  \item entscheidbar
+  \item berechenbar
+  \item rekursiv aufzählbar
+\end{itemize}
+
+\paragraph{Plot von Mengen} Berechenbarkeit $ \Rightarrow $ Abstand berechenbar. Beispiel Mandelbrot/Julia-Menge. Wenn die Funktion geplottet werden kann man sie berechnen (effektive Stetigkeit)
 
 \section{Effektiv stetig}
 Aus effektiver Stetigkeit folgt Stetigkeit. 
+Aus effektiver Stetigkeit folgt idR Berechenbarkeit
+Menge S zerlegt in i und j. Jeweils formale Kugeln. 
 
 \section{Diagonalisierung}
 \paragraph{$ \mathbb{R} $ ist überabzählbar}
@@ -86,8 +114,13 @@ Ein Isomorphismus ist zum Beispiel eine Funktion zwischen zwei Mengen, die bijek
 \section{Homomorphismus}
 Ein Homomorphismus bildet die Elemente aus der einen Menge so in die andere Menge ab, dass sich ihre Bilder dort hinsichtlich der Struktur ebenso verhalten, wie sich deren Urbilder in der Ausgangsmenge verhalten.
 
+\section{Berechenbare reelle Funktionen}
+Wurzel: bei negativen Argumenten macht die OTM irgendetwas (undefiniert). Lösung: Die Approximation liefert eine rationale Zahl, die keine negativen Zahlen akzeptiert und 
 
-\section{Cauchy-Darstellung}
+
+\section{Darstellung}
+
+\subsection{Cauchy-Darstellung}
 $ M = [A \rightarrow B] $ ist die Menge aller partiellen Funktionen $ f : \subseteq A \rightarrow B $.
 
 \paragraph{Definition} $ \rho : \subseteq[\mathbb{N}\rightarrow\mathbb{Q}] \rightarrow \mathbb{R}$ 
@@ -97,37 +130,46 @@ $ M = [A \rightarrow B] $ ist die Menge aller partiellen Funktionen $ f : \subse
   $ \rho $ = Cauch-Darstellung der reellen Zahlen.
 \end{center} 
 
-\section{Mengenlehre}
-
-
-\subsection{Abgeschlossene Menge}
-
-
-\subsection{Offene Menge}
-
-\subsection{Kompakte Menge}
-
-\section{Turingmaschinen}
+\section{Turingmaschinen (Berechenbarkeitsmodelle)}
 
 \subsection{Typ-2-Turingmaschinen}
-Besonderheiten: Eingabeband ist read-only, Ausgabeband kann nur nach rechts schreiben.
+Besonderheiten: Eingabeband ist read-only, Ausgabeband kann nur nach rechts schreiben. Undendliche Eingabe 
+
 
 \subsection{Orakel-Turingmaschine OTM}
 \paragraph{$ \mathbb{F} $} 
 ist die Menge aller partiellen Funktionen auf dem Alphabet der OTM: \\ 
  $ \mathbb{F} = \{ f | f: \subseteq \Sigma^* \rightarrow  \Sigma^* \}$
+\paragraph{Funktion} Orakel als Eingabe und Parameter als Eingabe: Liefert Resultat
 
+\subsection{Komposition der Modelle}
+$ \Gamma_3 = \Gamma_2 \circ \Gamma_1 $. $ \Gamma_3 $ muss $ \Gamma_2 $ das richtige Orakel liefern. Bei der Implementierung ruft $ \Gamma_3 $ das Approx von $ \Gamma_2 $ und $ \Gamma_2 $ wiederum das Approx von $ \Gamma_1 $ auf.
+
+\textbf{OTM und Implementierung sind das Gleiche.}
 
 \section{Implementierung}
-
-\subsection{DAG}
-
+\textbf{Approx realisiert Orakelanfragen}
 
 
+\subsection{DAG Directed Acyclic Graph}
+Acyclic, weil sonst um die Zahl zu berechnen, die Zahl selbst berechnet werden müsste.
+
+\paragraph{Rundung} Naive multiplikatoin von rationalen Zahlen verdoppelt bei jeder Iteration den Speicherplatz $ \Rightarrow $ Rundung 
+
+\paragraph{Caching} Stuktur der DAGs ausnutzen. Bekannte Ergebnisse aus DAGs werden gespeichert (Anwendung bei der Komposition)
+
+\paragraph{Limit-Operator} Modul ist konstant n wenn $ |f(n,x) - g(x)| < 2^{-n} $ 
+
+\paragraph{Lambda-Funktionen} Funktionen als Eingabe für Variablen
 
 
-\section{Fragen}
-\subsection{Warum ist eine reelle Zahl bb, wenn Sie eine endlose Binärdarstellung hat?}
+\section{Mengenlehre}
+
+\subsection{Abgeschlossene Menge}
+
+\subsection{Offene Menge}
+
+\subsection{Kompakte Menge}
 
 
 \end{document}
