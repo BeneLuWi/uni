@@ -7,7 +7,9 @@ Mitschriften, Zusammenfassungen und Projekte im Master an der Universität Trier
 [Verteilte Systeme](verteilte_systeme/vs.pdf)  
 
 ## Sommersemester 19
-[Approximative Algorithmen](approximative_algorithmen/main.pdf)   
+[Approximative Algorithmen (unvollständig)](approximative_algorithmen/main.pdf)   
 [Transaktionale Informationssysteme](transaktionale_infsysteme/main.pdf)  
-[Informations Visualisierung](informations_visualisierung/main.pdf)  
-[Berechenbare Analysis](berechenbare_analysis/main.pdf)  
+[Informations Visualisierung - Mitschrift](informations_visualisierung/main.pdf)  
+[Informations Visualisierung - Zusammenfassung](informations_visualisierung/zusammenfassung/main.pdf)  
+[Berechenbare Analysis - Mitschrift](berechenbare_analysis/main.pdf)  
+[Berechenbare Analysis - Zusammenfassung](berechenbare_analysis/zusammenfassung/main.pdf)  
