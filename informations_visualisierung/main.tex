@@ -270,15 +270,66 @@ Ad-hoc diagrams hard to understand without explanation. With reverse engineering
 \section{Lecture}
 \subsection{Dynamic Program Visualization}
 
-\paragraph{Dynamic Data Acquisition} invasive mehtod, monitoring the behaviour of a program before/after each instruction. May alter the program execution. 
+\paragraph{Dynamic Data Acquisition} invasive mehtod, monitoring the behaviour of a program before/after each instruction. Might alter the program execution. 
+NACHLESEN
+
+\section{Lecture}
+\subsection{Visula Debugging}
+Slices are parts/slices of the huge dependency graph in a program 
+\paragraph{Static Slice} How is a variable changed by other code points. Slice is a samll part
+\paragraph{Dynamic Slice} 
+\paragraph{Execution Slices} Sequence of program points.
+
+\paragraph{Dice} Difference of two Slices.
+
+\paragraph{X-Slice} (Heuristic) Compare a run with failing and compiling input. Only the failing program points are highlighted. Color coding coverage data by failure propability and evidence for failure.
+
+\paragraph{Test Blueprint} Highlight non-executed program points in the Class Blueprint. 
+
+
+\subsection{Software Evolution}
+aka Software Development Process $ \Rightarrow $ Software changes in its lifetime.
+
+\paragraph{Software Archive} version control/collection of the history of a program of any kind. 
+
+\paragraph{Color-coding}
+\begin{itemize}
+  \item Line Representation: indentation/different metrices
+  \item Code Age: when was a file/line changed
+  \item Pixel Representation
+  \item Version-specific Code: highlight eg platform specific code
+  \item Depth of nested blocks
+  \item CVSScan: different versions for a file with LOC as bar height.
+\end{itemize}
+
+\paragraph{Evolution Matrix} Classes are represented as boxes. Box height and width encode a certain metric. $ \Rightarrow $ No insight on program structure
+
+\paragraph{Call Graph} Which function calls wich function (low level info). Encode program structure. Edge splatting (the more often an edge is drawn the more intense it color gets) shows call clusters.
+
+\subsubsection{Visual Data Mining in Software Architecture}
+\paragraph{Data Mining Process}
+Startgin with a version control program (git)
+\begin{enumerate}
+  \item Analysis
+  \item Extraction
+  \item Data Mining
+  \item Visual Data Mining
+\end{enumerate} 
+
+
+\paragraph{Coupling}
+\begin{itemize}
+  \item Evolutionary Coupling artifact are related, when they are changed together.
+  \item Logical Coupling artifacts are related, when they are programmatically calling each other.
+\end{itemize}
+
+
+
 
 
 
 
 \end{document}
-
-
-
 
 
 

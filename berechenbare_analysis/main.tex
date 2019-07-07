@@ -377,7 +377,7 @@ Eine reelle Zahl ist dann berechenbar, wenn eine der \textbf{äquivalenten} Bedi
 \begin{enumerate}
   \item Es gibt eine TM, die eine unendlich lange binäre Representation von $ x $ auf dem Ausgabeband erzeugt.  
   \item \textbf{Fehlerabschätzung} Es gibt eine TM, die Approximationen liefert. Formal: $ q:\mathbb{N}\rightarrow \mathbb{Q} $ $ (q_{i})_{i \in \mathbb{N}} $ ist Folge rationaler Zahlen, die gegen $ x $ konvergiert. Bedeutet, dass alle $ q_i $ innerhalb eines bestimmten beliebig kleinen Bereichs um $ x $ liegen. Größter möglicher Fehler $ 2^0 = 1 $
-  \item \textbf{Intervalschachtelung} Es gibt eine berechenbare Intervallschachtelung mit rationalen Endpunkten: Angabe zweier Folgen rationaler Zahlen mit der Bedingung, dass sie beide gegen $ x $ gehen und $ x $ dazwischen liegt. Ziel: Abstände von linker und rechter Schranke soll gegen null gehen.
+  \item \textbf{Intervalschachtelung} Es gibt eine berechenbare Intervallschachtelung mit rationalen Endpunkten: Angabe zweier Folgen rationaler Zahlen mit der Bedingung, dass sie beide gegen $ x $ gehen und $ x $ dazwischen liegt. Ziel: Abstähttps://de.wikipedia.org/wiki/Isomorphismusnde von linker und rechter Schranke soll gegen null gehen.
   \item \textbf{Dedekindscher Schnitt}Menge $ \{q \in \mathbb{Q} | q < x \} $ ist entscheidbar. Beispiel $ \sqrt{2} $ ist berechenbar. $ \{ q | q < \sqrt{2} \} = \{ q | q^2 < 2\}$. $ \Rightarrow $ Es gibt einen Test, ob die Zahl kleiner ist.
   \item Man kann x als endliche Summe von Brüchen darstellen: $ z \in \mathbb{Z} $ $ A \subseteq \mathbb{N} $, $ x_A = \sum_{i \in A} 2^{-i-1} $, $ x = z + x_A $
   \item Es exisitert eine Kettenbruchentwicklung
@@ -406,12 +406,16 @@ Warum kann nicht auf 0 geprüft werden.
 \subsection{Effektiv stetig}
 Aus effektiver Stetigkeit folgt Stetigkeit. 
 \subsection{Diagonialisierung}
+\paragraph{$ \mathbb{R} $ ist überabzählbar}
+
+Beweisidee: Man nimmt eine Folge reeller Zahlen zwischen 0 und 1. Mit der Diagonialisierung zeigt man, dass es eine Zahl gibt, die nicht in dieser Folge enthalten ist. Da dies für eine beliebige Menge geht, kann es keine Folge geben, die alle reellen Zahlen zwischen 0 und 1 enthält.
+
 
 \subsection{Isomorphismus}
-
+Ein Isomorphismus ist zum Beispiel eine Funktion zwischen zwei Mengen, die bijektiv ist und ein Homomorphismus ist. Elemente der einen Menge werden auf bedeutungsgleiche Elemente der anderen Menge abgebildet.
 
 \subsection{Homomorphismus}
-
+Ein Homomorphismus bildet die Elemente aus der einen Menge so in die andere Menge ab, dass sich ihre Bilder dort hinsichtlich der Struktur ebenso verhalten, wie sich deren Urbilder in der Ausgangsmenge verhalten.
 
 \subsection{Berechenbarkeits-Typen}
 
@@ -434,6 +438,6 @@ Aus effektiver Stetigkeit folgt Stetigkeit.
 
 \subsection{Orakel-Turingmaschine}
 
-abgeschlossen und beschräkt
+\
 
 \end{document}

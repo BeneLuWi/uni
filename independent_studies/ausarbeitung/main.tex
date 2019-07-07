@@ -1,0 +1,84 @@
+\documentclass[ngerman]{scrartcl}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{bibgerm}
+
+\usepackage{hyperref}
+
+
+
+\title{Agile Entwicklungsmethoden in der Praxis\\{\small Erfahrungsbericht \\ Independent Studies, M.Sc. Informatik, Universität Trier}}
+\author{Benedikt Lüken-Winkels\\{\small 1138844, s4beluek@uni-trier.de}}
+\begin{document}
+\nocite{*}
+
+\maketitle
+\begin{abstract}
+Robert C. Martin, einer der Mitunterzeichner des Manifesto for Agile Software Development\cite{2001mfasd}, veröffentlichte 2003 einen Leitfaden für agile Entwicklungsmethodik, welche für die Realisierung umfangreicher Software-Projekte gedacht ist und diese durch flexible Strukturen vereinfachen und verbessern soll. Unter Anderem wurde dies auch bei dem Projekt, an dem ich während eines halbjährigen Praktikums bei der Firma Arhs-Spikeseed mitgearbeitet habe, versucht. Zwar wird in Martins Buch Extreme Programming verwendet, während Arhs-Spikeseed auf Scrum setzt, allerdings bleibt die agile Methodik die Gleiche. Im Idealfall lassen sich die Prinzipien des Agile Manifesto im Entwicklungsprozess wiederfinden und fördern die Produktivität des Teams. Ob und wie dies geschehen ist und welche Rolle Scrum dabei gespielt hat, ist Gegenstand dieses Berichts. 
+\end{abstract}
+\newpage
+\section{Entwicklungsprozess bei Arhs-Spikeseed}
+Bei Arhs-Spikeseed, speziell beim Projekt Fleetback, wird Scrum als Sofwaremanagementmethode angewandt:
+\begin{itemize}
+    \item Das Arbeitsjahr wird durch zwei Roadmap-Meetings unterteilt. Bei einem Roadmap-Meeting präsentiert jeweils der Leiter eines jeden Teams des Projekts die bisherigen Fortschritte seit dem letzten Roadmap-Meeting. Dann werden zusammen mit der Führungsebene zukünftige Ziele und Kritik besprochen. Beispielsweise zeigt die Entwicklungsabteilung neue Features, die Marketingabteilung eine neue Kampagne und das Verkaufsteam die letzten Quartalszahlen.
+    \item Die Zeit zwischen den Roadmap-Meetings ist in zweiwöchige Sprints unterteilt, die jeweils mit einer einstündigen Präsentation (Demo) enden, bei der jeder Entwickler seinen Fortschritt der vergangenen zwei Wochen präsentiert. Der neue Sprint beginnt dann mit dem auf die Demo folgenden Sprint-Planning, wobei, falls die individuellen Aufgaben erledigt wurden oder nur kleine Anmerkungen während der Demo gemacht wurden, neue Aufgaben durch den ScrumMaster zugewiesen werden. Außerdem ist der Product Owner bei diesen Meetings anwesend, um den nächsten Sprint mitzugestalten und Kritik zu üben. Die Produktivität eines Sprints wird anhand der Velocity, dem Verhältnis von geplanten und erledigten Aufgaben, gemessen. 
+    \item Täglich, zur selben Uhrzeit, findet ein maximal 20-minütiges Treffen der am Projekt beteiligten Entwickler statt, wo jeder kurz zusammenfasst, woran er am vergangenen Tag und an diesem Morgen gearbeitet hat und ob Probleme aufgetreten sind und womit er plant, den Rest des Tages zu verbringen. Gibt es Probleme, werden diese nach dem Stand Up Meeting besprochen, da sie nicht immer für alle relevant sind.
+    \item Der Product Owner ist ein in der Firmenhierarchie über dem Leiter des Entwicklungsteams stehender Mitarbeiter. Er entscheidet über neu aufzunehmende Features und ist Ansprechpartner, bei Ideen oder Problemen.
+    \item Den Posten des ScrumMasters hat der Leiter des Entwicklerteams besetzt.
+\end{itemize}
+Die bei Arhs-Spikeseed verwendete Version von Scrum folgt also dem in der Literatur\cite{2010apvx} beschriebenen Prozess.
+
+\section{Prinzipien agiler Softwareentwicklung\cite{2003asd}}
+Fleetback, an dem ich während eines Praktikums mitgearbeitet habe, ist ein Projekt, dass sich aus einer Webanwendung und einer mobilen Anwendung zusammensetzt (Android und iOS). Das Programm ist eine Art Customer-Relationship-System für Autohäuser/händler, welches zusätzlich Funktionen bereitstellt, die den Autohaus-internen Arbeitsablauf vereinfachen soll. 2014 wurde Fleetback zunächst nur für einen Kunden entwickelt und in den darauffolgenden Jahren auch von anderen Kunden bezogen und von einem stetig wachsendem Entwicklerteam weiterentwickelt. Das Agile Manifesto schreibt zwölf Prinzipien vor, die einen kundenfreundlichen, flexiblen und produktiven Entwicklungsprozess unterstützen sollen. In diesem Kapitel wird die Theorie mit der Praxis in der Firma verglichen und versucht festzustellen, ob die Vorschriften befolgt wurden und welchen Effekt das Einhalten oder nicht Einhalten zu folge hatte.   
+\paragraph{Our highest priority is to satisfy the customer early and continuous delivery valuable software.}
+Nachdem die Basisanforderungen an ein Dealer-Management-System erfüllt waren, wurde Fleetback an den Kunden ausgeliefert und wird seit dem stetig weiterentwickelt. Dem gegenüber stand die Möglichkeit, das Produkt mit allen Zusatzfunktionen zunächst durchzuplanen und dann komplett zu entwickeln, was einen langwierigen Entwicklungsprozess bedeuten würde, bei dem der Kunde lange auf ein Produkt hätte warten müssen. 
+
+
+\paragraph{Welcome changing requirements, even late in development. Agile processes harness change for the customer's competitive advantage.}
+Die Anforderungsanalyse und Entwicklung neuer Features erfolgt in Kooperation mit verschiedenen Autohäusern. In Fleetback wird das Java Spring Framework für das Backend und AngularJS für das Frontend verwerendet. Angular ermöglicht einen hohen Grad an Modularität, sodass Funktionaltiäten leicht ausgetauscht, verändert oder neu hinzugefügt werden können.  
+
+\paragraph{Deliver working software frequently, from a couple of weeks to a couple of months, with a preference to the shorter timescale.}
+Fleetback hat diverse Konkurrenz-Produkte, was den Druck auf die Entwicklung neuer Funktionen, die bei der Konkurrenz (noch) nicht vorhanden sind, erhöht. Das Ende eines jeden Sprints bedeutet ein- bis zweitägiges Testen der neu entwickelten Features und bearbeiteten Tickets, auch die der anderen Entwickler. Nach dem erfolgreichen Testen wird ein neuer Release veröffentlicht und die Marketing-Abteilung informiert die Kunden über neue Funktionen und Möglichkeiten, wenn es sich um größere Änderungen handelt.
+
+\paragraph{Business people and developers must work together daily throughout the project.}
+Zum Entwicklungsteam von Fleetback gehört unter Anderem auch ein Business Analyst, der dadurch, dass er sowohl an den täglichen Stand-up-Meetings, als auch an Kundengesprächen teilnimmt, nah am Kunden und den Entwicklern ist. Er hat einen guten Überblick über die Funktionsweisen und Anwendungsfälle verschiedener Features und ist maßgeblich an der Testphase am Ende eines Sprints beteiligt. Wenn ein größeres Feature fertiggestellt ist, präsentiert der Entwickler dies üblicherweise vor dem Sales-Team, welches am nächsten am Kunden selbst ist. Dadurch kann sichergestellt werden, dass die fertige Funktionalität den Kundenwünschen entspricht.
+
+\paragraph{Build projects around motivated individuals. Give them the environment and support they need, and trust them to get the job done.}
+Gleich zu Anfang wurde mir klar gemacht, dass es viele Ansprechpartner bei Fragen oder Anmerkungen gibt. Mit neuer Hardware an der ich arbeiten konnte und diesen Anlaufstellen war es leicht, in einen Arbeitsfluss zu kommen. Die Büroräume sind weiträumig und offen, sodass man problemlos einen Dialog führen kann. Bis auf den Product Owner saß das gesamte Entwicklerteam, also auch Senior und Junior-Developer in einem Raum. Insgesamt zeichnete sich das Arbeiten im Team durch die ungezwungene Art aus, in der auch mal ein Nachmittag mit mehr, als einer Kaffeepause erlaubt war. 
+
+\paragraph{The most efficient and effective method of conveying information to and within a development team is face-to-face conversation.}
+Das Besprechen neuer Features oder Änderungen erfolgte durch verschiedene Medien. In der Regel setzte man sich mit dem ScrumMaster zusammen, der die Anforderungen erklärte und eine kurze Zusammenfassung im Backlog erstellte. In Kombination mit dem täglichen Stand-up-Meeting herrschte viel persönlicher Austausch über die gestellten Aufgaben, was mich motivierte und ScrumMaster und dem Rest des Teams einen guten Einblick in den Fortschritt gab. 
+
+\paragraph{Working software is the primary measure of progress.}
+Zwar unterschieden sich die Sprints von Woche zu Woche in den zu erledigenden Aufgaben, allerdings wurde die Wichtigkeit des Testens der Software jedesmal aufs neue betont. Featureentwicklung wurde dabei hinten angestellt. Wirkliche Maßnahmen, den Testprozess zu verbessern wurden jedoch nicht unternommen.  
+
+\paragraph{Agile processes promote sustainable development. The sponsors, developers, and users should be able to maintain a constant pace indefinitely.}
+Einige der geforderten Features bedeuten sehr viel mehr Arbeit, als andere. Bei einer Erweiterung, die während meiner Praktikumszeit entwickelt wurde, waren selbst die Teilanforderungen, in die das Feature aufgebrochen wurde, nicht innerhalb eines Sprints zu schaffen. Hier zeigte sich eine gewisse Unflexibilität des Scrumverfahrens, da die am Feature beteiligten Entwickler unter großem Druck standen, sich an den zwei-Wochen-Rhythmus zu halten.
+
+
+\paragraph{Continuous attention to technical excellence and good design enhances agility.}
+Um die Qualität des Codes und die Funktionalität möglichst hoch zu halten, sollten Änderungen ausgiebig von Entwickler selbst und vom ScrumMaster getestet werden, während der ScrumMaster diese eher überfliegt und auf offensichtliche Fehler achtet. Hier wurde hoher Wert auf Konsitenz im Code gelegt, zum Beispiel bei der Dateistruktur oder den Variablennamen.
+
+
+\paragraph{Simplicity--the art of maximizing the amount of work not done--is essential.}
+Durch die Trennung der Anwendung in verschiedene Bereiche und den generellen Programmaufbau (Backend/Frontend), ließen sich Aufgaben in der Regel gut aufteilen. Grundsätzlich war die Vorgabe, Bottom-Up vorzugehen. Zunächst sollte also das Modell, bzw die Klassenstruktur, dann die API und erst zuletzt die Darstellung im Frontend für die Problemstellung programmiert werden.
+
+
+\paragraph{The best architectures, requirements, and designs emerge from self-organizing teams.}
+Die Aufgabenverteilung geschieht bei Fleetback durch den ScrumMaster. Wenngleich er auch Teil des Entwicklerteams ist, nimmt das die freie Arbeitsaufteilung des Teams. Häufig war die Folge, dass beim Stand-up-Meeting der Satz 'I'm currently waiting to be assigned a new task' gefallen ist. Hier wäre eine flexiblere Aufteilung von Vorteil, da es nicht an Arbeitsmotivation im Team mangelte.
+
+
+\paragraph{At regular intervals, the team reflects on how to become more effective, then tunes and adjusts its behavior accordingly.}
+Eine Reflexion über den Fortschritt und die Produktivität des Teams hat nicht stattgefunden. Meist wurde eine Art Zeitdruck vermittelt, der sich vermutlich aus dem ungleichen Workload, der auf dem ScrumMaster lastet ergeben hat. Da er bei jedem Meeting anwesend war und sich zugleich um Kundengespräche (Supportanfragen), Deploy und Codeverifizierung kümmern musste vermute ich, dass für ein solches Gespräch keine Zeit war und auch nicht vorgesehen war. Hier wäre eine Entlastung des ScrumMasters durch andere Teammitglieder von Vorteil.
+
+
+\section{Fazit}
+Insgesamt bin ich der Überzeugung, dass die überwiegende Einhaltung der im Agile Manifesto beschriebenen Prinzipien dem Entwicklungsprozess dienlich war. Besonders die tägliche Kommunikation von Erfolgen und Hindernissen, halfen dabei, Lösungen zu finden und etwas abstrahierend über die eigene Arbeit nachzudenken. Auch wenn ich nicht lange Teil des Entwicklungsteams war, hatte ich schnell eine Idee davon, wo wessen Stärken liegen und wer mein Ansprechpartner bei tiefergehenden Fragen ist.
+
+\newpage
+\bibliography{sources.bib}
+\bibliographystyle{plain}
+
+\end{document}

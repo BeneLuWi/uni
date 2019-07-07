@@ -1,0 +1,20 @@
+\begin{thebibliography}{1}
+
+\bibitem{2010apvx}
+{\em Agile Prozesse: Von XP über Scrum bis MAP / Eckhart Hanser}.
+\newblock Springer, Berlin [u.a.], 2010.
+
+\bibitem{2001mfasd}
+Kent Beck, Mike Beedle, Arie van Bennekum, Alistair Cockburn, Ward Cunningham,
+  Martin Fowler, James Grenning, Jim Highsmith, Andrew Hunt, Ron Jeffries, Jon
+  Kern, Brian Marick, Robert~C. Martin, Steve Mellor, Ken Schwaber, Jeff
+  Sutherland, and Dave Thomas.
+\newblock Manifesto for agile software development, 2001.
+
+\bibitem{2003asd}
+Robert~Cecil Martin.
+\newblock {\em Agile software development : principles, patterns, and
+  practices}.
+\newblock Prentice Hall, Upper Saddle River, NJ, 2003.
+
+\end{thebibliography}
