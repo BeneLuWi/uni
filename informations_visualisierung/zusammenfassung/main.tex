@@ -93,9 +93,10 @@ Infographiken sind graphische Representationen von Informationen, Daten oder Wis
 \end{multicols}
 
 \section{Visuelle Wahrnehmung}
-Visuelle Wahrnehmung ist selektiv und kann durch die Umgebung (Kontrast/Struktur) abgelenkt werden. 
+Visuelle Wahrnehmung ist selektiv, interpretierend und kann durch die Umgebung (Kontrast/Struktur) abgelenkt werden (nicht wie eine Kamera)
 
 \subsection{Verarbeitung visueller Informationen}
+
 \paragraph{Dreiphasenmodell} 
 \begin{enumerate}
   \item Primitive Mustererkennung
@@ -103,17 +104,90 @@ Visuelle Wahrnehmung ist selektiv und kann durch die Umgebung (Kontrast/Struktur
   \item Visuelles Arbeitsgedächtnis
 \end{enumerate}
 
-\paragraph{Menschliches Auge}
+\paragraph{Menschliches Auge} Man kann verschiedene Eigenschaften der visuellen Wahrnehmung ausnutzen. 
+\begin{itemize}
+  \item Antizipation von Bewegungen: Vorhersehen von Ereignissen
+  \item Mustererkennung: Verdeutlichen von Clustern
+\end{itemize}
+
+\paragraph{Perphere Schärfe} Die Schärfe mit der Text lesbar oder Objekte erkennbar sind, nimmt abhängig vom Zentrum ab: 
+\begin{itemize}
+  \item Zentrum: Farbe und Helligkeit sind klar erkennbar.
+  \item Rand/Peripherie: Unscharf und nur Helligkeit ist erkennbar.
+\end{itemize}
+
+\subsection{Farbwahrnehmung}
+
+\paragraph{Opponent Color Theory. Gegenfarbtheorie}
+Es ist einfacher und effizienter die Farben anhand der Unterschiede zwischen benachbarten Farben zu erkennen. 3 chemische Prozesse mit jeweils 2 Gegenfarben sorgen für Farbidentifizierung. $ \Rightarrow $ Farbe und Helligkeit sind relativ.
 
 
 
+\subsection{Mustererkennung}
+\paragraph{Kategorien von Mustern}
+\begin{itemize}
+  \item Kantenerkennung (Farben, Helligkeit)
+  \item Einfache Muster (Verbindung durch Kanten oder Roation)
+  \item Komplexe Muster (Muster in Mustern, Cluster)
+  \item Objekterkennung (Icons, Symbole)
+\end{itemize}
+
+
+\paragraph{Präattentive Elemente} Ein Element in einer Gruppe ähnlicher Elemente mit herausstehenden Eigenschaften kann schnell erkannt werden. \textbf{Bewegung ist präattentiv}
+
+\paragraph{Bewegungserkennung}
+Bewegung kann auf einen Zusammenhang hinweisen. 
+
+
+\paragraph{Visuelle Suche}
+Folgt einem Zyklus:
+\begin{enumerate}
+  \item Erkenne Muster
+  \item Wähle einen Kandidaten aus
+  \item Schließe vorherige Ziele aus
+  \item Bewege das Auge
+\end{enumerate}
+
+\paragraph{Gestalt Psychologie}
+Gesetze, die helfen, Gruppierungen leichter erkennbar zu machen.
+\begin{itemize}
+  \item Räumliche Nähe
+  \item Ähnlichkeit in Gestalt oder Form
+  \item Verbindungen (durch Kanten in einem Graphen)
+  \item Fortläufigkeit (Continuity, zB nicht unterbrochene Linien)
+\end{itemize}
 
 
 
+\subsection{Dreidimensionale Wahrnehmung}
+Problematisch bei der Visualisierung von abstrakten Informationen. 
+\paragraph{Hauptprobleme von 3D}
+\begin{itemize}
+  \item Schwierige Navigation
+  \item Ausschluss von Information im Hintergrund
+\end{itemize}
+
+\paragraph{2,5D Darstellung}
+Kombiniert die Vorteile von 2D und 3D. Dritte Dimension bietet Schatten oder Perspektive. Beispiele:
+\begin{itemize}
+  \item Cuschion treemap
+  \item Cone Trees
+  \item UML Geons
+  \item Perspective Wall
+\end{itemize}
 
 
-
-
+\subsection{Design Empfehlungen}
+\begin{itemize}
+  \item Emphasize with color
+  \item Differences with brightness
+  \item Coding of categories: max 6 to 12 different colors
+  \item Color scales should vary in color and brighntess 
+  \item Color perception depends on culture
+  \item Motion to grap attention/indicate a relation
+  \item Strong colors/contrast can cause interta (ghost images)
+  \item User yellow/blue variations for colorblinds
+\end{itemize}
 
 
 
