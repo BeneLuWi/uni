@@ -190,8 +190,172 @@ Kombiniert die Vorteile von 2D und 3D. Dritte Dimension bietet Schatten oder Per
 \end{itemize}
 
 
+\section{Visualisierung von Hierarchien}
+
+\paragraph{Hierarchische Daten/Informationen als Baumstruktur}
+\begin{itemize}
+  \item Keine Zyklen
+  \item Es gibt genau einen Weg von der Wurzel zu einem beliebigen Knoten.
+  \item $ \Rightarrow $ Verbundener, ungerichteter Graph 
+\end{itemize}
+
+\subsection{Node-Link}
+Darstellung eines Baums, mit Knoten als Punkte und Kanten als Linien. \\
+Vorteile: 
+\begin{itemize}
+  \item Intuitiv
+  \item Hierarchie schnell erkennbar
+  \item Flexibles Layout
+\end{itemize}
+Nachteile:
+\begin{itemize}
+  \item Kanten brauchen Platz
+  \item Degernerierte Bäume sind schwer darzustellen.
+\end{itemize}
+
+\subsection{Eingerückte Gliederungs Plots}
+Darstellungs eines Baums in einer Liste \\
+Vorteile: 
+\begin{itemize}
+  \item Leicht lesbar
+  \item Allgemein bekannt
+  \item Darstellen degernerierter Bäume möglich
+\end{itemize}
+Nachteile:
+\begin{itemize}
+  \item Unflexibles Layout
+\end{itemize}
+
+\subsection{Eiszapfen Plot (Icicle Plot)}
+Hierarchie als Teil-Ganzes Beziehung \\
+Vorteile: 
+\begin{itemize}
+  \item Labelling ist einfach
+  \item Effektive Nutzung von Bildschirmplatz
+\end{itemize}
+Nachteile:
+\begin{itemize}
+  \item Nicht sehr intuitiv
+  \item Breite der Kindelement wird durch Breite der Vaterelemente beschränkt
+\end{itemize}
+
+\subsection{Treemap}
+Elemenete als Flächen (Venn Diagramm - artig) \\
+Vorteile: 
+\begin{itemize}
+  \item Kaum Platzverbrauch für Kanten
+  \item Platz der Blattknoten kann verbraucht werden
+\end{itemize}
+Nachteile:
+\begin{itemize}
+  \item Labelling schwierig
+  \item Rand eines Elements muss berücksichtigt werden und ins Layout mit einbezogen werden. (2,5D)
+\end{itemize}
 
 
 
+\subsection{Verwendung in der Praxis}
+Empfohlene Layouts: Node-Link, Einzapfen, Eingerückte Gliederung. Nicht empfohlen, weil unintuitiv und meistens schwer lesbar: Treemap und Radial Layouts.
+ 
+\paragraph{Vergleich von Hierarchien} Aufbau als Matrix, farbliche Hervorhebung, Linienverbindungen
+
+
+\section{Visualisierung von Graphen}
+
+\paragraph{Anwendung}
+\begin{itemize}
+  \item Karten: Multivariate Daten in einer Karte (London Underground: Verbindungen und geographische Lage)
+  \item Ego/Personen-Netzwerke: Persönliche Verbindungen als Graph (Facebook)
+\end{itemize}
+
+\paragraph{Visuelle Kodierung}
+\begin{itemize}
+  \item Dicke einer Kante: Kantengewicht
+  \item Pfeil: Kantenrichtung
+  \item Verschachtelte Boxen: Hierarchie
+  \item Knotenlabel: Knotennamen
+\end{itemize}
+
+\paragraph{Ästhetische Kriterien}
+\begin{itemize}
+  \item Minimale Kantenüberschneidung
+  \item Minimale Bemalte Fläche
+  \item Minimale Kantenlänge
+  \item Minimale Anzahl an Biegungen in Kanten
+  \item Maximale Symmetrie
+  \item Verdeutlichung von Clustern
+  \item Fortlaufende Winkel an den Kanten
+\end{itemize}
+
+
+\subsection{Layout Algorithmen}
+
+\paragraph{Radial Layout}
+\begin{itemize}
+  \item Gleichverteilung im Knotengewicht
+  \item Viele Kantenüberschneidungen
+  \item Gut anwendbar, wenn keine Metadaten vorhanden sind
+\end{itemize}
+
+\paragraph{Force-Directed Layout}
+\begin{itemize}
+  \item Kanten werden wie Federn in eine bestimmte Länge geforcet
+  \item Equilibrium, wo sich Kantenkräfte gegenseitung ausbalancieren
+\end{itemize}
+
+\paragraph{Hierarchisches Layout}
+\begin{itemize}
+  \item Problem beim Zeichnen von Zyklen:
+  \begin{itemize}
+    \item Drehe die Kanten um, die den Zyklus schließen
+    \item Male dann den Graphen
+    \item Drehe die Kanten wieder um
+  \end{itemize}
+  \item Tiefensuche ergibt die topologische Ordnung der Elemente
+  \item Dummy Knoten, die nach dem Erstellvorgang entfernt werden ergeben ein sauberes Layout
+\end{itemize}
+
+
+\paragraph{Orthogonales Layout}
+\begin{itemize}
+  \item Kanten folgen einem Raster
+  \item Metriken für die Form: zB Je weniger Wendungen in einem Pfad, desto besser
+\end{itemize}
+
+\paragraph{Kantenbündelung}
+\begin{itemize}
+  \item Strukturiertes Radial Layout
+  \item Kanten, die in die selbe Richtung gehen werden gebündelt
+\end{itemize}
+
+\subsection{Matrix Visualisierung von Graphen}
+
+\paragraph{Adjazenzmatrix} NxN-Matrix, mit Einfärbungen, wenn eine Kante existiert. Clustererkennung ist schwer. $ \Rightarrow $ Sortierung der Knoten
+
+
+\subsection{Visualisierung von dynamischen Graphen}
+Zeitliche Abfolge von Graphzuständen
+
+\paragraph{Animation} see difference between layout and data changes to preserve the mental map of the graph. Examples:
+\begin{itemize} 
+  \item TimeArchTrees, horizontal development of the graph, vertical orientation of the graph  
+  \item TimeSpiderTrees, cirular layout, each ring is one graph
+  \item TimeRadarTrees, cicular layout, outer circles are a representation of the inner. The inner circle shows incoming edges, the outer shows outgoing
+\end{itemize}
 
 \end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
