@@ -441,7 +441,96 @@ Häufige Artitekturmodelle:
 \end{itemize}
 
 \subsection{Reverse Engineering}
-\textbf{Definition:} Analyse eines Systems, um Repräsentationen auf einer höheren Abstraktionsebene zu erstellen.
+\textbf{Definition:} Analyse eines Systems, um Repräsentationen auf einer höheren Abstraktionsebene zu erstellen. Problem dabei ist, dass die Erkennung von Designpatterns sehr schwer ist.
+
+\paragraph{Class Blueprint} Aufsplitten einer Klasse in
+\begin{itemize}
+  \item Initionalisierung (init-Methoden)
+  \item Interface-Methoden (Methoden, die von anderen Klassen verwendet werden)
+  \item Implementierungen (private Methoden)
+  \item Accessors (Getter/Setter)
+  \item Attributen
+\end{itemize}
+
+\paragraph{Dependency Viewer} Package Graph, der Dependencies zwischen Packages veranschaulicht, um Designfehler zu zeigen.
+
+\paragraph{Dependency Structure Matrix} Adjazenzmatrix, die die Dependencies einer Software darstellt. Zyklenerkennung möglich
+
+\paragraph{Software Städte} Fläche repräsentiert das System. Dritte Dimension kann verschiedene Metriken darstellen, wie Dependencies oder Größe von Paketen.
+
+
+
+\subsection{Verhalten von Software}
+
+\subsubsection{Dynmaische Programm Visualisierung}
+
+\paragraph{Erfassung von Daten} Viele Methoden haben das Problem, dass sie direkt in den Kontrollfluss des Programms eingreifen und so möglicherweise den Ablauf oder die Laufzeit beeiflussen, die gemessen werden soll. Methoden zur Erfassung sind:
+\begin{itemize}
+  \item Instrumentation: Vor/Nach jeder Operation, wenn eine Datenstrukture geändert wurde oder an bestimmten Programmpunkten wird eine Messung vorgenommen
+  \item Messen in einem parallelen Thread, der den Speicher liest
+  \item Besondere Hardware
+\end{itemize}
+
+\paragraph{Dynamische Datenerfassung} Erfassung von Daten zur Laufzeit: Programm positionen, Werte von Variablen, Inhalt des Heaps
+
+\paragraph{Dynamische Daten und Code Visualisierung}
+
+
+
+
+
+
+
+
+
+
+
+\subsubsection{Animierung von Algorithmen}
+
+\subsubsection{Visuelles Debugging}
+
+
+
+\subsection{Entwicklung von Software}
+Synonym für den Entwicklungprozess einer Software.
+
+\paragraph{Zeilen Representation}
+
+\paragraph{Pixel Representation}
+
+\paragraph{Code Alter}
+
+\paragraph{Entwicklungsmatrix}
+
+\paragraph{Aufrufgraphen}
+
+\subsubsection{Visuelles Data-Mining von Softwarearchiven}
+
+\paragraph{Gesetze der Softwareentwicklung}
+\begin{itemize}
+  \item Lehman:
+  \item McCabe:
+  \item Basili und Möller:
+\end{itemize}
+
+\paragraph{Data Mining Process}
+Startgin with a version control program (git)
+\begin{enumerate}
+  \item Analysis
+  \item Extraction
+  \item Data Mining
+  \item Visual Data Mining
+\end{enumerate} 
+
+
+
+\paragraph{Coupling}
+\begin{itemize}
+  \item Evolutionary Coupling artifact are related, when they are changed together.
+  \item Logical Coupling artifacts are related, when they are programmatically calling each other.
+\end{itemize}
+
+
 
 
 
