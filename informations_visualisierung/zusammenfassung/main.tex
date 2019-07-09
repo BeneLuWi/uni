@@ -473,44 +473,76 @@ Häufige Artitekturmodelle:
 
 \paragraph{Dynamische Datenerfassung} Erfassung von Daten zur Laufzeit: Programm positionen, Werte von Variablen, Inhalt des Heaps
 
-\paragraph{Dynamische Daten und Code Visualisierung}
-
-
-
-
-
-
-
-
-
-
 
 \subsubsection{Animierung von Algorithmen}
+\paragraph{Anwendungen}
+\begin{itemize}
+  \item Verständnis der Vorgehensweise
+  \item Design
+  \item Optimierung
+  \item Debugging
+\end{itemize}
+$ \Rightarrow $ Problem: Finden des richtigen Darstellungsmodells (Korrekte Darstellung der Übergänge zwischen Zuständen)
+
+\paragraph{Architekturen für Graph Animationen}
+\begin{itemize}
+  \item Ad Hoc: Ohne Verwendung von Libraries (from Scratch)
+  \item Special Datatypes: Algorithmen verwenden Datentypen mit eingebauten Visualisierungen
+  \item Interesting Events: Einfügen von Aktionen an bestimmten Punkten im Code
+  \item Deklarativ: Teilung von Code und Annotiation. Annotation biete Code für einen Demon, der Datenänderungen anzeigt 
+  \item Post-Mortem Visualisierung: Aufnahme der Änderungen während der Ausführung in einem Log. Anschließend wird die Ausführung animiert.
+  \item Semantik-gerichtet: Autimatische Animation durch Interpreter der Programmiersprache
+\end{itemize}
 
 \subsubsection{Visuelles Debugging}
 
+\paragraph{Memory Graph} Darstellung des Speichers eine Programms. Kann sehr groß werden $ \Rightarrow $ Fokussierung auf Subgraphen
+
+\paragraph{Memory Slices} Forward Memory Graph: 
+
+\paragraph{Forward Reference Pattern}
+\begin{itemize}
+  \item Zugriffsgraph (Baum)
+  \item Keine Erkennung von Zyklen
+\end{itemize}
+
+\paragraph{Static Slice} How \textbf{can} a variable be changed by other code points. Slice is a small part
+\paragraph{Dynamic Slice} How \textbf{is} a variable actually changed by other code points. Slice is a small part
+\paragraph{Execution Slices} Sequence of program points.
+\paragraph{Dice} Difference of two Slices.
+
+\paragraph{X-Slice} (Heuristic) Compare a run with failing and compiling input. Only the failing program points are highlighted. Color coding coverage data by failure propability and evidence for failure.
+
+\paragraph{Test Blueprint} Highlight non-executed program points in the Class Blueprint. 
 
 
 \subsection{Entwicklung von Software}
 Synonym für den Entwicklungprozess einer Software.
 
-\paragraph{Zeilen Representation}
+\paragraph{Software Archive} version control/collection of the history of a program of any kind. 
 
-\paragraph{Pixel Representation}
+\paragraph{Color-coding}
+\begin{itemize}
+  \item Line Representation: indentation/different metrices
+  \item Code Age: when was a file/line changed
+  \item Pixel Representation
+  \item Version-specific Code: highlight eg platform specific code
+  \item Depth of nested blocks
+  \item CVSScan: different versions for a file with LOC as bar height.
+\end{itemize}
 
-\paragraph{Code Alter}
+\paragraph{Evolution Matrix} Classes are represented as boxes. Box height and width encode a certain metric. $ \Rightarrow $ No insight on program structure
 
-\paragraph{Entwicklungsmatrix}
+\paragraph{Call Graph} Which function calls wich function (low level info). Encode program structure. Edge splatting (the more often an edge is drawn the more intense it color gets) shows call clusters.
 
-\paragraph{Aufrufgraphen}
 
 \subsubsection{Visuelles Data-Mining von Softwarearchiven}
 
 \paragraph{Gesetze der Softwareentwicklung}
 \begin{itemize}
-  \item Lehman:
-  \item McCabe:
-  \item Basili und Möller:
+  \item Lehman: Größe, Komplexität und Funktionalität sind antiproporitonal zur Wachstumsrate und der Codequalität eines Programms
+  \item McCabe: Dichte des Callgraphen ist ein guter Indikator für Bugdichte
+  \item Basili und Möller: Kleine Änderungen haben eine höhere Fehlerdichte
 \end{itemize}
 
 \paragraph{Data Mining Process}
@@ -535,7 +567,6 @@ Startgin with a version control program (git)
 
 
 \end{document}
-
 
 
 
