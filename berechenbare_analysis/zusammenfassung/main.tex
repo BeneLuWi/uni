@@ -13,15 +13,7 @@
 
 \maketitle
 \tableofcontents
-\newpage
-\section{Chomsky Hierarchie}
 
-\begin{itemize}
-  \item Typ-0: Beliebige formale Grammatik. Rekursiv aufzählbar
-  \item Typ-1: Kontextsensitive Grammatik
-  \item Typ-2: Kontextfreie Grammatik
-  \item Typ-3: Reguläre Grammatik
-\end{itemize}
 
 \section{Abzählbar unendlich} 
 Es besteht eine Bijektion zu $ \mathbb{N} $. 
@@ -33,19 +25,19 @@ Eine Menge M ist entscheidbar, wenn eine Funktion $ f_A : \mathbb{N} \rightarrow
 \section{Rekursiv aufzählbar} 
 Eine Menge M ist rekursiv aufzählbar, wenn eine Funktion $ f_A : \subseteq \mathbb{N} \rightarrow \mathbb{N} $ berechenbar ist und angibt, ob ein Element in der Menge ist, aber sonst undefiniert ist. Bzw eine TM bei einer korrekten Angabe anhält und sonst in eine Endlosschleife läuft.
 
-\section{$ \delta $-rekursiv-aufzählbar} wenn eine Orakel TM existiert wenn die TM anhält.
+\section{$ \delta $-rekursiv-aufzählbar} Eine Orakel TM existiert, anhält wenn das Element aus der Menge ist.
 
 \section{Berechenbarkeit} 
 
 \subsection{Berechenbarkeit einer reellen Zahl}
 Eine reelle Zahl ist dann berechenbar, wenn eine der \textbf{äquivalenten} Bedingungen erfüllt ist:
 \begin{enumerate}
-  \item Es gibt eine TM, die eine unendlich lange binäre Representation von $ x $ auf dem Ausgabeband erzeugt.  
+  \item \textbf{Binärdarstellung} Es gibt eine TM, die eine unendlich lange binäre Representation von $ x $ auf dem Ausgabeband erzeugt.  
   \item \textbf{Fehlerabschätzung} Es gibt eine TM, die Approximationen liefert. Formal: $ q:\mathbb{N}\rightarrow \mathbb{Q} $ $ (q_{i})_{i \in \mathbb{N}} $ ist Folge rationaler Zahlen, die gegen $ x $ konvergiert. Bedeutet, dass alle $ q_i $ innerhalb eines bestimmten beliebig kleinen Bereichs um $ x $ liegen. Größter möglicher Fehler $ 2^0 = 1 $
   \item \textbf{Intervalschachtelung} Es gibt eine berechenbare Intervallschachtelung mit rationalen Endpunkten: Angabe zweier Folgen rationaler Zahlen mit der Bedingung, dass sie beide gegen $ x $ gehen und $ x $ dazwischen liegt. Ziel: Abstände von linker und rechter Schranke soll gegen null gehen.
   \item \textbf{Dedekindscher Schnitt} Menge $ \{q \in \mathbb{Q} | q < x \} $ ist entscheidbar. Beispiel $ \sqrt{2} $ ist berechenbar. $ \{ q | q < \sqrt{2} \} = \{ q | q^2 < 2\}$. $ \Rightarrow $ Es gibt einen Test, ob die Zahl kleiner ist.
   \item Man kann x als Summe von abzählbar unendlich vielen Brüchen darstellen: $ z \in \mathbb{Z} $ $ A \subseteq \mathbb{N} $, $ x_A = \sum_{i \in A} 2^{-i-1} $, $ x = z + x_A $
-  \item Es exisitert eine Kettenbruchentwicklung
+  \item Es exisitert eine \textbf{Kettenbruchentwicklung}
  \end{enumerate}
  \paragraph{Folgerungen / Beispiele}
 \begin{itemize}
@@ -58,7 +50,7 @@ Eine reelle Zahl ist dann berechenbar, wenn eine der \textbf{äquivalenten} Bedi
 
 
 
-\subsubsection{Übersetzung zwischen unendlichen Binärfolgen und schnell konvergierenden rationalen Folgen}
+\subsubsection{Unendliche Binärfolgen $ \rightarrow $ schnell-konvergierende rationale Folgen}
 \paragraph{Rationale Folge $ \Rightarrow $ Binärfolge}
 Realisiert durch OTM oder Typ-2-TM. Es gibt eine Folge, allerdings kann die Transformation nicht programmiert werden, weil nicht mehr verändert werden kann, was die OTM geschrieben hat (soll mit 1 oder 0 angefangen werden).
 
@@ -143,9 +135,7 @@ ist die Menge aller partiellen Funktionen auf dem Alphabet der OTM: \\
 \paragraph{Funktion} Orakel als Eingabe und Parameter als Eingabe: Liefert Resultat
 
 \subsection{Komposition der Modelle}
-$ \Gamma_3 = \Gamma_2 \circ \Gamma_1 $. $ \Gamma_3 $ muss $ \Gamma_2 $ das richtige Orakel liefern. Bei der Implementierung ruft $ \Gamma_3 $ das Approx von $ \Gamma_2 $ und $ \Gamma_2 $ wiederum das Approx von $ \Gamma_1 $ auf.
-
-\textbf{OTM und Implementierung sind das Gleiche.}
+$ \Gamma_3 = \Gamma_2 \circ \Gamma_1 $. $ \Gamma_3 $ muss $ \Gamma_2 $ das richtige Orakel liefern. Bei der Implementierung ruft $ \Gamma_3 $ das Approx von $ \Gamma_2 $ und $ \Gamma_2 $ wiederum das Approx von $ \Gamma_1 $ auf. \textbf{OTM und Implementierung sind das Gleiche.}
 
 \section{Implementierung}
 \textbf{Approx realisiert Orakelanfragen}
@@ -163,7 +153,8 @@ Acyclic, weil sonst um die Zahl zu berechnen, die Zahl selbst berechnet werden m
 \paragraph{Lambda-Funktionen} Funktionen als Eingabe für Variablen
 
 
-\section{Mengenlehre}
+\section{Allgemeines}
+
 
 \subsection{Abgeschlossene Menge}
 
@@ -171,9 +162,15 @@ Acyclic, weil sonst um die Zahl zu berechnen, die Zahl selbst berechnet werden m
 
 \subsection{Kompakte Menge}
 
+\subsection{Chomsky-Hierarchie}
+\begin{itemize}
+  \item Typ-0: Beliebige formale Grammatik. Rekursiv aufzählbar
+  \item Typ-1: Kontextsensitive Grammatik
+  \item Typ-2: Kontextfreie Grammatik
+  \item Typ-3: Reguläre Grammatik
+\end{itemize}
 
 \end{document}
-
 
 
 
