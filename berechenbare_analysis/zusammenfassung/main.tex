@@ -45,10 +45,6 @@ Eine reelle Zahl ist dann berechenbar, wenn eine der \textbf{äquivalenten} Bedi
   \item $ \sqrt{2} $ berechenbar, weil Dedekindscher Schnitt existiert.
  \end{itemize}
 
-\subsubsection{Unendliche Binärfolgen $ \rightarrow $ schnell-konvergierende rationale Folgen}
-\paragraph{Rationale Folge $ \Rightarrow $ Binärfolge}
-Realisiert durch OTM oder Typ-2-TM. Es gibt eine Folge, allerdings kann die Transformation nicht programmiert werden, weil nicht mehr verändert werden kann, was die OTM geschrieben hat (soll mit 1 oder 0 angefangen werden).
-
 %===========================
 % SUBSECTION
 %===========================
@@ -64,23 +60,8 @@ Mehrwertige Funktion $ f: \subseteq X \rightrightarrows  Y $ ist eine Funktion, 
 %===========================
 % SUBSECTION
 %===========================
-\subsection{Links/rechtsberechenbare reelle Zahlen}
-Halteproblem kodiert links oder rechtsberechenbare Zahlen. \\
-Links \textbf{und} rechtsberechenbare Zahl ergibt Berechenbarkeit. Approximationsmenge ist \textbf{rekurisv aufzählbar} und nicht entscheidbar.
-
-
-%===========================
-% SUBSECTION
-%===========================
-\subsection{$ (\rho, \rho)-berechenbar $ '(Approximation, Approximation)-bb'}
-
-
-%===========================
-% SUBSECTION
-%===========================
 \subsection{Berechenbare Folgen reeller Zahlen}
 Modelle zur Realisierung: OTM, Typ-2-TM
-
 
 \paragraph{Konvergenzmodul}
 Wie schnell geht die Folge gegen einen Grenzwert $ \overline{x} = \lim_{i \rightarrow \infty} x_ i $.
@@ -101,14 +82,21 @@ Die Funktion f ist auf den bb reellen Zahlen stetig, aber nicht bb mit einer nic
 \end{itemize}
 Funktion bildet bb Zahlen auf bb Zahlen ab oder eine Funktion ist überall stetig, springt aber trotzdem. $ \Rightarrow $ Typ-2 bb-Modell wird bevorzugt um solche Probleme zu umgehen.
 
+%===========================
+% SUBSECTION
+%===========================
 \subsection{Berechenbare Mengen reeller Zahlen}
-NACHTRAGEN
+Für eine berechenbare Menge gibt es einen Algortihmus, der entscheidet, ob ein Element in einer Menge ist oder nicht, oder dann in eine Endlosschleife läuft (semi-entscheidbar). Typ-2-TM und OTM sind implementierbar. Nimmt man die Berechenbarkeit auf Typ-2-TM und OTM, gibt es keine Darstellung, für die Gleichheit \textbf{entscheidbar} ist. Auf diesem Berechenbarkeitsmodell sind die einzigen entscheidbaren Teilmengen von $ \mathbb{R}^k $, $ \mathbb{R}^k $ und $ \emptyset $, da die charakteristische Funktion $ \chi_A $ stetig sein muss und somit konstant 1 oder 0.
 
+\paragraph{Entscheidbarkeit}
+Eine Menge A aus X mit der Darstellung $ \delta_X $ heißt $ \delta_X $-entscheidbar, wenn die Funktion, die bestimmt, ob ein $ x \in A $, $(\delta_X, \rho)$-berechenbar ist. $(\rho, \rho) $-entscheidbare Teilmengen von $\mathbb{R}$ nennt man entscheidbar. $\Rightarrow $ Modifikation des Entscheidbarkeitsbegriffs, indem die charakteristische Funktion durch die Abstandsfunktion ersetzt wird.
+
+\paragraph{Berechenbarkeit}
 \begin{itemize}
-  \item entscheidbar
-  \item berechenbar
-  \item rekursiv aufzählbar
+  \item Eine abgeschlossene Menge heißt berechenbar, wenn sie leer ist oder der Abstand berechenbar ist.
+  \item Eine offene Menge heißt berechenbar, wenn das Komplement der Menge berechenbar ist.
 \end{itemize}
+
 
 \paragraph{Plot von Mengen} Berechenbarkeit $ \Rightarrow $ Abstand berechenbar. Beispiel Mandelbrot/Julia-Menge. Wenn die Funktion geplottet werden kann man sie berechnen (effektive Stetigkeit)
 
@@ -139,12 +127,15 @@ Die Berechenbarkeiseigenschaft einer Zahl ergibt eine Intervallschachtelung (und
 %
 %====================================
 \section{Effektive Stetigkeit}
+
+\paragraph{Definition}
 $ S \subseteq \mathbb{N} $ ist rekursiv aufzählbar.
 \begin{enumerate}
   \item $ <i,j> \in S\ mit\ f(B^n(i))\subseteq B^1(j) $ erzeugt Rechtecke, durch die die Funktion laufen muss. Die Funktion liegt innerhalb der Schläuche.
   \item für jedes $ x\in Def(f) $ kann man ein $ <i,j> \in S $ finden. Die Schläuche werden beliebig fein.
 \end{enumerate}
 
+\paragraph{Definition}
 \begin{itemize}
   \item Eine Funktion $ f: \subseteq \mathbb{R}^n \rightarrow \mathbb{R} $ ist genau dann berechenbar, wenn sie effektiv stetig ist.
   \item Aus Stetigkeit folgt Berechenbarkeit. Aus nicht Stetigkeit folgt nicht Berechenbarkeit
@@ -154,11 +145,11 @@ $ S \subseteq \mathbb{N} $ ist rekursiv aufzählbar.
 
 \paragraph{Effektive Stetigkeit $ \Leftrightarrow $ Berechenbarkeit}
 \begin{itemize}
-  \item $ \Rightarrow $ Eine OTM M durchsucht S und das Orakel nach einem Tupel aus S und einem Wertpaar aus dem Orakel, sodass die Kugel aus dem Orakelwertpaar innerhalb der Kugel aus dem Tupel aus S liegt. M liefert so eine ausreichend genaue Approximation.
-  \item $ \Leftarrow $ Eine OTM M sucht zu einer Eingabe <i,j> ein Folge rationaler $ q_0,q_1,...,q_m$ Zahlen, sodass $ B^1(i) \subseteq B(q_m, 2^{-k}) $ und M ein $ \overline{q}_n $ liefert, bei dem $ B(\overline{q}_n, 2^{-n}) \subseteq B^1(j)$.
+  \item $ \Rightarrow $ Eine OTM M mit Eingabe n durchsucht S und das Orakel nach einem Tupel aus S und einem Wertpaar aus dem Orakel, sodass die Kugel aus dem Orakelwertpaar innerhalb der Kugel aus dem Tupel aus S, bei dem der Radius < $ 2^{-n}$ ist, liegt. Weil das Intervall aus <i,j> beliebig klein werden kann, ist liefert M so eine ausreichend genaue Approximation.
+  \item $ \Leftarrow $ Eine OTM M sucht zu einer Eingabe <i,j>  und $ n\in \mathbb{N}$ eine Folge rationaler $ q_0,q_1,...,q_m$ Zahlen, sodass $ B^1(i) \subseteq B(q_k, 2^{-k}) $ wobei $ 0 \leq k \leq m $ und M ein $ \overline{q}_n $ liefert, bei dem $ B(\overline{q}_n, 2^{-n}) \subseteq B^1(j)$. m ist die Schranke für die Orakelanfragen. Die Folge umschließt B(i) und wird immer kleiner und enger um B(i).
   \begin{itemize}
-    \item[Bedingung 1] für jedes $ x\in Def(f)$ gibt es ein $\phi$ (i) und ein $\psi$ (j)
-    \item[Bedingung 2]
+    \item Bedingung 1: Nimm ein <i,j> aus S. Dann gibt es für $ x \in B^1(i) $ einen Namen $ \psi $ = $ \phi $ für $ k \leq m $. Bei dem $ f^\psi_M (n) $ ein $ \overline{p}_n $ liefert, sodass gilt: $ f(B^1(i)) \subset B(\overline{q}_n, 2^{-n}) \subseteq B^1(j) $.
+    \item Bedingung 2: Wähle die Eingabe n so, dass gilt $ 2^{-n} < \epsilon $. Dann bildet der Schnitt aus allen Kuglen von $q_k$, B(i) und die Kugel um die Ausgabe von M $ \overline{q}_n $ ergibt B(j). Dadurch, dass für n gilt, dass $ 2^{-n} < \epsilon$, wird der Schlauch, den i und j aufspannen beliebig fein.
   \end{itemize}
 
 \end{itemize}
@@ -182,21 +173,6 @@ Wurzel: bei negativen Argumenten macht die OTM irgendetwas (undefiniert). Lösun
 
 $ \delta(\phi) = x $ (OTM) $\delta(p) = x $ (Typ-2-TM), dann sind $ \phi, p\ \delta$-Namen von x
 
-%===========================
-% SUBSECTION
-%===========================
-\subsection{$ (\delta, \delta)-berechenbar $ '(Name, Name)-bb'}
-\begin{figure}[h]
-  \centering
-  \includegraphics{orakelname.PNG}
-  \caption{$ (\delta_X, \delta_Y)-berechenbar$ OTM}
-\end{figure}
-
-\begin{figure}[h]
-  \centering
-  \includegraphics{typ2name.PNG}
-  \caption{$ (\delta_X, \delta_Y)-berechenbar$ TYP-2-TM}
-\end{figure}
 
 %===========================
 % SUBSECTION
@@ -227,6 +203,12 @@ Besonderheiten: Eingabeband ist read-only, Ausgabeband kann nur nach rechts schr
 \paragraph{Berechnete Funktion}
 Eine Typ-2-TM M berechnet eine Funktion $ f_M: \subseteq \Sigma^w \rightarrow \Sigma^w $, die aus der Eingabe nach und nach die Ausgabe als Wort auf dem Ausgabeband erzeugt.
 
+\begin{figure}[h]
+  \centering
+  \includegraphics{typ2name.PNG}
+  \caption{$ (\delta_X, \delta_Y)-berechenbar$ TYP-2-TM}
+\end{figure}
+
 %===========================
 % SUBSECTION
 %===========================
@@ -237,7 +219,14 @@ ist die Menge aller partiellen Funktionen auf dem Alphabet der OTM: \\
 \paragraph{Funktion} Orakel als Eingabe und Parameter als Eingabe: Liefert Resultat
 
 \paragraph{Berechnete Funktionen}
-Eine OTM M berechnet eine Funktion $ f_M^\phi \in \mathbb{F}$, die bei der Eingabe w und einem Orakel $ \phi $ einen Endzustand v ohne Fehler erreicht.
+Eine OTM M berechnet eine Funktion $ f_M^\phi \in \mathbb{F}$, die bei der Eingabe w und einem Orakel $ \phi $ einen Endzustand v ohne Fehler erreicht. \\ $\Rightarrow$ für $ \phi \in Def(f\circ \delta_X) : f \circ \delta_X(\phi) = \delta_Y \circ \Gamma(\phi) $
+
+\begin{figure}[h]
+  \centering
+  \includegraphics{orakelname.PNG}
+  \caption{$ (\delta_X, \delta_Y)-berechenbar$ OTM}
+\end{figure}
+
 
 %===========================
 % SUBSECTION
