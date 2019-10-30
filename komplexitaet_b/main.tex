@@ -1,0 +1,77 @@
+\documentclass[ngerman]{scrartcl}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{graphicx}
+
+\usepackage{hyperref}
+
+\title{Komplexitätstheorie B \\ WiSe 19/20}
+\author{Benedikt Lüken-Winkels}
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Motivation}
+Ziel ist die eindeutige Zuweisung einer eines Problems zu einer Komplexitätsklasse anhand von geeigneten Maschinenmodellen. \textbf{Probleme} sind Entscheidungsprobleme bzw. Mengen von Ja-Instanzen. 
+
+\subsection{Probleme aus Formalen Sprachen (Wortproblem)}
+\paragraph{$ P_1 $} eine Phrasenstrukturgrammatik G. Gilt $ L(G) \neq \emptyset $ ? 
+
+
+\paragraph{$ P_2 $} eine monotone Gammatik G. Gilt $ L(G) \neq \emptyset $ ? 
+
+
+\paragraph{$ P_3 $} eine kontextfreie Grammatik G. Gilt $ L(G) \neq \emptyset $ ? \\
+Ist entscheidbar, weil
+
+\paragraph{$ P_4 $} eine zwei kontextfreie Grammatiken $ G_1, G_2 $. Gilt $ L(G_1) \cap L(G_2) \neq \emptyset $ ? 
+
+
+\paragraph{$ P_5 $} eine zwei rechtslineare Grammatiken $ G_1, G_2 $. Gilt $ L(G_1) \cap L(G_2) \neq \emptyset $ ?  
+
+
+
+
+\section{Allgemeines}
+\subsection{Spezielles Halteproblem $ K $}
+\begin{itemize}
+    \item Eingabe: Kodierung einer TM
+    \item Ja-Instanzen: Menge aller Kodierungen von TMs, die angewendet auf sicht selbst halten.
+\end{itemize}
+
+\subsection{Allgemeines Halteproblem $ H $}
+\begin{itemize}
+    \item Einabe: Paar (Kodierung einer TM M die eine Grammatik realisiert, Wort)
+    \item Ja-Instanzen: Das Wort gehört zu M
+\end{itemize}
+
+\subsection{Grammatiken}
+\begin{itemize}
+    \item Phrasenstrukturgrammatik: Typ-0 Grammatik
+    \item Monoton (kontextsensitiv): Typ-1 Grammatik
+    \begin{itemize}
+        \item Rechte Seite darf beim Ersetzen nicht kürzer, als die linke Seite sein.
+    \end{itemize}
+    \item Kontextfrei: Typ-2 Grammatik
+    \begin{itemize}
+        \item Jede Regel hat genau ein NT-Symbol auf der linken Seite
+        \item Jede Regel hat eine nicht-leere Folge von NT- oder T-Symbolen auf der rechten Seite
+    \end{itemize}
+    \item Rechtslinear: Äquivalent zu den Typ-3 Grammatiken 
+    \begin{itemize}
+        \item Höchstens ein NT-Symbol auf der rechten Seite
+        \item Das NT-Symbol darf nur am Ende der rechten Seite stehen
+    \end{itemize}
+    \item Regulär: Typ-3 Grammatik
+    \begin{itemize}
+        \item Rechte Seite nur das leere Wort, ein oder mehrere Terminalsymbole oder ein oder mehrere T-Symbole gefolgt von einem einzigen NT sein.
+    \end{itemize}
+\end{itemize}
+
+
+
+\end{document}
