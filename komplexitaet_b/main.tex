@@ -25,15 +25,16 @@ Ziel ist die eindeutige Zuweisung einer eines Problems zu einer Komplexitätskla
 \paragraph{$ P_2 $} eine monotone Gammatik G. Gilt $ L(G) \neq \emptyset $ ? 
 
 
-\paragraph{$ P_3 $} eine kontextfreie Grammatik G. Gilt $ L(G) \neq \emptyset $ ? \\
-Ist entscheidbar, weil
+\paragraph{$ P_3 $} eine kontextfreie Grammatik G. Gilt $ L(G) \neq \emptyset $ ? 
+Ist entscheidbar, mit dem CYK-Algorithmus.
 
 \paragraph{$ P_4 $} eine zwei kontextfreie Grammatiken $ G_1, G_2 $. Gilt $ L(G_1) \cap L(G_2) \neq \emptyset $ ? 
-
+Sprachen von kontextfreie Grammatiken sind unterm Schnitt nicht abgeschlossen. Da der Schnitt nicht mehr kontextfrei ist, ist $ P_4 $ nicht entscheidbar.
 
 \paragraph{$ P_5 $} eine zwei rechtslineare Grammatiken $ G_1, G_2 $. Gilt $ L(G_1) \cap L(G_2) \neq \emptyset $ ?  
+Abgeschlossen auf Schnitt $ \Rightarrow $ entscheidbar
 
-
+\subsection{Reduktion}
 
 
 \section{Allgemeines}
@@ -52,7 +53,8 @@ Ist entscheidbar, weil
 \subsection{Grammatiken}
 \begin{itemize}
     \item Phrasenstrukturgrammatik: Typ-0 Grammatik
-    \item Monoton (kontextsensitiv): Typ-1 Grammatik
+    \item Kontextsensitiv: Typ-1 Grammatik
+    \item Monoton
     \begin{itemize}
         \item Rechte Seite darf beim Ersetzen nicht kürzer, als die linke Seite sein.
     \end{itemize}
