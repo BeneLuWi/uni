@@ -15,10 +15,10 @@
 \tableofcontents
 \newpage
 
-\section{Motivation}
+\section{Wiederholung Berechenbarkeit und Komplexität}
 Ziel ist die eindeutige Zuweisung einer eines Problems zu einer Komplexitätsklasse anhand von geeigneten Maschinenmodellen. \textbf{Probleme} sind Entscheidungsprobleme bzw. Mengen von Ja-Instanzen. 
 
-\subsection{Probleme aus Formalen Sprachen (Wortproblem)}
+\subsection{Probleme aus Formalen Sprachen (Nicht-leerheits-Problem)}
 \paragraph{$ P_1 $} eine Phrasenstrukturgrammatik G. Gilt $ L(G) \neq \emptyset $ ? 
 
 
@@ -29,14 +29,51 @@ Ziel ist die eindeutige Zuweisung einer eines Problems zu einer Komplexitätskla
 Ist entscheidbar, mit dem CYK-Algorithmus.
 
 \paragraph{$ P_4 $} eine zwei kontextfreie Grammatiken $ G_1, G_2 $. Gilt $ L(G_1) \cap L(G_2) \neq \emptyset $ ? 
-Sprachen von kontextfreie Grammatiken sind unterm Schnitt nicht abgeschlossen. Da der Schnitt nicht mehr kontextfrei ist, ist $ P_4 $ nicht entscheidbar.
+Simulation von Berechnugen von TMs mit 
 
 \paragraph{$ P_5 $} eine zwei rechtslineare Grammatiken $ G_1, G_2 $. Gilt $ L(G_1) \cap L(G_2) \neq \emptyset $ ?  
-Abgeschlossen auf Schnitt $ \Rightarrow $ entscheidbar
+\begin{itemize}
+    \item Reguläre Sprachen sind Schnittabgeschlossen. 
+    \item Es gibt einen Algorithmus der aus dem Schnitt von 2 det TMs eine det TM liefert. $ \Rightarrow $ entscheidbar.
+\end{itemize}
 
 \subsection{Reduktion}
 
 
+\subsection{Kodierung}
+Abhängig von der Kodierung ändert sich die Problemgröße. Zulässige Kodierungen müssen berechenbar sein: Man mann einer Kodierung einer TM zB kein Halteproblembit einfügen, das bezeichnet, ob es eine Ja-Instanz ist.
+\paragraph{Knapsack} 
+\begin{itemize}
+    \item In: $ a_1,..,a_n; p_1,...,p_n; a,c \in \mathbb{N} $
+    \item $ \exists I \subseteq \{ 1,...,n \} $ mit Summe von $ p_i \geq p$ und Summe von $ a_i \leq a$
+\end{itemize}
+
+\subsection{Turingmaschinen}
+\begin{itemize}
+    \item Konfiguration: Randbegrenzer, beliebige Zeichen aus Alphabet, Zustandsübergänge
+    \item Anfangskonfiguration: $ \$ s_0 w\ square $ ist keine Konfiguration mit $ w = \lambda $ ($ \lambda $ wird als blank definiert)
+    \item Konfigurationsübergang: (beachte nach links nicht erweiterbar) Tupel aus 
+    \item Akzeptierte Sprache: Menge aller Eingabe Wörter für die wir beim Startsymbol mit beliebig vielen Schritten in einen Endzustand kommen.
+\end{itemize}
+
+\paragraph{Deterministische TM} Für jedes Tupel aus Zuststand und Alphabet gibt es höchstens ein Tripel aus Zustandübergängen
+
+\paragraph{Mehrband TM} Simultanes Arbeiten auf mehreren Bändern: Arbeitsband ist getrennt vom Eingabeband. Simulation von Mehrband TMs auf Einband TM
+
+\subsection{NP-Schwere}
+\paragraph{Generische Ausgangsproblem für NP-Schwere} ist das Short NTM Acceptance. 
+\paragraph{SAT} Formel in Aussagelogik. Gibt es eine Belegung der Variablen, sodass die Formel erfüllt ist? Messung der Laufzeit eines det Algorithmus zB $ 2^n $
+
+
+
+
+
+
+
+
+
+
+%===============================
 \section{Allgemeines}
 \subsection{Spezielles Halteproblem $ K $}
 \begin{itemize}
@@ -73,6 +110,20 @@ Abgeschlossen auf Schnitt $ \Rightarrow $ entscheidbar
         \item Rechte Seite nur das leere Wort, ein oder mehrere Terminalsymbole oder ein oder mehrere T-Symbole gefolgt von einem einzigen NT sein.
     \end{itemize}
 \end{itemize}
+
+\subsection{Reduktion}
+\paragraph{Karp-Reduktion}
+
+\paragraph{Many-One-Reduktion}
+
+\subsection{Übersetzung von det TM auf nicht-det TM}
+
+%===============================
+\section{Aufgaben}
+\paragraph{Aufgabe 8} Lösen von VC mit Short NTM Acceptance
+
+
+
 
 
 
