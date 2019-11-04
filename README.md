@@ -13,3 +13,6 @@ Mitschriften, Zusammenfassungen und Projekte im Master an der Universität Trier
 [Informations Visualisierung - Zusammenfassung](informations_visualisierung/zusammenfassung/main.pdf)  
 [Berechenbare Analysis - Mitschrift](berechenbare_analysis/main.pdf)  
 [Berechenbare Analysis - Zusammenfassung](berechenbare_analysis/zusammenfassung/main.pdf)  
+
+## Wintersemester 19/20
+[Distributed AI](vert_ki/main.pdf)  

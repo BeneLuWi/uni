@@ -1,0 +1,95 @@
+\documentclass[ngerman]{scrartcl}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{graphicx}
+
+\usepackage{hyperref}
+
+\title{Distributed Artificial Intelligence \\ WiSe 19/20}
+\author{Benedikt Lüken-Winkels}
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+
+\section{Motivation}
+Where can DAI be applied?
+\begin{itemize}
+    \item Smart Factory: How can processes be designed to coordinate and communicate with each other (in Webservices, IoT)?
+    \item Autonomous Control: Switch from hierarchical, centralized structure to distributed, decentralized control of processes (Package delivery).
+\end{itemize}
+
+\section{Agents and agent interaction}
+An agent is the basic building block fo an AI system.
+\subsection*{Properties of an intelligent agent}
+A weak notion of Agency
+\begin{itemize}
+    \item Autonomy: makes own decisions, env influences the decisions
+    \item Reactivity: perceives env and adapts behaviour
+    \item Pro-activity: has goals, takes initiative to achieve them
+    \item Social ability: interaction (eg exchange info, ask for help,...)
+\end{itemize}
+
+\subsection*{Agent interactions with the environment}
+Perception (Sensors) $ \rightarrow $ Decision $ \rightarrow $ Action (Effectors). Reactive Agents (Decide according to inputs from env and try to match conditions). Environment $ E = {e_0, e_1, ...} $ is a set of env states. Agent actions $ Ac = {a, a', ...} $ is a set of all actions that changes the Environment state . $ Ac_i $ is the set of actions the Agent $ i $ can perform. Agent Function Ag $ Ag: E \rightarrow Ac $. 
+\begin{itemize}
+    \item $ R $
+    \item $ R^{Ac} $
+    \item $ R^E $
+\end{itemize} 
+\paragraph{Refined Ag = <see, action, next>} Perception, Internal state transition, Action
+\begin{itemize}
+    \item see: filter env to perception
+    \item next: current state and perception to new state
+    \item action: map internal state to actions
+\end{itemize}
+
+\subsection*{Communication between Agents}
+When agents have common goals or intentions they should interact, eg transport service.
+\subsubsection*{Message Passing} Speech-Act Theory (augment communication with info about how to interpret messages):
+\begin{itemize}
+    \item Speaker: Wants hearer to believe in info. Chooses language. Forms message.
+    \item Hearer: Perceives message (w/ disturbance). Analyses possible meanings. Interprets and chooses a meaning. Decides to belive the info or rejects
+\end{itemize}
+Three parts of a Speech-Act:
+\begin{itemize}
+    \item Locutionary act: meaningful words
+    \item Illocutionary act: intention
+    \item Perlocutionary act: effect of the intention 
+\end{itemize}
+Classification:
+\begin{itemize}
+    \item Representatives: notification
+    \item Directives: request, order
+    \item Commissives: promise
+    \item Expressives:
+    \item Declarations: directly changes the env
+\end{itemize}
+
+
+
+
+\section{Coordination mechanisms and mechanism design}
+
+
+
+
+\section{Deliberative agents and knowledge representaion}
+
+
+
+
+\section{Norms, trust and reputation into control intelligent distributed systems}
+
+
+
+
+\section{Distributed reinforcement learning}
+
+
+
+\end{document}
