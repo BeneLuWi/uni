@@ -1,0 +1,47 @@
+\documentclass[ngerman]{scrartcl}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{graphicx}
+
+\usepackage{hyperref}
+
+\title{Algorithmen und Datenstrukturen (Master) \\ WiSe 19/20}
+\author{Benedikt Lüken-Winkels}
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+
+\subsection*{Wörterbuchproblem}
+Menge S mit n Schlüssln aus einem Universum U.
+Operationen: INSERT (darauf achten, dass die Balance nicht verloren geht), DELETE, LOOKUP (Im Baum runterlaufen, bis das Element gefunden wurde)
+\paragraph{Situationen}
+\begin{enumerate}
+    \item U linear gehordnet, also existiert ein $ \leq $-Test $ \Rightarrow $ Suchbäume
+    \item U ist ein Intervall $ \{0,..., N-1\} $ der gesamten Zahlen $ \Rightarrow $ Hashing
+\end{enumerate}
+\subsubsection*{zu 1}
+\paragraph{Randomisierte Suchbäume}
+Idee: Benutze Zufallszahlen zur Balancierung eines binären Suchbaums
+\paragraph{Binärer Suchbaum (Knoten-Orientiert)}
+Schlüssel werden in den n Knoten eines binären Baums gespeichert, sodass im linken Unterbaum des Knotens mit Schlüssel x alle Schlüssel $ < x $ \textbf{und} im rechten Unterbaum alle $ > x $. Balanciert $ \Rightarrow Höhe(T)\leq logn$.  Degeneriert $ \Rightarrow Höhe(T) = O(n)$
+
+
+
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+

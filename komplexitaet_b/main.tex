@@ -28,15 +28,6 @@ Ziel ist die eindeutige Zuweisung einer eines Problems zu einer Komplexitätskla
 \paragraph{$ P_3 $} eine kontextfreie Grammatik G. Gilt $ L(G) \neq \emptyset $ ? 
 Ist entscheidbar, mit dem CYK-Algorithmus.
 
-\paragraph{$ P_4 $} eine zwei kontextfreie Grammatiken $ G_1, G_2 $. Gilt $ L(G_1) \cap L(G_2) \neq \emptyset $ ? 
-Simulation von Berechnugen von TMs mit 
-
-\paragraph{$ P_5 $} eine zwei rechtslineare Grammatiken $ G_1, G_2 $. Gilt $ L(G_1) \cap L(G_2) \neq \emptyset $ ?  
-\begin{itemize}
-    \item Reguläre Sprachen sind Schnittabgeschlossen. 
-    \item Es gibt einen Algorithmus der aus dem Schnitt von 2 det TMs eine det TM liefert. $ \Rightarrow $ entscheidbar.
-\end{itemize}
-
 \subsection{Reduktion}
 
 
@@ -58,23 +49,45 @@ Abhängig von der Kodierung ändert sich die Problemgröße. Zulässige Kodierun
 
 \paragraph{Deterministische TM} Für jedes Tupel aus Zuststand und Alphabet gibt es höchstens ein Tripel aus Zustandübergängen
 
-\paragraph{Mehrband TM} Simultanes Arbeiten auf mehreren Bändern: Arbeitsband ist getrennt vom Eingabeband. Simulation von Mehrband TMs auf Einband TM
+\paragraph{Mehrband TM} Simultanes Arbeiten auf mehreren Bändern: Arbeitsband ist getrennt vom Eingabeband. Simulation von Mehrband TMs auf Einband TM durch \textbf{Spuren} und Aufblähung des Alphabets. Aufwand für eine k-Bandmaschine: 2k 
 
 \subsection{NP-Schwere}
 \paragraph{Generische Ausgangsproblem für NP-Schwere} ist das Short NTM Acceptance. 
 \paragraph{SAT} Formel in Aussagelogik. Gibt es eine Belegung der Variablen, sodass die Formel erfüllt ist? Messung der Laufzeit eines det Algorithmus zB $ 2^n $
 
 
+\section{Parametrisierte Probleme}
+Messen der Komplextität eines Problems nicht nur in Bitlänge, sondern Ressourcenbedarf. Parametrisiertes Problem $ (P, \kappa) $ mit $ \kappa $ als Parametrisierungsfunktion (Anzahl der Klauseln bei SAT).  Für $ (P, \kappa) \in FTP$ gibt es einen det Algorithmus (DTM) mit Zeit $ O(f(\kappa(x))|x|^c) $.
+\paragraph{Parametrisierte Reduktionen}  Der Parameter $ \kappa_1(x) $ für $ P_2 $ soll durch eine Abbildung g gedeckelt werden sollen.
 
+\subsection{Typische FTP-Probleme}
+\paragraph{MaxSAT} Gegeben eine Formel in KNF und eine nat Zahl k. Finde eine Belegung, sodass $ \geq k $ Klauseln erfüllt werden. Ist NP-schwer wegen Reduktion auf KNF-SAT mit k = Anzahl der Klauseln. Belegt man alle Klauseln mit 0 oder 1 ist jeweils die Hälte aller Klauseln erfüllt. Das bedeutet, dass bei k < m/2 automatisch eine Ja-Instanz vorliegt. 
 
+\paragraph{Vertex Cover}
 
+\section{Die Klasse W[1]}
+Short NTM Acceptance lässt sich nicht mit DTM in Polynomzeit lösen. Beim Versuch der Parametrisierung
 
+\subsection{Probleme aus W[1]}
+\paragraph{Short NTM Word Acceptance} Akzeptiert die TM M das Wort w in k Schritten
+\paragraph{Independent Set} In einem Graphen suche eine Menge von k Knoten, die keine gemeinsame Kante haben.  
 
 
 
 
 %===============================
+%
+%
+%
+%
+%===============================
 \section{Allgemeines}
+\subsection{Simulation von NTM auf DTM}
+Grad des Nichtdeterminismus hängt von der Eingabe der NTM ab.
+
+
+\subsection{Satz von Cook}
+
 \subsection{Spezielles Halteproblem $ K $}
 \begin{itemize}
     \item Eingabe: Kodierung einer TM
@@ -118,6 +131,17 @@ Abhängig von der Kodierung ändert sich die Problemgröße. Zulässige Kodierun
 
 \subsection{Übersetzung von det TM auf nicht-det TM}
 
+\subsection{Dynamisches Programmieren}
+Verwenden vorheriger Ergebnisse während der Laufzeit ($ \Rightarrow $ Rekursive Algorithmen)
+
+
+
+
+%===============================
+%
+%
+%
+%
 %===============================
 \section{Aufgaben}
 
@@ -133,14 +157,31 @@ Simulation von Berechnungen von TMs
 \end{itemize}
 
 \paragraph{Aufgabe 2: Ist das Wortproblem (Folie 9) aufzählbar?} $ M \in K \Leftrightarrow f(M) = (G_K, c(M)) \in W $. $G_K$ ist die Grammatik, die Kodierungen von TMs aus K beschreibt. Für $G \in W$ gilt, $(G, w) mit\ w \in L(G)$. Das heißt, eine TM M ist eine Ja-Instanz für K, sobald $L(G_K)$ eine Kodierung ($c(M)$) von M erzeugen kann.
-\paragraph{Aufgabe 3: Wieso Polynomzeit für Unary Knapsack?}
+\paragraph{Aufgabe 3: Wieso Polynomzeit für Unary Knapsack?} Summe der Eingabe kodiert in Bits ergibt 
+\begin{itemize}
+    \item Verwende Datenstruktur Tabelle (Profit P/ Kosten A) und fülle sie mit 1 oder 0, wenn der Profit $ p_i $ mit Kosten $ a_j $ erreichbar ist 
+\end{itemize}
 \paragraph{Aufgabe 4: Formalisierung der Kopfbewegungen einer TM (Folie 13)}
+Vorsicht bei Linksbewegung, wegen $ \$ $
 \paragraph{Aufgabe 5: Formalisierung einer DTM und Mehrband TM}
-\paragraph{Aufgabe 6: Ist die Zahlenkodierung/Einband-/Mehrband-TM bei einem Problem wesentlich?}
-\paragraph{Aufgabe 7: Wie schnell lässt sich SAT lösen? }
-\paragraph{Aufgabe 8: Lösen von VC mit Short NTM Acceptance (zwei many-one Polynomzeitreduktionen)} 
+
+
+\paragraph{Aufgabe 6: Ist die Zahlenkodierung/Einband-/Mehrband-TM bei Short NTM Acceptance wesentlich?}
+Wenn die Schrittzahlbegrenzung k in unär kodiert ist. Besonderheit bei Mehrband: 
+
+\paragraph{Aufgabe 7: Wie schnell lässt sich SAT lösen?}
+Bei KNF-SAT kann die Klauselanzahl eine Messgröße sein. Lässt sich das auf SAT übertragen?
+
+\paragraph{Aufgabe 8: Lösen von VC mit Short NTM Acceptance (zwei many-one Polynomzeitreduktionen)} Erstellen einer NTM und dann Reduktion mit Short NTM Acceptance (Rechenteppich) 
+\begin{itemize}
+    \item 1. Reduktion:
+    \item 2. Reduktion:
+\end{itemize}
+
 \paragraph{Aufgabe 9: Zeigen, dass VC $\leq$ Short NTM Acceptance gilt. und umgekehrt}
-\paragraph{Aufgabe 10}
+
+
+\paragraph{Aufgabe 10: Zeigen, dass $ \MinSAT \leq_{FTP} VC $ (Folie 25)}
 \paragraph{Aufgabe 11}
 \paragraph{Aufgabe 12}
 \paragraph{Aufgabe 13}
