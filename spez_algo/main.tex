@@ -4,8 +4,9 @@
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
 \usepackage{graphicx}
-%\usepackage[linesnumbered,ruled]{algorithmic}
+\usepackage{algorithm2e}
 \usepackage{hyperref}
+
 
 \title{Algorithmen und Datenstrukturen (Master) \\ WiSe 19/20}
 \author{Benedikt Lüken-Winkels}
@@ -93,12 +94,22 @@ Trick: arbeite ab jetzt mit zufälliger Permutation statt den Prioritäten. $ \r
 \paragraph{Teil a) des Lemmas} $P_k $ ist Suchpfad für Knoten $x_k $. Seien $ P'_k $ und $ P''_k $ Teilfolgen von $ P_k $ mit: $ \forall v \in P'_k, key(v)\leq x_k $ und $ \forall u \in P''_k, key(u)\geq x_k $. Beobachtungen:
 \begin{enumerate}
     \item $ |P_k| = |P'_k| + |P''_k| - 1 $ ($ x_k $ in beiden Teilfolgen)
-    \item $ P'_k = $ Menge der knoten mv mit:
+    \item $ P'_k = $ Menge der knoten v mit:
     \begin{itemize}
         \item Wenn v eingefügt wird, gilt key(v) ist maximal mit key(v)$ \leq x_k $
     \end{itemize}
-    \item 
+    \item $ P''_k = $ Menge der knoten u mit:
+    \begin{itemize}
+        \item Wenn u eingefügt wird, gilt key(u) ist minimal mit key(u)$ \geq x_k $
+    \end{itemize}
 \end{enumerate}
+Wir zeigen
+\begin{enumerate}
+    \item E($ |P'_k| $) = $ H_k $
+    \item E($ |P''_k| $) = $ H_{n-k+1} $
+\end{enumerate}
+\underline{zu 1)} K mögliche Kandidaten für $ P'_k \{x_1,...,x_k\}$. Spiel: Ziehe zufällig Schlüssel aus $\{x_1,...,x_k\}$. E($ |P'_k| $) = Erwartungswert, wie of ein Kandidat gezogen wird, der $ \geq $ als alle vorher gezogenen ist. $ A^k = E(|P'_k|)$ (Spiel A)
+$$A^k = \sum_{i=1}^k \frac{1}{k} \cdot (1 + A^{k-i})$$
 
 
 
@@ -109,9 +120,50 @@ Trick: arbeite ab jetzt mit zufälliger Permutation statt den Prioritäten. $ \r
 
 
 
+\section{Übung}
+\subsection*{Übung 3:}
+\paragraph{1)} Durch entfernen von Kanten soll der Graph zerlegt werden. (Unions in umgekehrter Reihenfolge)
 
+\paragraph{2)}
+Zu zeigen:
+$$ a(z,n) \leq \lfloor\frac{4m}{n}\rfloor\ für\  z=\alpha (m,n) $$
+Definition von a und $ \alpha $ 
+$$a(z,n) = min \{j|A(z,j) > logn \} $$
+$$\alpha(m,n)=min\{i|A(i, \lfloor\frac{4m}{n}\rfloor) > logn\}$$
+Behauptung:
+$$a(\alpha(m,n), n) \leq \lfloor\frac{4m}{n}\rfloor$$
+Beweis: indirekt. Annahme:
+$$a(\alpha(m,n), n) > \lfloor\frac{4m}{n}\rfloor$$
+$$\Rightarrow A(\alpha(m,n),\lfloor\frac{4m}{n}\rfloor) \leq logn $$
+Widerspruch zur Definition von $ \alpha $ , denn
+$$A(\alpha(m,n),\lfloor\frac{4m}{n}\rfloor) > logn $$
 
+\paragraph{3.a)} Union-Split-Find. (van Emde-Boas aht Datenstruktur mit log log n für Union-Split-Find. ) Gegeben ist eine Array
+\begin{itemize}
+    \item Split(i): Markiere i
+    \item Find(x): Finde nächste Markierung
+    \item Union(x): Lösche Markierung x
+\end{itemize}
+Balancierter (blatt-orientierter) Baum zur Speicherung der markierten Elemente. Einfügen der markierten Elemente als Blätte rdes Baums
+\begin{itemize}
+    \item Split = Insert
+    \item Union = Delete
+    \item Find = Locate
+\end{itemize}
+Platz = \#Intervalle, Zeit O(logn)
+\paragraph{3.b)} 
+\begin{itemize}
+    \item Insert = Split
+    \item Delete = Union
+    \item FindMin = Find(1)
+\end{itemize}
 
+\section{Allgemeines}
+\subsection{Einschub: Erwartungswerte}
+Situation: n Ereignisse, die mit einer gweissen Wahrscheinlichkeit prob(i) auftreten. Jedes Ereignis besitzt einen Wert val(i). 
+$$E(val) = \sum_{i_1}^{n} prob(i)\cdot val(i) $$
+Spezialfall: Gleichverteilung: $ prob(i)=\frac{1}{n} für\ 1\leq i \leq n $. Dann gilt:
+$$ E(val)= \frac{1}{n} \sum_{i=1}^{n}val(i) = Mittelwert $$
 
 
 
