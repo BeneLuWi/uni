@@ -16,3 +16,4 @@ Mitschriften, Zusammenfassungen und Projekte im Master an der Universität Trier
 
 ## Wintersemester 19/20
 [Distributed AI](vert_ki/main.pdf)  
+[Spezielle Kapitel aus Algo und Datenstrukturen](spez_algo/main.pdf)  
