@@ -91,7 +91,9 @@ Wir analysieren die erwarteten Kosten einer Delete-Operation (Insert $ \rightarr
     \item Baum wächst nur an den Blättern.
 \end{enumerate}
 Trick: arbeite ab jetzt mit zufälliger Permutation statt den Prioritäten. $ \rightarrow $ normaler Binärbaum mit zufälliger Einfügereihenfolge.
-\paragraph{Teil a) des Lemmas} $P_k $ ist Suchpfad für Knoten $x_k $. Seien $ P'_k $ und $ P''_k $ Teilfolgen von $ P_k $ mit: $ \forall v \in P'_k, key(v)\leq x_k $ und $ \forall u \in P''_k, key(u)\geq x_k $. Beobachtungen:
+\paragraph{Teil a) des Lemmas} $P_k $ ist Suchpfad für Knoten $x_k $. Seien $ P'_k $ und $ P''_k $ Teilfolgen von $ P_k $ mit: $ \forall v \in P'_k, key(v)\leq x_k $ und $ \forall u \in P''_k, key(u)\geq x_k $. 
+\begin{proof}
+Beobachtungen:
 \begin{enumerate}
     \item $ |P_k| = |P'_k| + |P''_k| - 1 $ ($ x_k $ in beiden Teilfolgen)
     \item $ P'_k = $ Menge der knoten v mit:
@@ -108,9 +110,96 @@ Wir zeigen
     \item E($ |P'_k| $) = $ H_k $
     \item E($ |P''_k| $) = $ H_{n-k+1} $
 \end{enumerate}
-\underline{zu 1)} K mögliche Kandidaten für $ P'_k \{x_1,...,x_k\}$. Spiel: Ziehe zufällig Schlüssel aus $\{x_1,...,x_k\}$. E($ |P'_k| $) = Erwartungswert, wie of ein Kandidat gezogen wird, der $ \geq $ als alle vorher gezogenen ist. $ A^k = E(|P'_k|)$ (Spiel A)
+\underline{zu 1)} K mögliche Kandidaten für $ P'_k \{x_1,...,x_k\}$. Spiel: Ziehe zufällig Schlüssel aus $\{x_1,...,x_k\}$. E($ |P'_k| $) = Erwartungswert, wie of ein Kandidat gezogen wird, der $ \geq $ als alle vorher gezogenen ist (neues Maximum). $ A^k = E(|P'_k|)$ (Spiel A)
+
 $$A^k = \sum_{i=1}^k \frac{1}{k} \cdot (1 + A^{k-i})$$
 
+Im Zug $ x_i $ schließt $ x_1 ... x_i $ au. Dann gleiches Spiel mit K-i Kandidaten.
+
+$$A^k = \frac{1}{k} (k + \sum^{k}_{i=1} A^{k-i}) $$
+$$ = 1 + \frac{1}{k} \sum^{k}_{i=1} A^{k-i}$$ 
+
+Wir zeigen durch Induktion über k, dass $ A^k = H_k $
+
+\paragraph{IA}
+$$ = 1 + \frac{1}{k} \sum^{k}_{i=0} H_i$$ 
+Eigenschaften der harmonischen Zahlen:
+\begin{enumerate}
+    \item $$ \sum^{k}_{i=0} H_i = k \cdot (H_k -1 )$$
+    \item $$ H_k \leq 1 + lnk$$ 
+\end{enumerate}
+aus 1) folgt: 
+
+$$A^k = 1 + \frac{1}{k} \cdot k \cdot (H_k - 1)$$
+$$    = 1 + H_k - 1$$
+$$    = H_k$$
+Der Erwartungswert ist ist gleich der k-ten Harmonischen Zahl. $E(P'_k) = H_k$. Abschätzung von $E(P''_k) =: B^k$. (Spiel B) kandidaten $ \{ x_k ... x_n\} $: Zähle, wie of ein neues Minimum gezogen wird. Dann sieht man leicht, dass 
+$$B^k = H_{n-k+1}$$
+Beweis: symmetrisch.
+$$E(|P_k|) = E(|P'_k|) + E(|P''_k|) - 1 $$
+$$ = A^k + B^k - 1 $$
+$$ = H_k + H_{n-k+1} - 1 $$
+
+\end{proof}
+
+\paragraph{Teil b) des Lemmas}
+
+\begin{proof}{$L_k$ und $R_k$}
+Seien $ L_k = v_1, ... , v_l $ und $ R_k = u_1, ... , u_m $
+\paragraph{Erwartungswerte}
+Spiel C: Ziehe zufällig Elemente aus $ \{x_1 ... x_n \} $.
+Sobald $ x_k $ gezogen wird: ??? Trigger ???
+Sei $ C^k $ der Erwartungswert dieses Spiels, dh $ C^k = E(|L_k|) $.
+
+$$ C^k = \frac{1}{k} \cdot A^{k-1} + \sum_{i=1}^{k-1} \frac{1}{k} \cdot C^{k-i}$$
+im 1. Zug $ x_k $, dass Spiel mit k-1 Kandidaten (alle kleiner, als $ x_k $).
+
+$$ C^k = \frac{1}{k} (\cdot H_{k-1} + \sum_{i=0}^{k-1} \cdot C^{i})$$
+
+Trick: Schätze die Differenz zweier aufeinanderfolgender $ C^i $s = $ \delta_j = C^{j+1} - C ^j $ ab.
+
+$$\Rightarrow C^k = \sum_{j=1}^k \delta_j + C^0$$
+
+Beatrachte: 
+$$ (j + 1) \cdot C^{j+1} - j \cdot C ^j $$
+$$ = (j + 1) \frac{1}{j+1} (H_j + \sum_{i=0}^j C^i) - j \frac{1}{j} (H_{j-1} + \sum_{i=0}^j C^i)$$
+$$ = H_j + \sum_{i=0}^j C^i - (H_{j-1} + \sum_{i=0}^j C^i)$$
+$$ = H_j - H_{j-1} + C^i$$ 
+$$ = \frac{1}{j} + C^j$$
+Wir wissen nun, dass
+$$ (j + 1) \cdot C^{j+1} - j \cdot C ^j  = \frac{1}{j} + C^j$$
+$$ \frac{1}{j} = (j+1) C^{j+1} - (j+1) \cdot C^j $$
+$$ \frac{1}{j(j+1)} = C^{j+1} - C^j = \delta_j $$
+$$ \Rightarrow \delta_j = \frac{1}{j(j+1)} = \frac{1}{j} - \frac{1}{j+1}$$
+$$ C^k = \sum_{j=1}^{k-1} \delta_j = \sum_{j=1}^{k-1} (\frac{1}{j} - \frac{1}{j+1})$$
+$$ = 1 - \frac{1}{k}$$
+
+\end{proof}
+
+
+\paragraph{Teil c) des Lemmas}
+Spiel $ D^k = E (|R_k|) $: Wie oft wird ein neues Minimum größer $ x_k $ gezogen, nachdem $ x_k $ gezogen wurde (Trigger).
+
+\begin{proof}
+symmetrisch:
+
+$$ D^k = \frac{1}{n-k+1} \cdot B^{k-1} + \sum_{i=1}^{k-1 ??} \frac{1}{n+k-1} D^{i-k ??} $$
+\textbf{...}
+$$ D^k = 1 - \frac{1}{n-k+1}$$
+
+\end{proof} 
+
+\paragraph{Satz} Sie T ein RST für eine Menge von n Schlüsseln. Dann gilt:
+\begin{enumerate}
+    \item Die erwartete Laufzeit fpr Insert, Delete und Lookup ist O(logn)
+    \item Die erwartete Zahl der Rotationen bei Delete ist < 2
+\end{enumerate}
+\paragraph{Beweis}
+\begin{enumerate}
+    \item Kosten von Lookup = $ O(|P_k|) $, Insert und Delete = $ O(|P_k| + |L_k| + |R_k|) $
+    Kosten: $ O(H_k + H_{n-k+1} + 1 - \frac{1}{k} + 1- \frac{1}{n-k+1}) = O(H_n) = O(lnn) = O(logn)$
+    \item Erwartete Zahl der Rotationen: $ E(|L_k|) + E(|R_k|) < 2 $
+\end{enumerate}
 
 
 
@@ -120,6 +209,12 @@ $$A^k = \sum_{i=1}^k \frac{1}{k} \cdot (1 + A^{k-i})$$
 
 
 
+
+
+
+
+
+\newpage
 \section{Übung}
 \subsection*{Übung 3:}
 \paragraph{1)} Durch entfernen von Kanten soll der Graph zerlegt werden. (Unions in umgekehrter Reihenfolge)
@@ -171,7 +266,6 @@ $$ E(val)= \frac{1}{n} \sum_{i=1}^{n}val(i) = Mittelwert $$
 
 
 \end{document}
-
 
 
 
