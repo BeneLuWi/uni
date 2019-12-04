@@ -202,6 +202,90 @@ $$ D^k = 1 - \frac{1}{n-k+1}$$
 \end{enumerate}
 
 
+\section{Hashing}
+
+
+
+\subsection{Hashing mit offener Adressierung}
+Tafel T $ [0, ..., m-1], m \leq n, |S| = n $
+Verwende die Folge von Hashfunktionen $ h_0, h_1 $ 
+$$ h_i(x) = f(x) + i \cdot g(x), i = 0,1,...$$
+Häufig verwendet wird
+$$ h_i(x) = (x \cdot mod m + i)\cdot mod m $$
+$\rightarrow$ Linear Probing.\\
+Idee
+\begin{figure}[h]
+    \begin{center}
+        \includegraphics[width=10cm]{offeneadressierung.png}
+        \caption{Idee: Offene Adressierungs-Tabelle}
+        \label{fig:}
+    \end{center}
+\end{figure}
+
+\paragraph{Operationen} Tafelposition T[i] belegt oder frei.
+\begin{itemize}
+    \item Init: alle frei
+    \item Insert(x): betrachte die Tafelpositionen $T[h_0(x)], T[h_1(x)], T[h_2(x)]$ bis $ T[h_i(x)] $ frei und speicher x dort ab.
+    $ T[h_i(x)] \leftarrow x $ und markiere $ T[h_i(x)]$ als belegt. Voraussetzungen:
+    \begin{enumerate}
+        \item $ m \leq |S| = n $
+        \item $ h_i(x) $ frei $ i = 0,1,2,... $ muss alle Tafelpoitionen durchlaufen
+    \end{enumerate}
+    \item Lookup(x): Teste die Tafelpoition $ T[h_i(x)] $ für $ i=0,1,2,... $ bis entweder $ T[h_i(x)] = x $ erfolgreich oder $ T[h_i(x)] $ ist frei. \textbf{Terminiert nicht}, wenn m=n und die Tafel voll ist und das gesuchte Element nicht vorhanden ist. Daher idR $ m \geq n $
+    \item Delete(x): (Idee 1):
+    \begin{enumerate}
+        \item $ j \leftarrow Lookup(x) $ 
+        \item $ T[j] \leftarrow frei $, dann sind auf j folgende Elemente nicht mehr erreichbar.
+    \end{enumerate}
+    (Idee 2):
+    \begin{enumerate}
+        \item Dritter Zustand: 'gelöscht' (Details: Übung)
+    \end{enumerate}
+\end{itemize}
+
+
+
+\subsection{Perfektes Hashing}
+\textbf{Situation:} Statische Menge  S von n Schlüsseln aus $ [0,..,N-1] $. \textbf{Ziel:} Speichere S in einer Tafel der Größe O(n), sodass Lookup in Zeit O(1) realisiert werden kann (N >> n, N sehr viel größer, als n). \textbf{Andere Formulierung:} Finde einer Hashfunktion $ h: [0,..., N-1] \rightarrow [0,...,S-1] $ mit 
+\begin{enumerate}
+    \item S = Größe der Tafel und S = O(n)
+    \item h injektiv auf S
+\end{enumerate}
+Zur Konstruktion oder Auswahl einer solchen Funktion Hashfunktion verwenden wir ein probabilitisches Verfahren (Zufallsverfahren).
+\paragraph{Idee} 2-stufiges Hashing-Schema (Hashing-Verfahren)
+\begin{figure}[h]
+    \begin{center}
+        \includegraphics[width=10cm]{perfekthashing.png}
+        \caption{Idee: Perfekt Hashing Tabellen}
+        \label{fig:}
+    \end{center}
+\end{figure}
+
+Sei p eine Primzahl mit p > N und $ S \in \mathbb{N} $ (Tafelgröße). Betrachte folgende Hashfunktionen:
+
+$$ h_k:[0,...,N-1] \rightarrow [0,...,S-1] $$ mit $ h_k(x)= ((k \cdot x) mod p) mod s  $ für alle $ 1 \leq k \leq p-1 $ (Modulo Primzahl ergibt einen Restkörper, zB Inverses der Multiplikation). Diese Funktionen sind im Allgemeinen nicht injekt, dh $ h_k $ verteilt die Menge S auf s Buckets $ W_0^k, W_1^k, W_{s-1}^k $. 
+$$ \Rightarrow W_i^k  = \{x\in S | h_k(x) = i\} $$
+
+$ h_k $ injektiv auf $ S \Leftrightarrow |W_i^k| \leq 1 $ für $ 0 \leq i \leq s-1 $
+
+\paragraph{Lemma 1: } Für jede Menge $ S \subseteq \{0,..., N-1 \}, |S| = n $ gilt $ \exists k, 1 \leq k \leq p-1 mit $
+
+$$ \sum_{i=0}^{s-1} \binom{|W_i^k|}{2} < \frac{n^2}{s}$$
+(Anzahl der Kollisionen < $\frac{n^2}{s}$). \\
+
+\paragraph{Beweis} zunächst: Behauptung.
+$$ \sum_{k=0}^{p-1} \sum_{i=0}^{s-1} \binom{|W_i^k|}{2} <  (p-1)\frac{n^2}{s}$$
+
+Daraus folgt das Lemma (indirekt). Annahme, das Lemma 1 gilt nicht, dh $\forall 1\leq k\leq p-1: $
+
+$$ \sum_{i=0}^{s-1} \binom{|W_i^k|}{2} \geq \frac{n^2}{s}$$
+
+$$ \Rightarrow  \sum_{i=0}^{s-1} \binom{|W_i^k|}{2} \geq \frac{n^2}{s}$$
+Widerspruch zur Behauptung!
+
+\begin{proof}
+
+\end{proof}
 
 
 
@@ -261,13 +345,7 @@ Spezialfall: Gleichverteilung: $ prob(i)=\frac{1}{n} für\ 1\leq i \leq n $. Dan
 $$ E(val)= \frac{1}{n} \sum_{i=1}^{n}val(i) = Mittelwert $$
 
 
-
-
-
-
 \end{document}
-
-
 
 
 
