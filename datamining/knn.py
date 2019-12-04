@@ -24,21 +24,31 @@ T = [
 	["c", "n", "s", 0, 10],
 ]
 
-CB.append(T[0])
-
 for t in T:
 	max = 0
 	maxCase = []
-	print(CB)
+	classCounter = [0,0]
+	
+	#Get the Maximum Similarity
 	for c in CB:
-		
 		if t[4] != c[4]:			
 			if sim(t, c) > max:
 				maxCase = c
 				max = sim(t,c)
+				
+	#Count Cases from CB with equal similarity as the max sim
+	for c in CB:	
+		if t[4] != c[4]:			
+			if sim(t, c) == max:
+				classCounter[c[3]] += 1	
+	print("t: " + str(t))
+	print("Case Base: " + str(CB))
+	print("Closest: " + str(maxCase))
+	print(classCounter)
 	
-	if (len(maxCase) > 0) and (maxCase[3] != t[3]):
+	if ((classCounter[0] > classCounter[1] and t[3] == 1) or
+		(classCounter[0] < classCounter[1] and t[3] == 0) or
+		(classCounter[0] == classCounter[1])):
 		CB.append(t)
-		
-		
+	
 print(CB)
