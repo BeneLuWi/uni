@@ -1,0 +1,136 @@
+
+
+\section{Übung}
+\subsection*{Übung 3:}
+\paragraph{1)} Durch entfernen von Kanten soll der Graph zerlegt werden. (Unions in umgekehrter Reihenfolge)
+
+\paragraph{2)}
+Zu zeigen:
+$$ a(z,n) \leq \lfloor\frac{4m}{n}\rfloor\ für\  z=\alpha (m,n) $$
+Definition von a und $ \alpha $ 
+$$a(z,n) = min \{j|A(z,j) > logn \} $$
+$$\alpha(m,n)=min\{i|A(i, \lfloor\frac{4m}{n}\rfloor) > logn\}$$
+Behauptung:
+$$a(\alpha(m,n), n) \leq \lfloor\frac{4m}{n}\rfloor$$
+Beweis: indirekt. Annahme:
+$$a(\alpha(m,n), n) > \lfloor\frac{4m}{n}\rfloor$$
+$$\Rightarrow A(\alpha(m,n),\lfloor\frac{4m}{n}\rfloor) \leq logn $$
+Widerspruch zur Definition von $ \alpha $ , denn
+$$A(\alpha(m,n),\lfloor\frac{4m}{n}\rfloor) > logn $$
+
+\paragraph{3.a)} Union-Split-Find. (van Emde-Boas aht Datenstruktur mit log log n für Union-Split-Find. ) Gegeben ist eine Array
+\begin{itemize}
+    \item Split(i): Markiere i
+    \item Find(x): Finde nächste Markierung
+    \item Union(x): Lösche Markierung x
+\end{itemize}
+Balancierter (blatt-orientierter) Baum zur Speicherung der markierten Elemente. Einfügen der markierten Elemente als Blätte rdes Baums
+\begin{itemize}
+    \item Split = Insert
+    \item Union = Delete
+    \item Find = Locate
+\end{itemize}
+Platz = \#Intervalle, Zeit O(logn)
+\paragraph{3.b)} 
+\begin{itemize}
+    \item Insert = Split
+    \item Delete = Union
+    \item FindMin = Find(1)
+\end{itemize}
+
+\subsection*{Übung 4:}
+\paragraph{1)} Rekursive Funktion zum Aufbau eines RST \\
+A[1,...,n] von Schlüsseln. P[1,...,n] Prioritäten
+
+\begin{algorithm}
+    \For{$1\gets 0 $ \KwTo{n}}{
+        $P[i]\gets random()$
+    }
+\end{algorithm}
+
+Rekursice Funktion RST(A,P,l,r) baut einen RST für A[l,...,r] und liefert Pointer auf die Wurzel.
+
+\begin{verbatim}
+class rst_node {
+    key
+    prio
+    left,right: rst_node
+}
+\end{verbatim}
+
+\begin{algorithm}
+    \SetKwProg{Def}{def}{:}{end}
+    \Def{RST(A,P,l,r)}{
+        \uIf{ $l>r$} {
+            \Return null;
+        }
+        $i \gets max[P,l,r]$ \;
+        $q \gets$ new rstnode \;
+        $q.key \gets$ A[i] \;
+        $q.prio \gets$ P[i] \;
+        $q.left \gets$ RST(A,P,l,i-1) \;
+        $q.right \gets$ RST(A,P,i+1,r) \;
+        \Return q;
+    }
+\end{algorithm}
+
+
+
+
+\paragraph{2)}
+Spiel B symmetrisch zu Spiel A.
+
+\paragraph{3)} Implementiertung von Hashing mit Verkettung. Idee:
+Tafelgröße s beliebig. Hashfunktion $ h(x) = x \cdot mod s $\\
+\begin{algorithm}[H]
+\SetKwProg{Def}{def}{:}{end}
+\Def{Insert(x)}{
+    
+}
+\Def{Lookup(x)}{
+    
+}
+\Def{Delete(x)}{
+    
+}
+\end{algorithm}
+
+\paragraph{4)} Belegungsfaktor $ \beta = \frac{n}{m} $ m = Tafelgröße. Bei Hashing mit Verkettung ist $ \beta $ = erwartete Länge einer Liste. Laufzeit für eine Operation $ O(1+\beta) = O(1) \text{ für } \frac{1}{2} \leq \beta \leq 2$ 
+\subparagraph{Rehash} Die Tabelle muss in eine größere Liste kopiert werden \\
+\begin{algorithm}[H]
+\SetKwProg{Def}{def}{:}{end}
+\Def{Insert(x)}{
+    ... \;
+    $n\gets n+1$ \;
+    \uIf{$\frac{n}{m} > 2$} {
+        $m_0 \gets m$ \;
+        $m \gets 2m$ \;
+        $T' \gets new\ int[m]$
+    }
+    Kopiere alte Tabelle in neue \;
+}
+\Def{Delete(x)}{
+    $n\gets n-1$
+    \uIf{$\frac{n}{m} < \frac{1}{2}$}{
+        ...\;
+        $ m\gets \frac{m}{2}$\;
+        Kopiere alte Tabelle in neue \;
+    }
+
+}
+
+\end{algorithm}
+
+
+
+
+
+
+
+
+\section{Allgemeines}
+\subsection{Einschub: Erwartungswerte}
+Situation: n Ereignisse, die mit einer gweissen Wahrscheinlichkeit prob(i) auftreten. Jedes Ereignis besitzt einen Wert val(i). 
+$$E(val) = \sum_{i_1}^{n} prob(i)\cdot val(i) $$
+Spezialfall: Gleichverteilung: $ prob(i)=\frac{1}{n} für\ 1\leq i \leq n $. Dann gilt:
+$$ E(val)= \frac{1}{n} \sum_{i=1}^{n}val(i) = Mittelwert $$
