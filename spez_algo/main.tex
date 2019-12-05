@@ -283,9 +283,104 @@ $$ \sum_{i=0}^{s-1} \binom{|W_i^k|}{2} \geq \frac{n^2}{s}$$
 $$ \Rightarrow  \sum_{i=0}^{s-1} \binom{|W_i^k|}{2} \geq \frac{n^2}{s}$$
 Widerspruch zur Behauptung!
 
-\begin{proof}
+\begin{proof}[Beweis zur Behauptung]
+
+$$ (1)\sum_{k=0}^{p-1} \sum_{i=0}^{s-1} \binom{|W_i^k|}{2}$$
+= Anzahl der Paare $ (k, \{x,y\} $, $ x\neq y$ und $ h_k(x) = h_k(y) $ (Anzahl der Kollisionen).\\
+Wir schätzen zunächst den Betrag für 2 feste Werte $ x \neq y $ zur Behauptung ab.\\
+
+Sei also $ x \neq y $: \\
+(1) = Anzahl aller Ks mit $ (k\cdot x\cdot mod p)mods = (k \cdot y\cdot modp)mods $
+\[ \Leftrightarrow ((k\cdot x\cdot mod p)-(k\cdot y\cdot mod p))mods = 0 \]
+\[ k\cdot x\cdot mod p - k\cdot y\cdot mod p = i \cdot s \text{ für ein } i\in \mathbb{Z} \]
+\[k\cdot (x-y) mod p = i\cdot s \]
+Es gibt maximal $ \frac{2(p-1)}{s} $ mögliche Lösungen. Da p eine Primzahl ($ \mathbb{Z}_p $ ist ein Körper) hat jede dieser Gleichungen höchstens 1 Lösung für k.
+$ \Rightarrow $ Beitrag eines festen Paares $ x \neq y $ zu (1) ist maximal $ \frac{2(p-1)}{s} $ \\
+
+\[ \Rightarrow (1) \leq \binom{n}{2} \cdot \frac{2(p-1)}{s}\]
+\[ = \frac{n(n-1)}{2} \cdot \frac{2(p-1)}{s}\]
+\[ < \frac{n^2(p-1)}{s}\]
 
 \end{proof}
+
+\paragraph{Folgerung 1} (aus Lemma 1) \\
+Für s=n (dh Tafel der Größe n): 
+$$\exists k ,1 \leq k \leq p-1 \text{ mit } \sum_{i=0}^{n-1} |W_i^k|^2 < 3n$$
+
+\begin{proof}[Beweis für Folgerung 1]
+Betrachte Lemma 1 für s=n
+
+\begin{flalign}
+\exists k: \sum_{i=0}^{n-1}\binom{|W_i^k|}{2} &< n \\
+\sum_{i=0}^{n-1} \frac{|W_i^k| \cdot(|W_i^k| - 1)}{2} &< n\\ 
+\sum_{i=0}^{n-1} |W_i^k| \cdot(|W_i^k| - 1) &< 2 n \\
+\sum_{i=0}^{n-1} |W_i^k|^2  &< 2 n + \sum_{i=0}^{n-1} |W_i^k|(=n) \\
+ &<3n
+\end{flalign}
+
+\end{proof}
+
+
+\paragraph{Folgerung 2} Für $ s = n^2 $ dh quadratische Tafelgröße. \\
+$ \exists k' : 1\leq k \leq p-1 $, sodass die Hashfunktion
+$$ k_{k'}:x \rightarrow (k'x\cdot modp) mods $$
+injektiv auf S ist dh $ |W_i^k| \leq 1 \text{ für } 0\leq i \leq s-1 $.\\
+$\Rightarrow$ Für Tafeln mit quadratische Größe existiert eine perfekte (injektive) Hashfunktion.
+
+\begin{proof}[Beweis für Folgerung 2]
+Betrachte Lemma 1 mit $ s= n^2 $
+
+\begin{flalign}
+\exists k': \sum_{i=0}^{n^2-1}\binom{|W_i^k|}{2} &< 1 \\
+\Rightarrow  |W_i^k| &\leq 1\\
+\Rightarrow  h_{k'}\text{ ist injektiv auf S}
+\end{flalign}
+(zu 6): dh Keine Kollisionen, bzw Doppeltbelegung in den $ W_i^k $
+
+\end{proof}
+
+Folgerung 2 zeigt Perfektes Hashing mit quadratischem Platz. Vermeidung des quadratischen Platzbedarfs durch ein 2-stufigen Hashing-Schema:
+
+\begin{itemize}
+    \item Stufe 1: Wähle ein k gemäß Folgerung 1, dh Tafelgröße s=n und Hashfunktion $ h_k $ mit $ \sum_{i=0}^{n-1} |W_i^k| < 3n $
+    \item Stufe 2: Für jedes nicht-leere Bucket $ W_i^k $ der ersten Stufe verwende iene Tafel der Größe $ s_i = |W_i^k|^2 (0 \leq i \leq n-1) $ und wähle ein $k_i$ gemäß Folgerung 2, dh $ h_{k_i} $ ist injektiv auf $ W_i^k $
+\end{itemize}
+
+\begin{figure}[h]
+    \begin{center}
+        \includegraphics[width=15cm]{2stufenhashing.png}
+        \caption{Konzept 2-Stufen Hashing}
+        \label{fig:}
+    \end{center}
+\end{figure}
+
+
+\subsubsection{Datenstruktur} 4 Felder + Variable k
+\begin{itemize}
+    \item Variable k: ($ h_k $ der 1. Stufe)
+    \item k[0,...,n-1]: k[i] ist $ k_i $ der 2. Stufe
+    \item Size[0,...,n-1]: Size[i] = $ |W_i^k| $ Bucketgrößen der 1. Stufe
+    \item Ptr[0,...,n-1]: Pointer auf die Hashtafeln der 2. Stufe. Ptr[i] zeigt auf die Tafel B[0,...,Size[i]$^2$-1]
+    \item T[0,...,3n]: Gesamtspeicherplatz aller B-Tafeln der 2. Stufe
+\end{itemize} 
+
+\begin{figure}[h]
+    \begin{center}
+        \includegraphics[width=15cm]{datenstruktur.png}
+        \caption{Datenstruktur: Perfekt Hashing}
+        \label{fig:}
+    \end{center}
+\end{figure}
+
+
+\paragraph{Abspeichern eines Elements x}
+\begin{flalign}
+i &\leftarrow (k \cdot x mod p ) mod n\\
+k' &\leftarrow K[i]\\
+s' &\leftarrow Size[i]\\
+j &\leftarrow (k'\cdot x mod p) mod s'\\
+Ptr[i][j] &\leftarrow x
+\end{flalign}
 
 
 
@@ -346,7 +441,6 @@ $$ E(val)= \frac{1}{n} \sum_{i=1}^{n}val(i) = Mittelwert $$
 
 
 \end{document}
-
 
 
 
