@@ -1,5 +1,5 @@
 
-\subsection*{Wörterbuchproblem}
+\section{Wörterbuchproblem}
 Menge S mit n Schlüssln aus einem Universum U.
 Operationen: INSERT (darauf achten, dass die Balance nicht verloren geht), DELETE, LOOKUP (Im Baum runterlaufen, bis das Element gefunden wurde)
 \paragraph{Situationen}
@@ -7,7 +7,7 @@ Operationen: INSERT (darauf achten, dass die Balance nicht verloren geht), DELET
     \item U linear geordnet, also existiert ein $ \leq $-Test $ \Rightarrow $ Suchbäume
     \item U ist ein Intervall $ \{0,..., N-1\} $ der gesamten Zahlen $ \Rightarrow $ Hashing
 \end{enumerate}
-\subsubsection*{\underline{zu 1:}}
+\subsubsection{\underline{zu 1:}}
 
 \paragraph{Randomisierte Suchbäume}
 Idee: Benutze Zufallszahlen zur Balancierung eines binären Suchbaums
@@ -15,7 +15,7 @@ Idee: Benutze Zufallszahlen zur Balancierung eines binären Suchbaums
 \paragraph{Binärer Suchbaum (Knoten-Orientiert)}
 Schlüssel werden in den n Knoten eines binären Baums gespeichert, sodass im linken Unterbaum des Knotens mit Schlüssel x alle Schlüssel $ < x $ \textbf{und} im rechten Unterbaum alle $ > x $. Balanciert $ \Rightarrow Höhe(T)\leq logn$.  Degeneriert $ \Rightarrow Höhe(T) = O(n)$
 
-\subsubsection*{Definition: Randomized Search Tree (RST)}
+\subsubsection{Definition: Randomized Search Tree (RST)}
 Sei $ S=\{x_1,...,x_n\} $ eine Menge von n Schlüsseln. Jedem $ x_i $ wird eine zusätzlich eine Zufallszahl (auch Priorität genannt) $ prio(x_i) $ zugeordnet. $ prio(x_i) $ sind gleichverteilte reelle Zufallszahlen $ \in [0,1] $ (Implementierung wären int-Zahlen, zB 32-bit). \\
 Ein RST für S ist eine binärer Suchbaum für die Paare $ (x_i, prio(x_i), 1 \leq i \leq n $, sodass
 \begin{enumerate}
@@ -35,7 +35,7 @@ Beispiel: $ S=\{1,...,10\} $
 \end{itemize}
 $ \Rightarrow $ Wenn sich die Prioritäten genauso oder umgekehrt, wie die Schlüssel verhalten, erhält man einen degenrierten Baum. (bzgl $ \leq $). zB $ prio(x_i) = x_i $. Dieser Fall ist sehr unwahrscheinlich, wenn sich bei der Priorität um gleichverteilte Zufallszahlen handelt. 
 
-\subsubsection*{Operationen}
+\subsubsection{Operationen}
 
 \begin{itemize}
     \item Lookup(x): normale suche in binärem Baum. Kosten $ O(Höhe(T)) $
@@ -57,10 +57,10 @@ $ \Rightarrow $ Wenn sich die Prioritäten genauso oder umgekehrt, wie die Schl�
     \end{enumerate}
 \end{itemize}
 
-\subsubsection*{Analyse des RST}
+\subsubsection{Analyse des RST}
 Wir analysieren die erwarteten Kosten einer Delete-Operation (Insert $ \rightarrow $ umgekehrtes Delete). Seit T ein RST für die Menge $ \{x_1,...,x_n\}mit x_1 < x_2 < ... < x_n $ der durch Inserts aufgebaut wurde. Bertrachte die Operation Delete($ x_k $) für eine $ k, 1\leq k\leq n $. Für einen Knoten $ x_k $ im Baum T mit Suchpfad $ P_k $, $ L_k $ rechtes Rückgrad von $ T_l $ und $ R_k $ linkes Rückgrad von $ T_r $.  Kosten $ O(|P_k| + |L_k| + |R_k|) $. Wir schätzen die Erwartungswerte 
 
-\subsubsection*{Lemma 1:}
+\subsubsection{Lemma 1:}
 \begin{itemize}
     \item a) E$ (|P_k|) $ = $ H_k + H_{n-k+1} - 1$ $$k-te\ Harmonische Zahl=H_k = \sum_{i_1}^{k}\frac{1}{i}\ H_k \leq ln(x)+1$$
     \item b) E$ (|L_k|) $ = $ 1-\frac{1}{k} $
@@ -185,8 +185,6 @@ $$ D^k = 1 - \frac{1}{n-k+1}$$
 
 
 \section{Hashing}
-
-
 
 \subsection{Hashing mit offener Adressierung}
 Tafel T $ [0, ..., m-1], m \leq n, |S| = n $
@@ -363,6 +361,71 @@ j &\leftarrow (k'\cdot x mod p) mod s'\\
 Ptr[i][j] &\leftarrow x
 \end{flalign}
 
+\begin{algorithm}
+    
+\end{algorithm}
+
+
+
+\subsubsection{Aufbauzeit der Datenstruktur}
+Wir findet man die k bzw k' Werte der ersten und zweiten Stufe (gemäß Folgerung 1 und 2). Aus Folgerungen 1 und 2 folgt: Es existiert immer mindestens ein Wert für k (dh eine geeignete Hashfunktion $ h_k $). \textbf{Aufbaualgorithmus:} Teste alle k-Werte. Auf 1. und 2. Stufe\\
+\begin{algorithm}[H]
+\SetKwProg{Def}{def}{:}{end}
+\Def{Aufbau}{
+    \For{$k=1$ \KwTo $p-1$} {
+        1.Stufe: Teste ob $ \sum_{i=0}^{n-1} |W_i^k|^2 < 3n $\;
+    }
+}
+\end{algorithm}
+Kostet im worst case $ O(p \cdot n) = O(n \cdot N) $\\
+
+2.Stufe für jedes Bucket $ W_i^k $ \\
+\begin{algorithm}[H]
+\SetKwProg{Def}{def}{:}{end}
+\Def{Aufbau}{
+    \For{$k'=1$ \KwTo $n$} {
+        Teste ob $ h_{k'} \text{ injektiv auf } W_i^k$\;
+    }
+}
+\end{algorithm}
+Kostet für $ W_i^k O(p \cdot |W_i^k|$ für alle Buckets $ W_i^k (0 \leq i \leq n)$. Gesamtlaufzeit:
+
+\begin{flalign}
+O(\sum_{i=0}^{n-1} p\cdot|W_i^k|)    
+\end{flalign}
+
+
+Eine genauere Analyse zeigt, dass es viele  k-Werte mit den geforderten Eigenschaften gibt.
+
+\paragraph{Folgerung 3} (aus Lemma 1) \\
+Für mindestens die Hälfte aller k, $ 0 \leq k \leq p-1 $, gilt 
+$$ \sum_{i=0}^{n-1}|W_i^k|^2 < 5n (s=n)$$
+
+\paragraph{Folgerung 4} (aus Lemma 1) \\
+Für mindestens die Hälfte aller k', $ 0 \leq k' \leq p-1 $, gilt 
+$$ h_{k'}:x\rightarrow (k'\cdot x\ mod p) mod 2 \cdot  n^2 $$
+ist injektiv auf S (angedwandt: $ W_i^ks $. Beweis analog zum Beweis der Folgerung 1 und 2.
+
+\paragraph{Änderungen in der Datenstruktur} Auf 2.Stufe Tafelgrößen verdoppeln, dh jeweils Größe $ 2 \cdot |W_i^k|^2 $. Platzbedarf der 2.Stufe:
+
+$$ \sum_{i=0}^{n-1} 2- |W_i^k|^2 = 2 \sum_{i=0}^{n-1} |W_i^k|^2 < 10n $$
+
+Insgesamt: Platz 13n = O(n). 
+\subparagraph{Aufbau}
+\textbf{Stufe 1:} Wähle ein zufälliges $ k \in \{1,...,p-1 \} $ bis Folgerung 3 erfüllt. Wahrscheinlichkeit daür ist jeweils $ \geq \frac{1}{2} $. \textbf{Frage:} Wie hoch ist der Erwartungswert für die Anzahl der Tests. Analog zum Münzwurf: Wie viele Würfe, bis eine bestimmte Seite erscheint?
+Erwartungswert für diese Zahl (Integrierende Reihe): 
+$$ \sum_{i=0}^\infty \frac{1}{2^i} \cdot i = \frac{0.5}{(1-0.5)^2} = 2 $$
+Erwartete Laufzeit für Stufe 1 ist dann $ O(2 \cdot |S|) = O(n) $. Analog für Stufe 2: Erwartete Zahl der Tests = 2. $ \Rightarrow $ Gesamtlaufzeit O(n).
+
+\subsubsection{Zusammenfassung}
+Man kann eine Menge S von n Schlüsseln aus $ [0,...,N-1] $ so abspeichern, dass gilt 
+\begin{enumerate}
+    \item Platubedarf ist O(n)
+    \item Erwartete Aufbauzeit O(n)
+    \item Zugriffszeit (Lookup) O(1) worst-case
+\end{enumerate}
+
+Dynamisierung ist möglich (Dynmaic Perfect Hashing). Idee: Zeigen, dass die gewählten k-Werte mit großer Wahrscheinlichkeit für weitere Schlüssel funktionieren.
 
 
 

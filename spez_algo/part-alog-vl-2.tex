@@ -1,0 +1,26 @@
+\section{Warteschlangen (Priority Queues)}
+(Amortisierte Analyse von Datenstrukturen)\\
+
+\textbf{Problem:} Verwalte eine Menge S von Paaren aus Prioritäten und Informationen (p,i). Wobei $ p \in $ linear geordnetem Universum unter folgenden Operationen: \\
+Warteschlage PQ (kleine Priorität = höhere Wichtigkeit)
+\begin{itemize}
+    \item PQ.insert(p,i) Einfügen: mehrfache Prioritäten erlaubt.
+    \item PQ.findmin() Liefert ein Paar $ (p,i) \in S $ mit minimaler Priorität p.
+    \item PQ.delmin() Entfernt ein Paar mit minimaler Priorität (entfernt PQ.findmin()) 
+    \item PQ.decreaseprio((p,i),q) Vermindert die Priorität von (p,i) auf q. Voraussetzung ($ q \leq p $)
+\end{itemize}
+
+\textbf{Anwendung} Graphalgorithmen: Kürzeste Wege.
+
+\paragraph{Einface Implementierung (Datenstruktur)}
+\begin{enumerate}
+    \item Doppelt verkettete Liste (unsortiert)
+    \begin{itemize}
+        \item PQ.insert $ \rightarrow $ vorne einfügen O(1)
+        \item PQ.findmin $ \rightarrow $ lineare Suche O(n)
+        \item PQ.delmin $ \rightarrow $ lineare Suche + delete O(n)
+        \item PQ.decreaseprio $ \rightarrow $ finde Item per Referenz und ersetze p durch q O(1)
+    \end{itemize}
+    \item Sortierte Liste (Binärer Suchbaum)
+    \item Heap (Min-Heap)
+\end{enumerate}
