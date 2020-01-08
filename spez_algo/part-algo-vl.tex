@@ -429,8 +429,43 @@ Dynamisierung ist möglich (Dynmaic Perfect Hashing). Idee: Zeigen, dass die gew
 
 
 \section{Planare Graphen}
-Literatur: Nishizekim und Chiba (Planar Graphs). Graph kann in die Ebene gezeichnet werden, ohne dass sich Kanten kreuzen
+Literatur: Nishizekim und Chiba (Planar Graphs). Graph kann in die Ebene gezeichnet werden, ohne dass sich Kanten kreuzen. Wir betrachten ungerichtete Graphen G=(V,E).
+\subsection{Definition}
+\begin{enumerate}
+    \item Ein Graph G=(V,E) ist planar, wenn G eine planare Zeichnung hat.
+    \item Eine planare Zeichnung von G ordnet jedem Knoten v einen Punkt $ p \in \mathbb{R}^2 $ (Ebene) zu, $ p = pos(x) $ heißt die Position von v, und jeder Kante $ (v,w) $ eine stetige Kurve im $ \mathbb{R}^2 $ mit den Endpunkten $ pos(v) $ und $ pos(w) $ zu, sodass sich diese Kurven paarweise nicht schneiden, außer in ihren Endpunkten. 
+\end{enumerate}
+G planar $ \Leftrightarrow $ $ \exists $ planare Zeichnung.
+\paragraph{Beispiele}
 
+\paragraph{nicht-planar} $ K_{3,3} $ bipartiter vollständiger Graph mit jeweils 3 Knoten auf jeder Seite. $ K_5 $ vollständiger Graph mit 5 Knoten. Ist ein Graph nicht planar, kann einer der beiden nicht-planaren Graphen gefunden werden.
+
+\subsection{Planaritätstest}
+Frage: ist der Graph planar?
+\begin{enumerate}
+    \item Falls planar: planare Zeichnung
+    \item Falls nicht: möglichst kleiner nicht-planarer Teilgraph ($ K_{3,3} $ oder $ K_5 $)
+\end{enumerate}
+
+\paragraph{Beobachtung}
+\begin{itemize}
+    \item  G ist planar $ \Leftrightarrow $ $ \exists $ planare Zeichnung auf einer Kugeloberfläche
+    \item Oberflächenstruktur von Polyedern kann durch planare Graphen dargestellt werden. (zB Würfel)
+\end{itemize}
+
+\subsection{Wichtige Begriffe und Definitionen}
+\subsubsection{Kontenzusammenhang}
+Der Zusammenhand eines Graphen (genauer Knotenzusammenhang).
+\begin{itemize}
+    \item G heißt einfach zusammenhängend, wenn es für jedes Paar $ (v,w) $ von Knoten einen Pfad zwischen v und w gibt. Zusammenhangskomponenten sind zusammenhängede Teilgraphen.
+    \item G heißt zweifach zusammenhänged (biconnected), falls $ G \backslash \{v\} $ für jeden Knoten $ v \in V $ zusammenhängend ist. Der Knoten, der den Graph zerfallen lässt, nennt man Artikulationspunkt (cut-vertex)
+    \item Ein zweifach zusammenhängeder Graph G heißt dreifach zusammenhänged, wenn für beliebige Knoten $ v,w $ gilt, $ G\backslash \{v,w\} $ ist zusammenhängend. Die Knoten, die den Graph zerfallen lassen nennt man Separationspaar. \textbf{Splitgraphen} $ G_1 $ und $ G_2 $ durch Entfernung eines Separationspaares, erweitert um Kopieen des Entferten Paares. Kante innerhalb des Separationspaares kann existieren oder nicht.
+    \item Allgemein k-fach zusammenhängend kann man beliebige k-1 Knoten entfernen, sodass G zusammenhängend bleibt.
+\end{itemize}
+1-fach, 2-fach und 3-fach kann mit DFS in Zeit O(n+m) gelöst werden.
+
+\subsubsection{Beobachtung} Ein nicht-zweifach zusammenhängender Graph G ist genau dann planaer, wenn seine zweifach Zusammenhangskomponenten (Blöcke) planar sind. \paragraph{Idee}
+Konstruiere für jeden Block eine planare Zeichnung, sodass alle Cut-Vertices außen liegen und kleben diese zusammen.
 
 
 
