@@ -467,6 +467,71 @@ Der Zusammenhand eines Graphen (genauer Knotenzusammenhang).
 \subsubsection{Beobachtung} Ein nicht-zweifach zusammenhängender Graph G ist genau dann planaer, wenn seine zweifach Zusammenhangskomponenten (Blöcke) planar sind. \paragraph{Idee}
 Konstruiere für jeden Block eine planare Zeichnung, sodass alle Cut-Vertices außen liegen und kleben diese zusammen.
 
+\subsection{Planare Einbettung}
+(Plane Graph) Abstrakte planare Zeichnung eines Graphen:
+\begin{itemize}
+    \item Keine Positionen (Koordinaten) für die Kanten
+    \item Angabe der Flächen (Faces) in einer mögichen planaren Zeichnung 
+\end{itemize}
+
+% Graphik Faces
+\begin{figure}[h]
+    \begin{center}
+        \includegraphics[width=15cm]{faces}
+        \caption{Die Faces sind die Flächen, die durch die Kanten eingeschlossen werden.}
+        \label{fig:}
+    \end{center}
+\end{figure}
+
+
+
+\paragraph{Alternativ} Festlegung der Reihenfolge der Nachbarknotes jedes Knotens (Adjazenzliste) in einer möglichen planaren Zeichnung gegen den Uhrzeigersinn. Wir arbeiten meistens mit der 2. Alternative. Die beiden Definitionnen sind äquivalent.
+
+\paragraph{Planaritätstest} bzw Einbettung besteht dann in der Aufgabe die Adjazenzlisten in eine Reihenfolge zu sortieren, so dass diese eine planare Einbettung definiert (falls möglich). Im Allgemeinen besitzt ein planarer Graph verschiedene panare Einbettungen (Hinweis: Einbettung ist eindeutig für 3-fach zusammenhängende Graphen). Beispiel für nicht-eindeutige Einbettungen (siehe Graphik). Die Faces sind die Flächen, die durch die Kanten eingeschlossen werden.
+
+% Einbettung 
+\begin{figure}[h]
+    \begin{center}
+        \includegraphics[width=15cm]{einbettung}
+        \caption{Graph mit nichteindeutiger Einbettung: Rotation des unteren Teils (B und D)ergibt verschiedene Faces}
+        \label{fig:}
+    \end{center}
+\end{figure}
+
+\paragraph{Unterteilung (Subdivision)}
+Sei G ein ungerichteter Graph. G' heißt Unterteilung oder Subdivision von G, wenn G' aus G durch ersetzen von Kanten durch Pfade entsteht (Platzieren neuer (Unterteilungs-)Knoten auf bestehende Kanten).
+
+\subsection{Die Euler-Formel}
+Sei G eine zusammenhängende planare Einbettung mit n Knoten, m Kanten und f Faces. Dann gilt
+$$ n - m + f = 2 $$
+\newpage
+\begin{proof}[Euler-Formel]
+Induktion über m\\
+$\underline{m = 0:} $ Graph besteht aus einem isolierten Knoten: n=1, f=1  \\
+$\underline{m > 0:} $ Sei G eine planare Einbettung mit m Kanten, n Knoten und f Faces \\
+$\underline{IA} $ Für alle Einbettungen mit m-1 Kanten gilt die Formel \\
+$\underline{Fall 1} $ G ist azyklisch (dh: Baum) 
+\begin{enumerate}
+    \item f = 1
+    \item G besitzt Knoten v mit $ deg(v)=1 $ (Blatt)
+\end{enumerate}
+Die planare Einbettung $ G\backslash \{v\} $ ist zusammenhängend und hat n-1 Knoten und m-1 Kanten. 
+$$ IA: (n-1) - (m-1) + f = 2 $$
+$\underline{Fall 2} $ G ist kein Baum dh besitzt einen Kreis (f>1). Sei e eine beliebige Kante auf dem Kreis. Betrachte die planare Einbettung $ G\backslash \{e\} $
+
+\begin{itemize}
+    \item $ G\backslash \{e\} $ ist zusammenhängend
+    \item $ G\backslash \{e\} $ hat m-1 Kanten, n Knoten und f-1 Flächen
+\end{itemize}
+$$ IA: n - (m-1) + (f - 1) = 2 $$
+
+\end{proof}
+
+\subsubsection{Folgerung}
+Sei G ein planarer Graph 
+
+
+
 
 
 
