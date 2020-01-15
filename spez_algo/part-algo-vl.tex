@@ -505,7 +505,7 @@ Sei G ein ungerichteter Graph. G' heißt Unterteilung oder Subdivision von G, we
 Sei G eine zusammenhängende planare Einbettung mit n Knoten, m Kanten und f Faces. Dann gilt
 $$ n - m + f = 2 $$
 \newpage
-\begin{proof}[Euler-Formel]
+\begin{proof}[Beweis\ Euler-Formel]
 Induktion über m\\
 $\underline{m = 0:} $ Graph besteht aus einem isolierten Knoten: n=1, f=1  \\
 $\underline{m > 0:} $ Sei G eine planare Einbettung mit m Kanten, n Knoten und f Faces \\
@@ -528,7 +528,70 @@ $$ IA: n - (m-1) + (f - 1) = 2 $$
 \end{proof}
 
 \subsubsection{Folgerung}
-Sei G ein planarer Graph 
+Sei G ein planarer Graph mit $ n \geq 3 $ Knoten und m Kanten, dann gilt $ m = 3n-6 $. dh $ m=O(n) $, also linear viele Kanten.
+\begin{proof}
+Ein maximal planarer Graph ist ein planarer Graph, der durch Hinzufügen einer Kante $ (v,w) \notin E $ nicht-planar wird. Beobachtung: Alle Faces in jeder planaren Einbettung von G sind Dreiecke (Triangulierung). Jedes Face in einer Triangulierung hat 3 Rand-Kanten und jede Kante liegt am Rand von 3 Faces. 
+$$\Rightarrow 3f = 2m $$
+Einstetzen in Euler-Formel
+$$ n - m + \frac{2}{3}m = 2$$
+$$ m = 3n-6$$
+$ m \leq 3n-6 $ für beliebige planare Graphen
+\end{proof}
+
+%Graphik triangulierung
+\begin{figure}[h]
+    \begin{center}
+        \includegraphics[width=15cm]{triangulierung}
+        \caption{Beispiel für maximal planaren Graphen}
+        \label{fig:}
+    \end{center}
+\end{figure}
+
+
+\subsubsection{Folgerung}
+Sie G ein \textbf{bipartiter} planarer Graph Dann gilt $ m \leq 2n-4 $. Beweis: Keine Kreise ungerader Länge in bipartiten Graphen. Kleinstmögliche Fläche in einem bipartiten Graphen ist ein Viereck.
+
+\subsubsection{Folgerung}
+$ K_{3,3} $ und $ K_5 $ sind nicht planar. Jeder planare Graph besitzt einen Knoten v mit $ deg(v) \leq 5 $.
+\begin{proof}
+\underline{Annahme} $ \forall v \in V\ deg(v)\geq 6,\ m = \sum_{v\in V} \frac{deg(v)}{2} \geq \frac{6n}{2} = 3n$
+\end{proof}
+
+\subsection{Das Färbungsproblem für planare Graphen}
+Knotenfärbung: k Farben $ \{1, ..., k \} $. Finde eine Abbildung $ f: \rightarrow \{1, ..., k \} $, sodass $ f(v) \neq f(w) $ für alle Kanten $ (v,w) \in E $. \textbf{Frage:} Wie viele Farben k sind notwendig? (minimales k):
+\begin{itemize}
+    \item k=n geht immer
+    \item notwendig k=n für $ K_n $
+\end{itemize}  
+\subsubsection{Vierfarbensatz}
+k=4 für planare Graphen. Ursprung in der Darstellung von Landkarten beim Einfärben der Länder, sodass benachbarte Länder verschiedene Farben haben.
+\paragraph{Dualer Graph} $ G=(V,E) $ Für jedes Land (Fläche) einen Knoten $ v \in V, (v,w) \in E \Leftrightarrow $ Länder v und w haben eine gemeinsame Grenze.
+\begin{enumerate}
+    \item G ist planar
+    \item Knotenfärbung von G $ \Leftrightarrow $ Färbung der Karte
+\end{enumerate}
+Einfacher, als der Vierfarbensatz ist der Fünffarbensatz.
+\begin{proof}
+Induktion über n \\
+\underline{IA} für alle Grapfen mit $ n \leq 5 $. \\
+Sei G ein planarer Graph mit $ n > 5 $. Aus Folgerung 3: G besitzt einen Knoten mit $ deg(v) \leq 5 $.\\
+\underline{Fall 1} G besitzt einen Knoten v mit $ deg(v) \leq 4 $. Nach IA $ G \backslash \{ v \} $ besitzt eine 5-Färbung. Betrachte die r Farben den Nachbarn von v in G, dann gilt $ r \leq 4\ (deg(v) \leq 4) $ $ \Rightarrow $ mindestens eine Farbe frei. Diese erhält v. \\
+\underline{Fall 2} Alle Knoten haben mindestens Grad 5. Aus Folgerung 3: Sei $ v\in V $ mit $ deg(v) = 5 $. Beobachtung: v besitzt 2 Nachbarnknoten x, y mit $ (x,y) \notin E $ (dh x,y unabhängig), sonst totaler Graph $ K_5 $. Betrachte $ G' = G\backslash\{v \} $: Planare Einbettung von G und entferne v. G'' = Veschmelze die unabhängigen Knoten x und y zu einem Knoten z. G'' ist planar. G'' hat nur noch n-2 Knoten.\\
+Aus IA: G'' kann mit 5 Farben gefärbt werden. Sei c die Farbe von z in dieser Färbung. Expandiere Z wieder zu x, y mit $ color(x)=color(y)=c $. $ \Rightarrow $ Die 5 Nachbarn von v belegen höchstens 4 Farben und eine Farbe ist frei.
+\end{proof}
+\paragraph{Andere Anwendung} Finde eine große unabhängige Knotenmenge (Independent Set). Beobachtung: 5-Färbung $ \rightarrow $ Farbklasse  (Menge von Knoten der gleichen Farbe) mit mindestens $ \frac{n}{5} $ Knoten. Alle Knoten einer Farbe bilden ein Independent Set.
+
+
+\subsection{Satz von Kuratowski}
+\paragraph{Notation} Verschmelzung (Kontraktion) entlang einer Kante $ e=(v,w) $: $ G|e \rightarrow$ Graph den man durch Verschmelzen der Endknoten v und w. G planar $\Rightarrow G|e $ planar.
+\paragraph{Satz} Ein Graph G ist genau dann planar, wenn er keine Unterteilung (Subdivision) des $ K_5 $ oder $ K_{3,3} $ enthält.
+
+\begin{proof} \\
+$ \Rightarrow $ trivial \\
+$ \Leftarrow $
+
+
+\end{proof}
 
 
 
@@ -538,3 +601,5 @@ Sei G ein planarer Graph
 
 
 
+
+ 
