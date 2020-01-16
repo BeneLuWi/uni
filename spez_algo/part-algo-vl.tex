@@ -454,12 +454,12 @@ Frage: ist der Graph planar?
 \end{itemize}
 
 \subsection{Wichtige Begriffe und Definitionen}
-\subsubsection{Kontenzusammenhang}
+\subsubsection{Knotenzusammenhang}
 Der Zusammenhand eines Graphen (genauer Knotenzusammenhang).
 \begin{itemize}
-    \item G heißt einfach zusammenhängend, wenn es für jedes Paar $ (v,w) $ von Knoten einen Pfad zwischen v und w gibt. Zusammenhangskomponenten sind zusammenhängede Teilgraphen.
-    \item G heißt zweifach zusammenhänged (biconnected), falls $ G \backslash \{v\} $ für jeden Knoten $ v \in V $ zusammenhängend ist. Der Knoten, der den Graph zerfallen lässt, nennt man Artikulationspunkt (cut-vertex)
-    \item Ein zweifach zusammenhängeder Graph G heißt dreifach zusammenhänged, wenn für beliebige Knoten $ v,w $ gilt, $ G\backslash \{v,w\} $ ist zusammenhängend. Die Knoten, die den Graph zerfallen lassen nennt man Separationspaar. \textbf{Splitgraphen} $ G_1 $ und $ G_2 $ durch Entfernung eines Separationspaares, erweitert um Kopieen des Entferten Paares. Kante innerhalb des Separationspaares kann existieren oder nicht.
+    \item G heißt einfach zusammenhängend, wenn es für jedes Paar $ (v,w) $ von Knoten einen Pfad zwischen v und w gibt. Zusammenhangskomponenten sind zusammenhängede Teilgraphen. Der Knoten, der den Graph zerfallen lässt, nennt man Artikulationspunkt (cut-vertex)
+    \item G heißt zweifach zusammenhänged (biconnected), falls $ G \backslash \{v\} $ für jeden Knoten $ v \in V $ zusammenhängend ist. \textbf{Splitgraphen} $ G_1 $ und $ G_2 $ durch Entfernung eines Separationspaares, erweitert um Kopieen des Entferten Paares. Kante innerhalb des Separationspaares kann existieren oder nicht.
+    \item Ein zweifach zusammenhängeder Graph G heißt dreifach zusammenhänged, wenn für beliebige Knoten $ v,w $ gilt, $ G\backslash \{v,w\} $ ist zusammenhängend. Die Knoten, die den Graph zerfallen lassen nennt man Separationspaar.
     \item Allgemein k-fach zusammenhängend kann man beliebige k-1 Knoten entfernen, sodass G zusammenhängend bleibt.
 \end{itemize}
 1-fach, 2-fach und 3-fach kann mit DFS in Zeit O(n+m) gelöst werden.
@@ -586,12 +586,66 @@ Aus IA: G'' kann mit 5 Farben gefärbt werden. Sei c die Farbe von z in dieser F
 \paragraph{Notation} Verschmelzung (Kontraktion) entlang einer Kante $ e=(v,w) $: $ G|e \rightarrow$ Graph den man durch Verschmelzen der Endknoten v und w. G planar $\Rightarrow G|e $ planar.
 \paragraph{Satz} Ein Graph G ist genau dann planar, wenn er keine Unterteilung (Subdivision) des $ K_5 $ oder $ K_{3,3} $ enthält.
 
-\begin{proof} \\
+\begin{proof} Satz von Kuratowski \\
 $ \Rightarrow $ trivial \\
-$ \Leftarrow $
+$ \Leftarrow $ (Jeder Graph ohne eine Unterteilung des $ K_5 $ oder $ K_{3,3} $ ist planar) Induktion über n\\
+Sei G ein Graph mit n Knoten, der keine Unterteilung des $ K_5 $ oder $ K_{3,3} $ enthält. \\
+\underline{IB} $ n \leq 5 $ (dh, kein $ K_5 $)\\
+\underline{IA} Für alle Graphen mit weniger als n Knoten gilt die Behauptung \\
+\underline{Fall 1} G ist nicht 3-fach zusammenhängend \\
+Angenommen, G ist 2-fach zusammenhängend$ \Rightarrow $ G bestitzt ein Separationspaar (x,y), das G in die Blöcke $ G_1 $ und $ G_2 $ zerlegt, mit jeweils weniger, als n. Offensichtlich enthalten $ G_1 $ und $ G_2 $ keinen $ K_5 $ oder $ K_{3,3} $. Nach IA sind $ G_1 $ und $ G_2 $ planar. Betrachte jeweils eine planare Einbettung von $ G_1 $ und $ G_2 $ mit x und y (bzw Kanze (x,y)) außen liegt. Dann kann man diese Eingbettungen leicht zu einer Einbettung von G zusammenfügen. $ \Rightarrow $ G ist planar. \\
+\underline{Fall 2} G ist 3-fach zusammenhängend \\
+
+\paragraph{Lemma 1} Die planare Einbettung aus 2-fach zusammenhängenden Graphen G ist eindeutig, genau dann wenn G eine Unterteilung eines 3-fach zusammenhängenden 
+Graphen.
+
+\paragraph{Corollar} Die planare Einbettung eines 3-fach zusammenhängenden Graphen ist eindeutig.
+
+\paragraph{Lemma 2} Sei G ein 3-fach zusammenhängender Graph mit mindestens 5 Knoten. Dann enthält G eine Kante e, sodass $ G|e $ 3-fach zusammenhängend ist.
+
+\paragraph{Lemma 3} Sei e eine beliebige Kante in G. Falls $ G|e $ eine Unterteilung des $ K_5 $ oder $ K_{3,3} $ enthält, dann gilt dies auch für G. Dh Kontraktion einer Kante erzeugt keinen $ K_5 $ oder $ K_{3,3} $.\\
+\underline{IS} Sei G ein 3-fach zusammenhängender Graph mit n Knoten ohne $ K_5 $ oder $ K_{3,3} $. Aus Lemma 2 folgt $ \exists $ Kante e, sodass $ G|e $ (=G') 3-fach zusammenhängend ist. Aus Lemma 3 folgt G' hat weder $ K_5 $ noch $ K_{3,3} $. Nach IA ist G' planar. Aus Lemma 1 folgt, G' hat eine eindeutige planare Einbettung. Betrachte diese Einbettung in der Umgebung von z (=Knoten, der aus der Knotraktion von x,y entsteht). Seien $ x_1, ..., x_k $ die Nachbarknoten von z, angeordnet im Uhrzeigersinn, gemäß der planaren Einbettung. Ersetze z wieder durch die Kante (x,y) und Konstruiere eine planare Einbettung für G. Sei $ x'_1, ... , x'_l $ die Teilfolge der Knoten $ x_1, ..., x_k $, die in G benachbart zu x sind. \\
+\underline{Fall 1} Alle Nachbarn von y liegen auf einem Face-Segment zwischen $ x'_i $ und $ x'_{i+1} $ zyklisch und inklusive Ränder. $ deg(y) \geq 3 $, da G 3-fach zusammenhängend. Dann kann man leicht eine planare Einbettung für G' konstruieren. \\
+\underline{Fall 2} Nicht alle Nachbarn von y (außer x) liegen im selben Segment ($ x'_i $, $ x'_{i+1} $) \\
+\underline{Fall 2.1} y hat $ \geq $ 3 Nachbarn in $ x'_1, ... , x'_l $
+
+% Graphik Fall 2.1
+\begin{figure}[h]
+    \begin{center}
+        \includegraphics[width=10cm]{fall21}
+        \caption{Beweis Satz von Kuratowski: Fall 2.1}
+        \label{fig:}
+    \end{center}
+\end{figure}
+G enthält eine Unterteilung des $ K_5 $ definiert durch die Kanten.
+
+\underline{Fall 2.2} y hat  einen Nachbarn u in einem Segment $ P_i = (x'_i, x'_{i+1}) \backslash(x'_i, x'_{i+1}) $ und einem anderen u $ \notin P_i $
+% Graphik Fall 2.2
+\begin{figure}[h]
+    \begin{center}
+        \includegraphics[width=10cm]{fall22}
+        \caption{Beweis Satz von Kuratowski: Fall 2.2}
+        \label{fig:}
+    \end{center}
+\end{figure}
+G enthält eine Unterteilung des $ K_{3,3} $
 
 
+\underline{Fall 2.3} y hat 2 Nachbarn in $ x'_1$ und $ x'_j $ mit $ j \neq i+1 $ und $ i \neq j+1 $ (zyklisch).
+
+% Graphik Fall 2.3
+\begin{figure}[h]
+    \begin{center}
+        \includegraphics[width=10cm]{fall23}
+        \caption{Beweis Satz von Kuratowski: Fall 2.3}
+        \label{fig:}
+    \end{center}
+\end{figure}
+G enthält eine Unterteilung des $ K_{3,3} $\\
+
+$ \Rightarrow $ Es kann nur Fall 1 vorkommen, also ist G planar. 
 \end{proof}
+
 
 
 
