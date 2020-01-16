@@ -127,12 +127,31 @@ Tafelgröße s beliebig. Hashfunktion $ h(x) = x \cdot mod s $\\
 
 \subsection*{Übung 7}
 
+\subsection*{Übung 8}
+\paragraph{2)} Belegungsfaktor = $ \beta = \frac{n}{k} $. Ziel ist $ \frac{1}{2} \leq \beta \leq 2 $. Erwartete Laufzeit pro Operation $ O(1 + \beta) $. Rehashing: Test nach Inerst/Delete. Wenn $ \beta $ außerhalb des Zielintervalls, Rehash mit $ k \gets n $. \\
+Potentialmethode: $ pot: D \rightarrow \mathbb{R}^+_0 $. Folge von Insert, Rehash mit pot = 2 $ \cdot $ Anzahl der Markierten
+\begin{enumerate}
+    \item Rehash löscht alle Markierungen
+    \item Insert markiert neues Elemenent
+\end{enumerate} 
+pot = 2 $ \cdot $ Anzahl der Eingefügten + 1 $ \cdot $ (Anzahl der Gelöschten seit dem letzten Rehash) \\
 
+\begin{itemize}
+    \item $ T_{amontisiert} (INSERT) = O(1+\beta) + 2$  
+    \item $ T_{amontisiert} (INSERT) = O(1+\beta) + 1$
+    \item $ T_{amontisiert} (INSERT)$
+    \begin{itemize}
+        \item Verdopplung: $O(n) - 2\cdot neue$
+        \item Halbierung: $-n$
+    \end{itemize}
+\end{itemize}
 
-
-
-
-
+\paragraph{3)} Darstellungen von planaren Einbettungen:
+\begin{itemize}
+    \item Face Zyklen. Auflistung der Knoten eines Faces 
+    \item Nachbarn jedes Knotens. Sortierung der Adjazenslisten
+\end{itemize}
+Implementierung als doppelt verkettete Listen.
 
 
 \section{Allgemeines}
@@ -145,7 +164,6 @@ $$ E(val)= \frac{1}{n} \sum_{i=1}^{n}val(i) = Mittelwert $$
 \subsection{Integrierende Reihe}
 $ x \leq 1 $
 $$ \sum_{i=0}^\infty x^i \cdot i = \frac{x}{(1-x)^2}$$
-
 
 
 
