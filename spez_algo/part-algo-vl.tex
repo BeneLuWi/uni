@@ -667,6 +667,60 @@ Das sind alle möglichen Fälle. Dh $ v \notin H $
 
 \end{proof}
 
+\section{Maximal Matchings im bipartiten Graphen}
+
+\paragraph{Definition} Sei G = (V, E) ein ungerichteter Graph
+\begin{enumerate}
+    \item $ M \subseteq E $ heißt Matching von G, falls keine 2 Kanten aus M einen gemeinensamen Endpunkt (Knoten) haben.
+    \item Falls $ e \in M $, dann heißt e paarned. Ein Knoten v heißt gepaart, falls er einen Endpunkt einer paarenden Kante ist.
+    \item Ein Matching M heißt maximal, falls $ |M| \geq |M'| $ für alle Matchings M'. 
+\end{enumerate}
+
+\paragraph{Beobachtung} $ |M| \leq \lfloor \frac{n}{2} \rfloor \Rightarrow$ Falls $ M = \lfloor \frac{n}{2} \rfloor $, dann ist M maximal.
+
+\paragraph{Idee für Algorithmus} Kontruiere $ M_i,...,M_l $ von Matchings mit $ |M_i| < |M_{i+1}| $ und $ M_l $ maximal. Schritt (Erhöhung/Erweiterung) $ M \rightarrow M' $ mit $ |M'| = |M| + 1 $.
+
+\paragraph{Definition} Ein einfacher Pfad $ P = (v_1, v_2), (v_2, v_3), ..., (v_{2k-1}, v_{2k}) $ (ungerade Zahl von Kanten) heißt erweiternder Pfad (augmenting path) für ein Matching M, falls 
+\begin{enumerate}
+    \item $ v_1 $ und $ v_2 $ sind frei ($ \Rightarrow (v_1, v_2), (v_{2k-1}, v_{2k}) \notin M$)
+    \item Kanten von P sind abwechselnd in M und $ E\backslash M $
+\end{enumerate}
+Beobachtung: Man kann M um 1 vergrößern durch vertauschen von paarenden und nicht paarenden Kanten von P. Für $ M = \emptyset $ gilt jede Kante (v,w) ist erhöhender Pfad. 
+
+\subsection{Lemma 1} Sei M ein Matching und P ein erweiternder Pfad für M, dann ist $ M \oplus P = (M \cup P) \backslash (M \cap P) $ (symmetrische Differenz) ein Matching und $ |M \oplus P| = |M| + 1 $. 
+
+\begin{algorithm}[H]
+\SetAlgoLined
+M $ \gets \emptyset $\;
+ \While{$ \exists $ ein Pfad P für M  }{
+    $ M \gets M \oplus P $\;
+ }
+ \caption{Grundalgorithmus }
+\end{algorithm}
+Beobachtung: Knotendusjunkte erweiternde Pfade $ P_1,...,P_k $ kommen gelichzeitig behandelt werden: $ M\gets M \oplus (P_1 \oplus P_2 \oplus ... \oplus P_H $. Problem: Finde möglichst viele Knotendisjunkte Pfade für ein Matching M in einem Schritt.
+
+\subsubsection{Satz 1} Seien M und N Matchings mit $ |M| = r $ und $ |N| = s $ und $  s > r $. Dann enhält $ M \oplus N  $ mindestens s-r Knotendisjunkte erweiternde Pfade für M.
+
+\begin{proof}
+
+$ M \oplus N = (M\backslash N ) \cup (N \backslash M) $ dh Kanten die entweder in M oder in N sind. Sei $ \overline{G} = (V, M \oplus N) $. Da M und N Matchings sind, ist jeder Knoten in $ \overline{G}$ Endpunkt höchstens einer Kante aus $ M \backslash N $ und höchstens einer Kante aus $ M \backslash n $ $ \Rightarrow $ Für alle Knoten in $ \overline{G} $ gilt, $ outdeg_{\overline{G}}(c) \leq 2 $ dh $ outdeg_{\overline{G}}(c) \in \{1, 2, 3\} $ $ \Rightarrow  \overline{G}$ zerfällt in Zusammenhangskomponenten der folgenden Form
+\begin{enumerate}
+    \item isolierter Knoten
+    \item Pfade, die abwechselnd Kanten aus $ M \backslash N $ und $ N \backslash N  $ enthalten.
+    \item Kreis wie 2). 
+\end{enumerate} 
+
+\end{proof}
+
+
+
+
+
+
+
+
+
+
 
 
 

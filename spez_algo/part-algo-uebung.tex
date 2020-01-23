@@ -121,13 +121,13 @@ Tafelgröße s beliebig. Hashfunktion $ h(x) = x \cdot mod s $\\
 
 \end{algorithm}
 
-\subsection*{Übung 5}
+\subsection{Übung 5}
 
-\subsection*{Übung 6}
+\subsection{Übung 6}
 
-\subsection*{Übung 7}
+\subsection{Übung 7}
 
-\subsection*{Übung 8}
+\subsection{Übung 8}
 \paragraph{2)} Belegungsfaktor = $ \beta = \frac{n}{k} $. Ziel ist $ \frac{1}{2} \leq \beta \leq 2 $. Erwartete Laufzeit pro Operation $ O(1 + \beta) $. Rehashing: Test nach Inerst/Delete. Wenn $ \beta $ außerhalb des Zielintervalls, Rehash mit $ k \gets n $. \\
 Potentialmethode: $ pot: D \rightarrow \mathbb{R}^+_0 $. Folge von Insert, Rehash mit pot = 2 $ \cdot $ Anzahl der Markierten
 \begin{enumerate}
@@ -154,6 +154,29 @@ pot = 2 $ \cdot $ Anzahl der Eingefügten + 1 $ \cdot $ (Anzahl der Gelöschten 
 Implementierung als doppelt verkettete Listen.
 
 
+\subsection{Übung 9}
+\paragraph{1)} G planarer Graph mit $ n \geq 3 $. Sei d der maximale Grad eines Knotens und $ n_i = $ Anzahl von Knoten vom Grade i. Dann gilt 
+
+$$ 5n_1 + 4n_2 + 3n_3 + 2n_4 + n_5  \geq n_7 + 2n_8 + ... + (d-6) n_d + 12$$
+$$ 0 \geq  5n_1 - 4n_2 - 3n_3 - 2n_4 - n_5 + n_7 + 2n_8 + ... + (d-6) n_d + 12$$
+$$ \sum_{i = 1}^{d} (i-6) \cdot n_i +12 \leq 0 $$
+$$ \underbrace{\sum_{i = 1}^{d} i \cdot n_i}_{2m} - \underbrace{\sum_{i = 1}^{d} 6 n_i}_{6n} +12 \leq 0 $$
+$$ m -3n + 6 \leq 0$$
+$$ m  \leq 3n - 6 $$
+
+\paragraph{2)} Für jede Kante e=(x,y) gilt: $ G|e $ enthält eine Unterteilung des $ K_5 $ oder $ K_{3,3} $, dann enthält auch G eine solche Unterteilung. Sei H die Unterteilung des $ K_5 $ bzw $ K_{3,3} $ in $ G|e $.\\
+\underline{Fall 1:} $ z \in H $ und $ deg_H(z)=0 $, dann existiert H auch in G. \\
+\underline{Fall 2:} $ z \in H$ mögliche Grade  $ deg_H(z) \in \{2, 3, 4 \} $ \\
+\underline{Fall 2.1:} $ deg_H(z) = 2 $ (z liegt auf einer Kante) G $ \Rightarrow $ G enthält H der gleichen Art \\
+\underline{Fall 2.2:} $ deg_H(z) = 3 $ z ist Ende eines $ K_{3,3} $
+\underline{Fall 2.3:} $ deg_H(z) = 4 $ z ist Ende eines $ K_{5} $
+\begin{enumerate}
+    \item Hat x eine Kante in H, so ist x ein Subdivision-Knoten (symmetrisch für y)
+    \item Hat x 2 Kanten in H, so bilden x und y einen $ K_{3,3} $
+\end{enumerate}
+
+
+
 \section{Allgemeines}
 \subsection{Einschub: Erwartungswerte}
 Situation: n Ereignisse, die mit einer gweissen Wahrscheinlichkeit prob(i) auftreten. Jedes Ereignis besitzt einen Wert val(i). 
@@ -164,7 +187,6 @@ $$ E(val)= \frac{1}{n} \sum_{i=1}^{n}val(i) = Mittelwert $$
 \subsection{Integrierende Reihe}
 $ x \leq 1 $
 $$ \sum_{i=0}^\infty x^i \cdot i = \frac{x}{(1-x)^2}$$
-
 
 
 
