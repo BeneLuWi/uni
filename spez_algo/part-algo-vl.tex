@@ -607,51 +607,65 @@ Graphen.
 \underline{IS} Sei G ein 3-fach zusammenhängender Graph mit n Knoten ohne $ K_5 $ oder $ K_{3,3} $. Aus Lemma 2 folgt $ \exists $ Kante e, sodass $ G|e $ (=G') 3-fach zusammenhängend ist. Aus Lemma 3 folgt G' hat weder $ K_5 $ noch $ K_{3,3} $. Nach IA ist G' planar. Aus Lemma 1 folgt, G' hat eine eindeutige planare Einbettung. Betrachte diese Einbettung in der Umgebung von z (=Knoten, der aus der Knotraktion von x,y entsteht). Seien $ x_1, ..., x_k $ die Nachbarknoten von z, angeordnet im Uhrzeigersinn, gemäß der planaren Einbettung. Ersetze z wieder durch die Kante (x,y) und Konstruiere eine planare Einbettung für G. Sei $ x'_1, ... , x'_l $ die Teilfolge der Knoten $ x_1, ..., x_k $, die in G benachbart zu x sind. \\
 \underline{Fall 1} Alle Nachbarn von y liegen auf einem Face-Segment zwischen $ x'_i $ und $ x'_{i+1} $ zyklisch und inklusive Ränder. $ deg(y) \geq 3 $, da G 3-fach zusammenhängend. Dann kann man leicht eine planare Einbettung für G' konstruieren. \\
 \underline{Fall 2} Nicht alle Nachbarn von y (außer x) liegen im selben Segment ($ x'_i $, $ x'_{i+1} $) \\
-\underline{Fall 2.1} y hat $ \geq $ 3 Nachbarn in $ x'_1, ... , x'_l $
+\underline{Fall 2.1} y hat $ \geq $ 3 Nachbarn in $ x'_1, ... , x'_l $. G enthält eine Unterteilung des $ K_5 $ definiert durch die Kanten.
 
 % Graphik Fall 2.1
-\begin{figure}[h]
+\begin{figure}[h!]
     \begin{center}
         \includegraphics[width=10cm]{fall21}
         \caption{Beweis Satz von Kuratowski: Fall 2.1}
         \label{fig:}
     \end{center}
-\end{figure}
-G enthält eine Unterteilung des $ K_5 $ definiert durch die Kanten.
-
-\underline{Fall 2.2} y hat  einen Nachbarn u in einem Segment $ P_i = (x'_i, x'_{i+1}) \backslash(x'_i, x'_{i+1}) $ und einem anderen u $ \notin P_i $
-% Graphik Fall 2.2
-\begin{figure}[h]
     \begin{center}
         \includegraphics[width=10cm]{fall22}
         \caption{Beweis Satz von Kuratowski: Fall 2.2}
         \label{fig:}
     \end{center}
-\end{figure}
-G enthält eine Unterteilung des $ K_{3,3} $
-
-
-\underline{Fall 2.3} y hat 2 Nachbarn in $ x'_1$ und $ x'_j $ mit $ j \neq i+1 $ und $ i \neq j+1 $ (zyklisch).
-
-% Graphik Fall 2.3
-\begin{figure}[h]
     \begin{center}
         \includegraphics[width=10cm]{fall23}
         \caption{Beweis Satz von Kuratowski: Fall 2.3}
         \label{fig:}
     \end{center}
 \end{figure}
-G enthält eine Unterteilung des $ K_{3,3} $\\
+
+\underline{Fall 2.2} y hat  einen Nachbarn u in einem Segment $ P_i = (x'_i, x'_{i+1}) \backslash(x'_i, x'_{i+1}) $ und einem anderen u $ \notin P_i $. 
+G enthält eine Unterteilung des $ K_{3,3} $
+
+
+\underline{Fall 2.3} y hat 2 Nachbarn in $ x'_1$ und $ x'_j $ mit $ j \neq i+1 $ und $ i \neq j+1 $ (zyklisch). G enthält eine Unterteilung des $ K_{3,3} $
 
 $ \Rightarrow $ Es kann nur Fall 1 vorkommen, also ist G planar. 
 \end{proof}
 
+\subsubsection{Beweise der Lemmata}
 
+\paragraph{Lemma 1} Die Einbettung eines zweifach planaren Graphen G ist eindeutig $ \Leftrightarrow $ G ist eine Unterteilung eines 3-fach zusammenhängenden Graphen.
 
+\begin{proof}
+Für A $ \Leftrightarrow $ B zeige:
+\begin{enumerate}
+    \item $ \overline{B}  \Rightarrow \overline{A}$
+    \item $ \overline{A}  \Rightarrow \overline{B}$
+\end{enumerate}
 
+\paragraph{1)} Sei G 2-fach zusammenhängend, aber keine Unterteilung eines 3-fach zusammenhängenden Graphen. \underline{Beobachtung} Dann existiert ein Separationspaar x, y mit Split-Graphen $ G_1 $ und $ G_2 $, sodass weder $ G_1 $ noch $ G_2 $ ein Pfad ist. \underline{Annahme} Für alle Separationspaare (x,y) sind diese Splitgraphen Pfade $ \Rightarrow $ G ist eine Unterteilung eines 3-fach zusammenhängenden Graphen \textbf{Widerspruch zur Annahme}. Betrachte eine planare Einbettung von G und das Separationspaar (x, y) gemäß Beobachtung. Durch Drehung bzw Spiegelung von $ G_1 $ oder $ G_2 $ in dieser Einbettung erhält man eine neue Einbettung. Ist nur eine Seite eine Pfad, existiert nur eine Einbettung.
+\paragraph{2)} Sei G 2-fach zusammenhängend und planar mit einer nicht-eindeutigen Einbettung. Dh, es existieren mindestens 2 verschiedene Einbettungen E(G) und E'(G). $ \Rightarrow $ es existiert ein Face Zyklus C in E, der nicht in E' existiert. Betrachte E mit C als äußeres Face. C zerlegt G in mindestens 2 Komponenten, die wahlweise auf der einen oder anderen Seite von C eingebetter werden können. Dann existieren 2 Knoten x,y auf C die die beiden Komponenten trennt. $ \Rightarrow $ (x,y) ist ein Separationspaar, sodass beide Split-Graphen keine Pfade sind. $ \Rightarrow $ G ist keine Unterteilung eines 3-fach zusammenhängenden Graphen.
+\end{proof}
 
+\paragraph{Lemma 2} Sein G ein 3-fach zusammenhängender Graph mit mindestens 5 Knoten, dann existiert eine Kante e in G, sodass $ G|e $ 3-fach zusammenhängend ist.
 
+\begin{proof}(indirekt) \\
+\underline{Annahme} Für jede Kante e in G: $ G|e $ ist nicht 3-fach zusammenhängend. $ \Rightarrow $ $ G|e $ enthält ein Separationspaar (x', z). Sei e=(x,y) mit x' als Resultat der Kontraktion von (x,y), Im Originalgraphen G ist $ \{x,y,z \} $ eine Separationsmenge. Wähle die Kante e=(x,y) und den Knoten z so, dass eine möglichst große Komponente Komponente H entsteht. Sei H' der Rest der Grpahen (ohne H, x, y, z). Dann betrachte eine Kante e'=(z,v) mit u in H' (existiert, denn sonst wäre (x,y) ein Sep-Paarin G). Auch $ G|e' $ ist nicht 3-fach zusammenhängend (nach Annahme) $ \Rightarrow $ Es existiert ein Knoten v mit  $ \{x,y,z \} $ ist Separationsmenge von G. Für v gibt es 3 Möglichkeiten:
+\begin{enumerate}
+    \item $ v \in H' $
+    \item v = x. Dann existiert Komponente, die mindestens H und y enthält. Widersprch zur Maximalität con H.
+    \item v = y. Symmetrisch zu Fall 2 (Widerspruch)
+\end{enumerate}
+Das sind alle möglichen Fälle. Dh $ v \notin H $
 
+\paragraph{3} Für jede Kante e: $ G|e $ enthält eine Unterteilung des $ K_5 $ oder $ K_{3,3} $ $ \Rightarrow $ G enhält eine solche Unterteilung. 
+
+\end{proof}
 
 
 
