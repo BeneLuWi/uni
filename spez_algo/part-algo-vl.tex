@@ -709,12 +709,47 @@ $ M \oplus N = (M\backslash N ) \cup (N \backslash M) $ dh Kanten die entweder i
     \item Pfade, die abwechselnd Kanten aus $ M \backslash N $ und $ N \backslash N  $ enthalten.
     \item Kreis wie 2). 
 \end{enumerate} 
-
+\paragraph{Korollar 1} M ist maximales Matching $ \Leftrightarrow $ es existiert kein erweiternder Pfad für M
 \end{proof}
 
+\paragraph{Lemma 2} Sei M ein Matching mit $ |M| = r $ und $ s $ die Größes eines maximalen Matchings mit $ s>r $ (dh M ist nicht maximal). Dann gibt es für M einen erweiternden Pfad der Länge $ \leq 2 \cdot \lfloor \frac{r}{s-r} \rfloor + 1$.
+
+\begin{proof}
+Sie N ein max Matching ($ |N| = s $) \\
+Aus Satz 1 $ \Rightarrow M \oplus N$ enthält mindestends s-r Knotendisjunkte erweiternde Pfade für M. Alle diese Pfade enthalten Zusammen $ \leq r $ Kanten aus M (da $ |M| = r $).\\
+Verteile r Dinge auf s-r Pfade 
+
+\begin{itemize}
+    \item[] $ \Rightarrow \exists$ ein Pfad mit $ \leq \lfloor \frac{r}{s-r} \rfloor$ Kanten aus M 
+    \item[] $ \Rightarrow \exists$ ein Pfad P mit  $|P| \leq 2 \cdot \lfloor \frac{r}{s-r} \rfloor + 1$
+\end{itemize}
+\end{proof}
+ Ein erweiternder Pfad P für M heißt kürzester erweiternder Pfad, falls $ |P| \leq |P'| $ für alle erweiternden Pfade P' für M.
+
+\subsubsection{Satz 2}
+Sei M ein Matching, P ein kürzester erweiternder Pfad für M und P' ein beliebiger erweiternder Pfad für $ M \oplus P $. Dann gilt 
+$$ |P'| \geq |P| + |P \cap P'| $$
 
 
+\begin{proof} Satz 2 \\
+$ M \rightarrow_P M \oplus P \rightarrow_{P'} \underbrace{M \oplus P \oplus P'}_N $. N ist ein Matching, $|N| = |M| + 2$. Aus Satz 1 $ \Rightarrow M \oplus N $ enthält 2 Knotendisjunkte erweiternde Pfade $ P_1,P_2 $ für M. 
+$$ M \oplus N = M \oplus M \oplus P \oplus P' = P \oplus P ' $$
+$$ \Rightarrow |P \oplus P'| = |M \oplus N | \geq |P_1| + |P_2| $$
+Außerdem $ |P_1| \geq P, |P_2| \geq P $, da P ein kürzester erweiternder Pfad für M ist.
+$$ \Rightarrow \underbrace{|P \oplus P'|}_{= |P| + |P'| - |P \cap P'| \geq 2 \cdot |P| } \geq |P_1| + |P_2| \geq 2 \cdot |P| $$
+$$ \Rightarrow |P'| \geq |P| + |P \cap P'| $$
 
+\end{proof}
+ 
+\subsubsection{Neue Idee für Algorithmus} Berechne Folge von Matchings $ M_0, M_1,..., M_i $ mit 
+\begin{enumerate}
+    \item $ M_0 = \emptyset $
+    \item $ M_{i+1} \gets M_i \cdot P_i $ mit $P_i$ ist ein erweiternder Pfad für $ M_i $
+\end{enumerate}
+
+\paragraph{Korollar 2} $ |P_i| \leq |P_{i + 1}| $, dh die Länge der kürzesten erweiternden Pfade ist in der Folge $ P_0,P_1,... $ monoton wachsend
+
+\paragraph{Korollar 3} Für alle i,j mit $ i \neq j $ und $ |P_i| = |P_j| $ gilt $ P_i, P_j $ sind knotendisjunkt.
 
 
 
