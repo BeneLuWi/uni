@@ -761,7 +761,7 @@ Situation: Folge der kürzesten erhöhenden Pfade: $ \underbrace{P_0,P_1}_{\text
 Effizienter Algorithmus:
 \begin{enumerate}
     \item Behandlung aller Pfade in einem Abschnitt (einer Phase) in Zeit $ O(n+m) $
-    \item Das muss für $ O(\sqrt{n})} $ Abschnitte gemacht werden
+    \item Das muss für $ O(\sqrt{n}) $ Abschnitte gemacht werden
     \item[] $ \rightarrow $ Laufzeit $ O(\sqrt{n} nm)= O(\sqrt{n} m)  (m \leq n) = O(n^{2,5} (m \leq n^2))$
 \end{enumerate}
 Im Gegensatz zum trivialen Algorithmus, der jeden Pfad getrennt durch Exploration des Graphen (Tiefen oder Breitensuche) betrachtet. Das führt zu einer Laufzeit von $ O(s(n+m)) = O(nm) = O(n^3)$ \\
@@ -789,13 +789,88 @@ Kürzeste Pfade: Teile den Graphen in Schichten ein (Levels) ein.
     \item[] Level i: alle von Level i-1 über eine Kante erreichbaren, die nicht in Level i...i-1 enthalten sind.
     \item[] $ \Rightarrow $ Level i $ \subseteq $ A, falls i ungerade, Level i $ \subseteq $ B, falls i gerade.
 \end{itemize}
+Konstruiere den geschichteten Graphen $ \overline{G} $
+\begin{enumerate}
+    \item füge 2 Knoten s,t hinzu
+    \item Kanten von s zu allen freien Knoten in A; von allen freien in B zu t.
+\end{enumerate}
+Dann repräsentiert jeder Pfad von s nach t in $ \overline{G} $ einen erhöhenden Pfad in G (1. und letzte Kante weglassen). \\
+Level-Einteilung: Breitensuche die in s startet. Berechnet für jeden Knoten v $ dist[v] $ mit $ dist[v] = 1 \Leftrightarrow v $ in Level i
+
+\paragraph{Einschub: Breitensuche} Startknoten s:\\
+\begin{itemize}
+    \item Felder:
+    \begin{itemize}
+        \item dist über die Knoten
+        \item Init $ dist[v] = -1 $ für alle $ v \in V $
+        \item Schlange u (FIFO-Queue)
+    \end{itemize}
+\end{itemize}
+BFS(s)
 
 \begin{algorithm}[H]
 \SetAlgoLined
-
-\caption{Effizienter Algorithmus für bipartite Graphen}
+$dist[s] \gets 0$ \; 
+u.append(s)\;
+\While{not u.empty()}{
+    $ v \gets $ u.pop()\;
+    \For{$w \in V\ mit\ (v,w) \in E $} {
+        \uIf{$dist[w] = -1$}{
+            $dist[w] \gets dist[v]+1$\;
+            u.append(w)\;
+        }    
+    }
+}
+\caption{BFS(s)}
 \end{algorithm}
+Laufzeit O(n+m) (n = $ \sum_{v\in V} (1+ outdeg(v)) $)
+
+
+\paragraph{Einschub: Tiefensuche} DFS zur Berechnung von Pfaden von s aus
+
+
+\begin{itemize}
+    \item $besucht[v]$ = false für alle $ v \in V $
+    \item $pred[v]$ = null
+\end{itemize}
+
+
+\begin{algorithm}[H]
+\SetAlgoLined
+$besucht[v] \gets true$ \;
+\For{$w\in V\ mit\ (v,w) \in E$}{
+    \uIf{not $besucht[w]$}{
+        $pred[w] \gets (v,w)$
+        dfs(w)\;
+        
+    }
+}
+\caption{DFS(v)}
+\end{algorithm}
+(Aufruf DFS(s))
+Darstellung der Pfade: $ s\rightarrow v $ duch Vorgängerverweise. $pred[v]$: die Kante, (u,v) über die DFS den Knoten v besucht hat.
 
 
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
