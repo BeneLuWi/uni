@@ -752,10 +752,49 @@ $$ \Rightarrow |P'| \geq |P| + |P \cap P'| $$
 \paragraph{Korollar 3} Für alle i,j mit $ i \neq j $ und $ |P_i| = |P_j| $ gilt $ P_i, P_j $ sind knotendisjunkt.
 
 
+\subsubsection{Maximal Cardinality Matching Algorithmus}
+Situation: Folge der kürzesten erhöhenden Pfade: $ \underbrace{P_0,P_1}_{\text{Abschnitte gleicher Länge}},\underbrace{...,...},\underbrace{...,P_s}$ (Abschnitt = Phase des Algorithmus)
+\begin{enumerate}
+    \item In jedem Abschnitt sind die Pfade knotendisjunkt
+    \item Anzahl der Abschnitte $ \leq 2 \lfloor \sqrt{s} \rfloor + 2 $, dh $ s=O(\sqrt{n}) $
+\end{enumerate}
+Effizienter Algorithmus:
+\begin{enumerate}
+    \item Behandlung aller Pfade in einem Abschnitt (einer Phase) in Zeit $ O(n+m) $
+    \item Das muss für $ O(\sqrt{n})} $ Abschnitte gemacht werden
+    \item[] $ \rightarrow $ Laufzeit $ O(\sqrt{n} nm)= O(\sqrt{n} m)  (m \leq n) = O(n^{2,5} (m \leq n^2))$
+\end{enumerate}
+Im Gegensatz zum trivialen Algorithmus, der jeden Pfad getrennt durch Exploration des Graphen (Tiefen oder Breitensuche) betrachtet. Das führt zu einer Laufzeit von $ O(s(n+m)) = O(nm) = O(n^3)$ \\
 
+Zwei Knotenmengen A, B (Seiten des Graphen). Darstellung eines Matchings M in bipartiten Graphen: \\
+Idee $ \rightarrow $ gerichteter Graph.
+\begin{itemize}
+    \item[] Falls $ (v,w) \in M $, dann Richtung von B nach A
+    \item[] Falls $ (v,w) \in M $, dann Richtung von A nach B
+\end{itemize}
+\paragraph{Beobachtung} (in der gerichteten Darstellung): Ein Pfad P ist genau dann ein ehöhender Pfad, wenn er in einem freien Knoten von A startet und in einem freien Knoten von B endet.
 
+\paragraph{Erhöhung} $ M \oplus P $ in der Darstellung:
+\begin{enumerate}
+    \item Drehe alle Kanten von P um
+    \item Endpunkte als gepaar markieren (nicht mehr frei)
+\end{enumerate}
 
+\paragraph{Algorithmus} sucht nach maximal vielen kürzesten erhöhenden Pfaden (gleicher Länge) und dreht alle Kanten dieser Pfade um. Wichtig dafür: Pfade sind Knotendisjunkt. Wiederhole, bis keine Pfade mehr existieren. \\
 
+Kürzeste Pfade: Teile den Graphen in Schichten ein (Levels) ein.
+\begin{itemize}
+    \item[] Level 1: alle freien Knoten in A
+    \item[] Level 2: alle von Level 1 über eine Kante erreichbar
+    \item[] Level i: alle von Level i-1 über eine Kante erreichbaren, die nicht in Level i...i-1 enthalten sind.
+    \item[] $ \Rightarrow $ Level i $ \subseteq $ A, falls i ungerade, Level i $ \subseteq $ B, falls i gerade.
+\end{itemize}
+
+\begin{algorithm}[H]
+\SetAlgoLined
+
+\caption{Effizienter Algorithmus für bipartite Graphen}
+\end{algorithm}
 
 
 
