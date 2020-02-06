@@ -7,7 +7,7 @@ Operationen: INSERT (darauf achten, dass die Balance nicht verloren geht), DELET
     \item U linear geordnet, also existiert ein $ \leq $-Test $ \Rightarrow $ Suchbäume
     \item U ist ein Intervall $ \{0,..., N-1\} $ der gesamten Zahlen $ \Rightarrow $ Hashing
 \end{enumerate}
-\subsubsection{\underline{zu 1:}}
+\subsection{\underline{zu 1:}}
 
 \paragraph{Randomisierte Suchbäume}
 Idee: Benutze Zufallszahlen zur Balancierung eines binären Suchbaums
@@ -15,7 +15,7 @@ Idee: Benutze Zufallszahlen zur Balancierung eines binären Suchbaums
 \paragraph{Binärer Suchbaum (Knoten-Orientiert)}
 Schlüssel werden in den n Knoten eines binären Baums gespeichert, sodass im linken Unterbaum des Knotens mit Schlüssel x alle Schlüssel $ < x $ \textbf{und} im rechten Unterbaum alle $ > x $. Balanciert $ \Rightarrow Höhe(T)\leq logn$.  Degeneriert $ \Rightarrow Höhe(T) = O(n)$
 
-\subsubsection{Definition: Randomized Search Tree (RST)}
+\subsection{Definition: Randomized Search Tree (RST)}
 Sei $ S=\{x_1,...,x_n\} $ eine Menge von n Schlüsseln. Jedem $ x_i $ wird eine zusätzlich eine Zufallszahl (auch Priorität genannt) $ prio(x_i) $ zugeordnet. $ prio(x_i) $ sind gleichverteilte reelle Zufallszahlen $ \in [0,1] $ (Implementierung wären int-Zahlen, zB 32-bit). \\
 Ein RST für S ist eine binärer Suchbaum für die Paare $ (x_i, prio(x_i), 1 \leq i \leq n $, sodass
 \begin{enumerate}
@@ -35,7 +35,7 @@ Beispiel: $ S=\{1,...,10\} $
 \end{itemize}
 $ \Rightarrow $ Wenn sich die Prioritäten genauso oder umgekehrt, wie die Schlüssel verhalten, erhält man einen degenrierten Baum. (bzgl $ \leq $). zB $ prio(x_i) = x_i $. Dieser Fall ist sehr unwahrscheinlich, wenn sich bei der Priorität um gleichverteilte Zufallszahlen handelt. 
 
-\subsubsection{Operationen}
+\subsection{Operationen}
 
 \begin{itemize}
     \item Lookup(x): normale suche in binärem Baum. Kosten $ O(Höhe(T)) $
@@ -57,10 +57,10 @@ $ \Rightarrow $ Wenn sich die Prioritäten genauso oder umgekehrt, wie die Schl�
     \end{enumerate}
 \end{itemize}
 
-\subsubsection{Analyse des RST}
+\subsection{Analyse des RST}
 Wir analysieren die erwarteten Kosten einer Delete-Operation (Insert $ \rightarrow $ umgekehrtes Delete). Seit T ein RST für die Menge $ \{x_1,...,x_n\}mit x_1 < x_2 < ... < x_n $ der durch Inserts aufgebaut wurde. Bertrachte die Operation Delete($ x_k $) für eine $ k, 1\leq k\leq n $. Für einen Knoten $ x_k $ im Baum T mit Suchpfad $ P_k $, $ L_k $ rechtes Rückgrad von $ T_l $ und $ R_k $ linkes Rückgrad von $ T_r $.  Kosten $ O(|P_k| + |L_k| + |R_k|) $. Wir schätzen die Erwartungswerte 
 
-\subsubsection{Lemma 1:}
+\subsection{Lemma 1:}
 \begin{itemize}
     \item a) E$ (|P_k|) $ = $ H_k + H_{n-k+1} - 1$ $$k-te\ Harmonische Zahl=H_k = \sum_{i_1}^{k}\frac{1}{i}\ H_k \leq ln(x)+1$$
     \item b) E$ (|L_k|) $ = $ 1-\frac{1}{k} $
@@ -678,7 +678,7 @@ Das sind alle möglichen Fälle. Dh $ v \notin H $
 
 \paragraph{Beobachtung} $ |M| \leq \lfloor \frac{n}{2} \rfloor \Rightarrow$ Falls $ M = \lfloor \frac{n}{2} \rfloor $, dann ist M maximal.
 
-\paragraph{Idee für Algorithmus} Kontruiere $ M_i,...,M_l $ von Matchings mit $ |M_i| < |M_{i+1}| $ und $ M_l $ maximal. Schritt (Erhöhung/Erweiterung) $ M \rightarrow M' $ mit $ |M'| = |M| + 1 $.
+\paragraph{Idee für Algorithmus} Konstruiere $ M_i,...,M_l $ von Matchings mit $ |M_i| < |M_{i+1}| $ und $ M_l $ maximal. Schritt (Erhöhung/Erweiterung) $ M \rightarrow M' $ mit $ |M'| = |M| + 1 $.
 
 \paragraph{Definition} Ein einfacher Pfad $ P = (v_1, v_2), (v_2, v_3), ..., (v_{2k-1}, v_{2k}) $ (ungerade Zahl von Kanten) heißt erweiternder Pfad (augmenting path) für ein Matching M, falls 
 \begin{enumerate}
@@ -847,20 +847,118 @@ $besucht[v] \gets true$ \;
 }
 \caption{DFS(v)}
 \end{algorithm}
+
 (Aufruf DFS(s))
-Darstellung der Pfade: $ s\rightarrow v $ duch Vorgängerverweise. $pred[v]$: die Kante, (u,v) über die DFS den Knoten v besucht hat.
+Darstellung der Pfade: $ s\rightarrow v $ duch Vorgängerverweise. $pred[v]$: die Kante, (u,v) über die DFS den Knoten v besucht hat. $ \rightarrow $ Pfade können adnn rückwärts durchlaufen werden.
+
+\subsubsection{Algorithmus von Hopcroft und Karp}
+Maximale Matchings in bipartiten Graphen in Zeit $ O(\sqrt{n}m) $. Bipartiter Graph G (mit Seiten A, B) $ \rightarrow \overline{G}$ 
+
+\begin{itemize}
+    \item Füge Knoten s,t ein und verbinde s mit allen Knoten in A und t mit allen Knoten in B. Alle Knoten sind von links nach rechts, A nach B, gerichtet $ \Rightarrow M=0$.
+    \item Jeder Pfad P von s nach t ist ein erhöhender Pfad. $ M \oplus P $
+    \begin{enumerate}
+        \item Lösche erste und letzte Kante
+        \item alle anderen (inneren) Kanten umdrehen
+    \end{enumerate}
+    \item Kürzeste erweiternde Pfade: Breitensuche \textbf{BFS}(s, level)
+    \begin{itemize}
+        \item Führt BFS mit Startknoten s aus und berechnet Levels ($ dist[v] $, auch als $ level[v] $ bezeichnet)
+        \item $ dist[t] $ Länge der aktuell kürzesten erweiternden Pfade
+    \end{itemize}
+    \item Ausführung des eigentlichen Algorithmus: \textbf{DFS}
+\end{itemize}
+
+\paragraph{Algorithmus}
+
+\begin{enumerate}
+    \item Initialisierung: (Konstruiere $ \overline{G} $)
+    \begin{enumerate}
+        \item Richte alle Kanten von A nach B 
+        \item Füge die 2 neue Knoten s und t hinzu 
+        \item Füge Kanten (s,v) für alle $ v\in A $ und (u,t) für alle $ u \in B $
+    \end{enumerate}
+    \item Wiederholte Pfaderhöhung BFS(s, level):
+    \begin{enumerate}
+        \item t ist von s aus erreichbar  $ \Rightarrow \exists $ erhöhende Pfade
+        \item Bestimme maximale Menge von Knotendisjunkten Pfaden von s nach t, sodass für alle Kanten (v,w) auf einem Pfad gilt: $ level[v] = level[w]-1$ (Dies sind stets \textbf{kürzeste erweiternde Pfade}. Nur Kanten, die )
+            \item Sei S die Menge dieser Pfade (jeweils eine Phase):
+    \begin{enumerate}
+        \item streiche erste und letzte Kante ($ M \oplus P $)
+        \item drehe die Richtung aller anderen Kanten um
+    \end{enumerate}
+    \end{enumerate}
+
+\end{enumerate}
 
 
 
 
+\begin{algorithm}[H]
+\SetAlgoLined
+Richte alle Kanten von A nach B \;
+Füge die 2 neue Knoten s und t hinzu \;
+Füge Kanten (s,v) für alle $ v\in A $ und (u,t) für alle $ u \in B $\;
+\While{$ level[t] \neq -1 $}{
+    Bestimme maximale Menge von Knotendisjunkten Pfaden von s nach t, sodass für alle Kanten (v,w) auf einem Pfad gilt: $ level[v] = level[w]-1$\;
+    \For{Pfade $ P \in S $}{
+        streiche erste und letzte Kante\;
+        drehe die Richtung aller anderen Kanten um\;
+    }
+}
 
+\caption{Hopcroft und Karp}
+\end{algorithm}
 
+Für die innere Schleife (Max Menge von Pfaden von s nach t) brauchen wir eine Variante von DFS, die Kanten (v,w) ausfiltert (dh nicht benutzt) mit $ level[v] \neq level[w]-1 $. 
+\begin{algorithm}[H]
+\SetAlgoLined
+$besetzt[v] \gets true$\;
+\For{$ w\in V\ mit\ (v,w)\in R $}{
+    \uIf{not $ besucht[w] \land levle[w] = level [v]+1 $} {
+        $pred[w] \gets (v,w) $\;
+        dfs(w)\;
+    }
 
+}
 
+\caption{dfs-Variante (Kanten im geschichtenten Graphen)}
+\end{algorithm}
+Die Funktion berechnet stet kürzeste Pfade. 
 
+\begin{algorithm}[H]
+\SetAlgoLined
+dfs(s, pred)\;
+\While{$pred[t] \neq null$}{
+    //Iteration über die Kanten (rückwärts)\;
+    $u\gets t$\;
+    \While{$u\neq s$}{
+        $(x,y) \gets pred[u]$\;
+        $u\gets x$\;
+    }
+    dfs(s, pred)\;
+}
+\caption{Maximale Menge von kürzesten Pfaden}
+\end{algorithm}
+Algorithmus in Zeit $ O(n+m) $
+\paragraph{Laufzeitanalyse}
+\begin{itemize}
+    \item Hauptschleife: solange t von s erreichbar: wird höchstens $ 2 \lfloor \sqrt{s} \rfloor + 2$ mal ausgefürht. Mögliche verschiedener Läangen kürzester erweiternder Pfade
+    \item Inner Schleife $ O(n+m) $: BFS und DFS zur Behandlung aller Pfade 
+\end{itemize}
+\paragraph{Satz (Hopcroft/Karp)} In bipartiten Graphen kann man ein max Matching in Zeit $ O(\sqrt{n} m) $ berechnen (Annahme ($ m \geq n $))
 
+\paragraph{Bemerkungen}
+\begin{enumerate}
+    \item Der Algorihmus funktioniert nicht bei allgemeinen Graphen, da diese zyklisch sein können und erfordert einen komplizierteren Algorithmus.
+    \item Maximales Matching $M_max$ $ \leftrightarrow $ Minimales Vertex Cover $C_min$.
+    \begin{itemize}
+        \item Vertex Cover $ C_min \subseteq V $ mit: für alle Kanten $(v,w) \in E$ gilt $v \in C_min$ oder $ w\in C_min $
+        \item Einfache Beobachtung $ |C_min| \geq |M_max|$ kein Knoten kann zwei Matching-Kanten überdecken
+    \end{itemize}
+\end{enumerate}
 
-
+\paragraph{Satz von König} In bipartiten Graphen ist $ |M_max| = |C_min| $
 
 
 
