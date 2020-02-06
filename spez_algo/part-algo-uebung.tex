@@ -2,7 +2,15 @@
 
 \section{Übungen}
 \subsection*{Übung 1:}
+\paragraph{1)}  
+\paragraph{1)}
+\paragraph{1)}
+
+
 \subsection*{Übung 2:}
+
+
+
 \subsection*{Übung 3:}
 \paragraph{1)} Durch entfernen von Kanten soll der Graph zerlegt werden. (Unions in umgekehrter Reihenfolge)
 
@@ -129,6 +137,7 @@ Tafelgröße s beliebig. Hashfunktion $ h(x) = x \cdot mod s $\\
 
 \subsection{Übung 7}
 
+
 \subsection{Übung 8}
 \paragraph{2)} Belegungsfaktor = $ \beta = \frac{n}{k} $. Ziel ist $ \frac{1}{2} \leq \beta \leq 2 $. Erwartete Laufzeit pro Operation $ O(1 + \beta) $. Rehashing: Test nach Inerst/Delete. Wenn $ \beta $ außerhalb des Zielintervalls, Rehash mit $ k \gets n $. \\
 Potentialmethode: $ pot: D \rightarrow \mathbb{R}^+_0 $. Folge von Insert, Rehash mit pot = 2 $ \cdot $ Anzahl der Markierten
@@ -176,6 +185,60 @@ $$ m  \leq 3n - 6 $$
     \item Hat x eine Kante in H, so ist x ein Subdivision-Knoten (symmetrisch für y)
     \item Hat x 2 Kanten in H, so bilden x und y einen $ K_{3,3} $
 \end{enumerate}
+
+
+\subsection{Übung 10}
+\paragraph{1)} Fälle 2.1, 2.2, 2.3 (Stehen am Ende des Dokuments), die zum Widerspruch führen. Beobachtung: Die Nachbarn müssen in einem Segemnt liegen
+\begin{itemize}
+    \item[] Fall 1: Guter Fall. Expandierung gelingt
+    \item[] Fall 2: (nicht Fall 1):
+    \begin{itemize}
+        \item[] Fall 2.1: Ergibt den $K_5$ 
+        \item[] Fall 2.2: Ergibt den $K_{3,3}$ 
+        \item[] Fall 2.3: Ergibt den $K_{3,3}$ 
+    \end{itemize}
+\end{itemize}
+
+\paragraph{2)} Situation: 2 kantendisjunkte erweiternde Pfade P und Q für ein Matching M. Dh $ P \cap Q = \emptyset $. Dann gilt P und Q sind knotendisjunkt bis auf evtl gemeinsame Endpunkte. Mögliche Fälle:
+\begin{enumerate}
+    \item Gemeinsame Endpunkte sind möglich
+    \item Innerhalb des einen Pfades kann der Endpunkt nicht im inneren des anderen liegen. Kreuzen ist auch nicht möglich, wegen Matching-Eigenschaft (Knoten, bei dem gekreutzt wird, hätte mehrere Matching Kanten.)
+\end{enumerate}
+
+\paragraph{3)} Idee: Betrachte den Test, ob ein Graph bipartit ist (Test-Algorithmus). Breitensuche (ungerichteter zusammenhängender Graph)
+
+\begin{algorithm}[H]
+\SetAlgoLined
+$u \gets \emptyset$\;
+\For{$v \in V$}{
+    $side[v]\gets -1$\;
+}
+$u.append(s)$\;
+$side[s] \gets \emptyset$\;
+\While{not $u.empty$} {
+    $u \gets u.pop$\;
+    \For{$v \in V\ mit\ (v,w)\in E$}{
+        \eIf{$side[w] = -1$}{
+            $u.append(w)$\;
+            $side[w] \gets 1- side[w]$ //Seite wechseln\;
+        }{
+            \uIf{$side[w] = side[w]$ }{
+                //Konflikt: Aufsammeln \;
+                $L.push(v,w)$
+            }
+        }
+    }   
+
+}
+
+
+\caption{BFS(s,side)}
+\end{algorithm}
+Variante, die Levels berechnet, entfernt alle Kanten in L
+
+
+\paragraph{4)} Entfernen der Kanten L, dann im bipartiten Graphen das Matching bestimmen und dann L wieder hinzufügen.
+
 
 
 
