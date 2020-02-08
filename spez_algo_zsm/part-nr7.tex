@@ -1,0 +1,29 @@
+\section{Random Search Tree}
+Beschreiben Sie den Aufbau und die Operationen eines Random Search Trees und analysieren Sie diese.
+
+\subsection*{Lösung}
+\paragraph{Aufbau} Jeder der s Schlüssel aus S erhält einen zufälligen Prioritätswert $ prio(x_i) = p_i $. Initialisierung:
+
+\begin{algorithm}
+\SetAlgoLined
+$(x, p) \gets $ max(prio) aus N\;
+$(x, p).left \gets$ RST($ \{(x_l, p_l) |x_l < x \}$)\;
+$(x, p).right \gets$ RST($ \{(x_r, p_r) |x_r > x \}$)\;
+\caption{Initialisierung: RST(N)}
+\end{algorithm}
+Der Baum ist sehr wahrscheinlich balanciert, da der Worst Case eintritt, wenn maxprio in der Teilliste gleich maxValue ist, was bei gleichverteilten Zufallszahlen unwahrscheinlich ist.
+
+\paragraph{Operationen}
+\begin{itemize}
+    \item[] Lookup(x): Suche nach Schlüssel im balancierten Baum $ O(\log n) $
+    \item[] Insert(x): Insert $ (x,p) $ als Blatt nach der Schlüsselgröße und rotiere dann nach der Priorität, bis die Heapeigenschaft $prio(x) < prio(parent(x))$
+    \item[] Delete(x): Runterrotieren des Knotens, bis x ein Blatt ist. Dann entferne das Blatt. $ O(1 + |L| + |R|) $ mit
+    \begin{itemize}
+        \item[]  R = linkes Rückgrat des rechten Teilbaums
+        \item[]  L = rechtes Rückgrat des linken Teilbaums
+    \end{itemize}
+    \item[] Split(x): Insert($(x+ \epsilon, \infty)$). Rotiere $(x+ \epsilon, \infty)$ bis zur Wurzel, dann entferne die Wurzel.
+    \item[] Join($T_1, T_2$): Erstelle T mit Wurzel x mit $ max(S_1) \leq x \leq max(S_2) $. Dann Hänge $ T_1, T_2 $ an x und Delete(x).
+\end{itemize}
+
+$ \Rightarrow $ Mit Hilfe der Harmonischen Zahl des jeweiligen Elements lässt sich die Anzahl an nötigen Rotationen bei Insert und Delete als $ <2 $ abschätzen.
