@@ -1,0 +1,62 @@
+\section{Hashing}
+	Entwickeln Sie eine Datenstruktur zur Speicherung von $n$ Schlüsseln aus dem Universum $\{1,...,N\}$(wobei $n<<N$), die eine Zugriffszeit von O(1) garantiert. Sie dürfen dabei $O(n^2)$ Speicherplatz verwenden.
+	
+(Perfektes Hashing) Verbessern Sie die Datenstruktur aus Aufgabe \ref{q:1}, so dass nur noch Speicherplatz $O(n)$ benutzt wird.
+Hashig durch Verkettung und mit offener Adressierung (Linear Probing: Wie funktioniert Delete())
+
+\subsection*{Lösung}
+\paragraph{Hashing mit Verkettung} Idee: keine Auflösung von Konflikten, sondern mehrere Schlüssel an gleicher Stelle speichern. Tafel T mit m Buckets, Hashfunktion h und Belegungsfaktor B$ =\frac{m}{n} $.
+
+\textbf{Verdopplungsstrategie}: Wenn B $ > $ 2 verdopple m und rehashe alle n mit neuem h.
+\begin{itemize}
+    \item[] Lookup(x): Lineare Suche in einer kurzen Liste T[h(x)] in $O(1)$, da durch die Verdopplungsstrategie garantiert wird, dass es genug Platz gibt, um jedes Element in eine eigene Liste zu legen.
+    \item[] Insert(x): Füge x an erste freie Stelle in T[h(x)] ein.
+    \item[] Delete(x): Entferne x aus T[h(x)]. Bei B $\leq \frac{1}{2}$ kann nach m Delete halbiert werden.
+\end{itemize}
+
+\paragraph{Hashing mit offener Adressierung} Idee: Linear Probing. Ausprobieren einer Reihe von Hashfunktionen $ h_i $. Startpunkt ist $ f(x) $, $ g(x) $ verschiebt beim Probing. Eine Beispielfunktion wäre (mit $n\leq m$, damit B $ \leq 1 $):
+\[ h_i(x) = (x modm + i)modm \]
+
+\begin{itemize}
+    \item[] status[$1,...,m$]: Status des Feldes (belegt, frei oder gelöscht)
+    \item[] Lookup(x): Probiere $ h_0, h_1, h_2,... $ bis freie Stelle oder x gefunden wurde:
+    \item[] Insert(x): Probiere $ h_0, h_1, h_2,... $ bis freie oder gelöschte Stelle gefunden wurde:
+    \item[] Delete(x): Probiere $ h_0, h_1, h_2,... $ bis freie Stelle oder x gefunden wurde. Entferne x und markiere status[Postition(x)] als gelöscht.
+\end{itemize}
+
+
+\paragraph{Perfektes Hashing} Ziel Speicherplatz $ O(n) $ ohne Kollisionen. Idee: 2-Stufen-Hashing
+
+\subparagraph{1.Stufe} Wähle eine Hashfunktion $ h_k $ so dass die Summe der Bucketgrößen in der Tafel T mit s=n Elementen $ < 3n $ ist, also:
+\[ (1)\ \sum_{i=0}^{n-1} |w_i^k|^2 < 3n\]
+$ h_k $ muss in diesem Schritt noch nicht injektiv sein. Sei $ p $ eine Primzahl mit $ p>N $, dann wähle zufällig Kandidaten $ k $ aus $\{1,...,p-1\}$, bis (1) erfüllt ist. Wir wissen, dass mindestens die Hälfte aller möglichen $ k $ geeignet sind. 
+
+$ \Rightarrow $ Wahrscheinlichkeit $ \frac{1}{2} $ und Erwartungswert für Versuche, um $ k $ zu finden = 2 (Münzwurf).
+
+$ \Rightarrow O(2n)$ Tests, bis k gefunden wird.
+
+\subparagraph{2.Stufe} Für nicht-leere Buckets jeweils eine Tafel $ s_i $ mit $ 2|w_i^k|^2 $ Platz und Wahl von $ k_i $ so, dass $ h_{k_i} $ injektiv auf $ w_i^k $. (Wieder Münzwurf). Platzbedarf: 
+\[ (2)\ \sum_{i=0}^{n-1} 2|w_i^k|^2 = 2\sum_{i=0}^{n-1} |w_i^k|^2 < 10n \]
+$ \Rightarrow $ Gesamtplatzbedarf: $ (1) + (2) \rightarrow O(13n)$ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

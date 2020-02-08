@@ -1,0 +1,19 @@
+\section{Amortisierte Analye} 
+	Beschreiben Sie die Technik der amortisierten Analyse einer Folge von Operationen auf einer Datenstruktur $D$. Demonstrieren Sie diese Technik am Beispiel einer Folge von Increment-Operationen auf einem binären Zähler.
+\subsection*{Lösung}
+\paragraph{Potentialmethode} Idee: Bilde den Ablauf eines Algorithmus als Zustände und deren Übergänge ab.
+\begin{itemize}
+    \item[] Zustände $D', D'',...$ in der Datenstruktur
+    \item[] $pot:D \rightarrow \mathbb{R}$, Methode zur Bestimmung des Potentialwertes eine Zustandes
+    \item[] $op: D\rightarrow D'$, Operation die einen Zustand in den nächsten überführt
+    \item[] $ T_{Tats}(op) $, Tatsächliche Laufzeit einer Operation
+    \item[] $ T_{Amort}(op) = T_{Tats}(op) + pot(D'') - pot(D') = T_{Tats}(op) + \Delta pot $, Amortisierte Laufzeit einer Operation
+\end{itemize}
+
+Beim \textbf{Binärzähler für die Increment Operation} stellt $pot$ die Anzahl der Einsen $ k $ dar.
+\begin{itemize}
+    \item[] $T_{Tats}(incr) = 1 + k$
+    \item[] $\Delta pot = 1-k$, da die Einsen zu 0 geflippt werden. 
+    \item[] $T_{Amort}(incr) = 1 + k + (1 - k) = 2$
+\end{itemize}
+$ \Rightarrow $ Ein Increment kostet $ O(1) $
