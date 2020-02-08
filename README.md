@@ -1,10 +1,9 @@
 Mitschriften, Zusammenfassungen und Projekte im Master an der Universität Trier
 
-## Sommersemenster 18
-[Formale Sprachen B](formale_sprachen_b/fsb.pdf)  
-[Information Retrieval](information_retrieval/ir2.pdf)  
-[Rechnerarithmetik](rechnerarithmetik/)  
-[Verteilte Systeme](verteilte_systeme/vs.pdf)  
+## Wintersemester 19/20
+[Distributed AI](vert_ki/main.pdf)  
+[Spezielle Kapitel aus Algo und Datenstrukturen - Mitschrift](spez_algo/main.pdf)  
+[Spezielle Kapitel aus Algo und Datenstrukturen - Zusammenfassung](spez_algo_zsm/main.pdf)  
 
 ## Sommersemester 19
 [Approximative Algorithmen (unvollständig)](approximative_algorithmen/main.pdf)   
@@ -14,6 +13,8 @@ Mitschriften, Zusammenfassungen und Projekte im Master an der Universität Trier
 [Berechenbare Analysis - Mitschrift](berechenbare_analysis/main.pdf)  
 [Berechenbare Analysis - Zusammenfassung](berechenbare_analysis/zusammenfassung/main.pdf)  
 
-## Wintersemester 19/20
-[Distributed AI](vert_ki/main.pdf)  
-[Spezielle Kapitel aus Algo und Datenstrukturen](spez_algo/main.pdf)  
+## Sommersemenster 18
+[Formale Sprachen B](formale_sprachen_b/fsb.pdf)  
+[Information Retrieval](information_retrieval/ir2.pdf)  
+[Rechnerarithmetik](rechnerarithmetik/)  
+[Verteilte Systeme](verteilte_systeme/vs.pdf)  
