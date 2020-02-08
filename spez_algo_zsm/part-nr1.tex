@@ -13,7 +13,7 @@
 	    size[A]: Größe des Blocks A (Init 1)
 	    list[A]: Liste der Elemente in Block A
 	\end{verbatim}
-	
+	    \vspace{5mm}
     \begin{algorithm}[H]
     \SetAlgoLined
     \ForEach{x $\in N $}{
@@ -23,13 +23,13 @@
     }
     \caption{Initialisierung}
     \end{algorithm}
-    
+        \vspace{5mm}
     \begin{algorithm}[H]
     \SetAlgoLined
     \Return name[x]\;
     \caption{Find(x)}
     \end{algorithm}
-    
+        \vspace{5mm}
     \begin{algorithm}[H]
     \eIf{size[A] $\geq$ size[B] }{
         \ForEach{ x $\in$ list[B]}{
@@ -66,7 +66,6 @@
         wurzel[x]: Wurzel des Blocks mit Namen x
         vater[x]: Vaterknoten des Knotens x. 0, wenn x Wurzel
     \end{verbatim}
-    
     \begin{algorithm}[H]
     \SetAlgoLined
     \ForEach{x $\in N $}{
@@ -77,8 +76,7 @@
     }
     \caption{Initialisierung}
     \end{algorithm}
-    
-    
+    \vspace{5mm}
     \begin{algorithm}[H]
     \SetAlgoLined
     \While{vater[x] $ \neq $ 0}{
@@ -87,8 +85,7 @@
     \Return name[x]\;
     \caption{Find(x)}
     \end{algorithm}
-    
-    
+    \vspace{5mm}
     \begin{algorithm}[H]
     \SetAlgoLined
     a $ \gets $ wurzel[A]\;
