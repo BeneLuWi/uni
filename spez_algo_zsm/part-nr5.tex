@@ -1,0 +1,47 @@
+\section{Split-Find}
+	Das $Split-Find$-Problem ist wie folgt definiert: Verwalte eine Einteilung der Zahlen $\{1,...,n\}$ in disjunkte Intervalle, die am Anfang nur aus dem Intervall $[1,n]$ besteht, unter folgenden Operationen:
+	\begin{itemize}
+		\item $FIND(i)$: liefert das Intervall, das die Zahl $i$ enthält.
+		\item $SPLIT(i)$: ersetze das Intervall $[a,b]$ und $[i+1,b]$
+	\end{itemize}
+	Entwickeln Sie eine Datenstruktur die jede FIND-Operation in Zeit O(1) und jede Folge von SPLIT-Operationen möglichst effizient unterstützt.
+
+\subsection*{Lösung}
+\textbf{Idee:} Relable the smaller Half für Split.
+\paragraph{Datenstruktur}
+\begin{verbatim}
+    name[x] = Name des Intervalls von x
+\end{verbatim}
+
+\begin{algorithm}
+\SetAlgoLined
+\ForEach{x $\in$ N}{
+    name[x] $\gets 1$\;
+}
+\caption{Initialisierung}
+\end{algorithm}
+\vspace{5mm}
+
+\begin{algorithm}
+\SetAlgoLined
+\Return name[x]\;
+\caption{Find(x)}
+\end{algorithm}
+\vspace{5mm}
+
+\begin{algorithm}
+\SetAlgoLined
+Intervall I $ \gets $ Find(x)\;
+Laufe in I parallel nach link l und rechts r, bis name[x]$ \neq $ name[l] oder name[r]\;
+Benenne kleineres Intervall I$_{min} $ um\;
+I = [a,b] $\rightarrow$ [a, x], [x+1, b]\;
+\caption{Split(x)}
+\end{algorithm}
+
+\paragraph{Laufzeit}
+\begin{itemize}
+    \item[] Find(x): $ O(1) $
+    \item[] Split(x): $ O(\# Namensänderungen) = O(\log n) $
+\end{itemize}
+
+
