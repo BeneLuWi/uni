@@ -1,4 +1,33 @@
 \section{Planare Graphen}
 	Sei $G$ ein planarer Graph mit $n$ Knoten und $m$ Kanten. Folgern Sie aus dem Satz von Euler, dass $m\leq3n-6$ und dass $G$ einen Knoten vom Grad$\leq5$ besitzt.
-\subsection*{Zusatz}
-	Zeigen Sie, dass für bipartite planare Graphen $m\leq2n-4$ gilt.
+	
+\subsection*{Lösung}
+Eulerformel: 
+\[ n - m + f = 2\]
+\begin{proof} $m \leq 3n-6 $\\
+Ein maximler planarer Graph hat eine Einbettung, in der jedes Face ein Dreieck ist (Triangulierung). Jede Kante liegt damit am Rande von 2 Faces und jedes Face hat 3 Kanten:
+\[ 3f = 2m \]
+Eingesetzt in die Eulerformel:
+\[ n - m + \frac{2}{3}m = 2 \]
+\[ \Rightarrow m = 3n-6 \]
+Für allgemeine planare Graphen gilt daher:
+\[ m \leq 3n-6 \]
+\end{proof}
+
+\begin{proof} G hat einen Knoten $ v $ mit $ deg(v) \leq 5 $ \\
+Annahme, dass $ \forall v \in V: deg(v) \geq 6$. Dann wäre 
+\[ m = \sum_{v \in V} \frac{deg(v)}{2} \geq \frac{6n}{2} = 3n \]
+$ \Rightarrow $ $m \leq 3n - 6$ ist nicht mehr erfüllt
+\end{proof}
+
+
+\textbf{Zusatz:} Zeigen Sie, dass für bipartite planare Graphen $m\leq2n-4$ gilt.
+
+\subsection*{Lösung}
+\begin{proof} $m \leq 2n-4 $ für bipartite planare Graphen.\\
+Da pipartite Graphen keine ungeraden Zyklen haben, ist das kleinste Face ein Viereck:
+\[ 2f = m \]
+Eingesetzt in die Eulerformel:
+\[ n - m + \frac{1}{2}m = 2 \]
+\[ \Rightarrow m = 2n-4 \]
+\end{proof}
