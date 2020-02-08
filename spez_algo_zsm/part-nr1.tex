@@ -1,0 +1,120 @@
+\section{Aufgabe 1:}
+	Beschreiben Sie jeweils eine Lösung für das Union-Find-Problem mit Laufzeit
+	\begin{enumerate}
+		\item $O(\log n)$ (amortisiert) für UNION und $O(1)$ für FIND
+		\item $O(1)$ für UNION und $O(\log n)$ für FIND
+	\end{enumerate}	
+	wobei $n$ die Anzahl der Elemente ist. Begründen Sie in beiden Fällen die entsprechenden Laufzeiten.
+
+	\subsection*{Lösung 1.)} Union in $ O(\log n) $, Find in $ O(1) $. \textbf{Idee:} Relable the smaller half, sodass jedes Element nur maximal $ \log n $ geändert wird:
+	\paragraph{Datenstruktur}
+	\begin{verbatim}
+	    name[x]: Name des Blocks, der x enthält
+	    size[A]: Größe des Blocks A (Init 1)
+	    list[A]: Liste der Elemente in Block A
+	\end{verbatim}
+	
+    \begin{algorithm}[H]
+    \SetAlgoLined
+    \ForEach{x $\in N $}{
+        name[x]$\gets$ x\;
+        size[x]$\gets$ 1\;
+        list[x]$\gets$ \{x\}\;
+    }
+    \caption{Initialisierung}
+    \end{algorithm}
+    
+    \begin{algorithm}[H]
+    \SetAlgoLined
+    \Return name[x]\;
+    \caption{Find(x)}
+    \end{algorithm}
+    
+    \begin{algorithm}[H]
+    \eIf{size[A] $\geq$ size[B] }{
+        \ForEach{ x $\in$ list[B]}{
+            name[x] $\gets$ A\;
+        }
+        size[A] $ \gets $ size[A]+size[B]\;
+        list[A].append(list[B])\;     
+    }{
+        \ForEach{ x $\in$ list[A]}{
+           name[x] $\gets$ B\;
+        }
+        size[B] $ \gets $ size[A]+size[B]\;
+        list[B].append(list[A])\;       
+    
+    }
+
+    \caption{Union(A,B)}
+    \end{algorithm}
+    
+    \paragraph{Laufzeit}
+    \begin{itemize}
+        \item[] Find: $ O(1) $. Lookup im Array.
+        \item[] Union: $ O(\log n) $. Jedes x kann maximal $ \log n $ mal seinen Namen ändern, da es sich nach jeder Namensänderung in einer doppelt so großen Liste befindet.
+    \end{itemize}
+    
+    
+    \subsection*{Lösung 2.)}
+    Union in $ O(1) $ und Find in $ O(\log n) $. \textbf{Idee:} Bei Union Anhängen des kleineren Teilbaums an den Größeren.\\
+    Das ergibt die Abschätzung size[x] $ \geq 2^{höhe(x)} $, bzw $\log_2$(size[x]) $\geq$ höhe(x), also wird der Baum nie tiefer, als $ \log n $
+    \paragraph{Datenstruktur}
+    \begin{verbatim}
+        name[x]: Name des Blocks mit Wurzel x (nur, wenn x eine Wurzel relevant)
+        size[x]: Anzahl der Knoten im Unterbaum mit Wurzel x
+        wurzel[x]: Wurzel des Blocks mit Namen x
+        vater[x]: Vaterknoten des Knotens x. 0, wenn x Wurzel
+    \end{verbatim}
+    
+    \begin{algorithm}[H]
+    \SetAlgoLined
+    \ForEach{x $\in N $}{
+        name[x]$\gets$ x\;
+        size[x]$\gets$ 1\;
+        wurzel[x]$\gets$ x\;
+        vater[x]$\gets$ 0\;
+    }
+    \caption{Initialisierung}
+    \end{algorithm}
+    
+    
+    \begin{algorithm}[H]
+    \SetAlgoLined
+    \While{vater[x] $ \neq $ 0}{
+        x $ \gets$ vater[x] \;
+    }
+    \Return name[x]\;
+    \caption{Find(x)}
+    \end{algorithm}
+    
+    
+    \begin{algorithm}[H]
+    \SetAlgoLined
+    a $ \gets $ wurzel[A]\;
+    b $ \gets $ wurzel[B]\;
+    \eIf{size[a] $\geq $ size[b]}{
+        vater[b] $\gets$ a\;
+        name[a] $\gets$ C\;
+        wurzel[C] $\gets$ a\;
+        size[a] $\gets$ size[a] + size[b]\;
+    } {
+        analog\;
+    }
+    \caption{Union(A, B, C)}
+    \end{algorithm}
+    
+    \paragraph{Laufzeit}
+    \begin{itemize}
+        \item[] Find: $ O(\log n) $. Höhe des Baums bleibt maximal $ \log n $, da der kleinere Teilbaum immer an die Wurzel des Größeren gehangen wird und sich die Tiefe des Baums durch seine Größe abschätzen lässt.
+        \item[] Union: $ O(1) $. Lediglich die Wurzel muss umgeschrieben werden.
+    \end{itemize}
+    
+    
+    
+    
+    
+    
+    
+    
+    
