@@ -32,7 +32,7 @@
 \begin{algorithm}
 \SetAlgoLined
 Intervall I $ \gets $ Find(x)\;
-Laufe in I parallel nach link l und rechts r, bis name[x]$ \neq $ name[l] oder name[r]\;
+Laufe in I parallel nach links l und rechts r, bis name[x]$ \neq $ name[l] oder name[r]\;
 Benenne kleineres Intervall I$_{min} $ um\;
 I = [a,b] $\rightarrow$ [a, x], [x+1, b]\;
 \caption{Split(x)}
@@ -43,5 +43,4 @@ I = [a,b] $\rightarrow$ [a, x], [x+1, b]\;
     \item[] Find(x): $ O(1) $
     \item[] Split(x): $ O(\# Namensänderungen) = O(\log n) $
 \end{itemize}
-
 

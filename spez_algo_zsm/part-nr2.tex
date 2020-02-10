@@ -5,7 +5,7 @@
 Hashig durch Verkettung und mit offener Adressierung (Linear Probing: Wie funktioniert Delete())
 
 \subsection*{Lösung}
-\paragraph{Hashing mit Verkettung} Idee: keine Auflösung von Konflikten, sondern mehrere Schlüssel an gleicher Stelle speichern. Tafel T mit m Buckets, Hashfunktion h und Belegungsfaktor B$ =\frac{m}{n} $.
+\paragraph{Hashing mit Verkettung} Idee: keine Auflösung von Konflikten, sondern mehrere Schlüssel an gleicher Stelle speichern. Tafel T mit m Buckets, Hashfunktion h und Belegungsfaktor B$ =\frac{n}{m} $.
 
 \textbf{Verdopplungsstrategie}: Wenn B $ > $ 2 verdopple m und rehashe alle n mit neuem h.
 \begin{itemize}
@@ -38,7 +38,6 @@ $ \Rightarrow O(2n)$ Tests, bis k gefunden wird.
 \subparagraph{2.Stufe} Für nicht-leere Buckets jeweils eine Tafel $ s_i $ mit $ 2|w_i^k|^2 $ Platz und Wahl von $ k_i $ so, dass $ h_{k_i} $ injektiv auf $ w_i^k $. (Wieder Münzwurf). Platzbedarf: 
 \[ (2)\ \sum_{i=0}^{n-1} 2|w_i^k|^2 = 2\sum_{i=0}^{n-1} |w_i^k|^2 < 10n \]
 $ \Rightarrow $ Gesamtplatzbedarf: $ (1) + (2) \rightarrow O(13n)$ 
-
 
 
 
