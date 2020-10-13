@@ -1,0 +1,115 @@
+\section*{Netzwerke - Übersicht}
+Ein Netzwerk ist ein Graph von Knoten und Kanten mit bestimmten Zusatzinformationen:
+\begin{itemize}
+    \item Kosten: $c : E \rightarrow \mathbb{R}$
+    \item Kapazität: Wieviele Einheiten pro Zeiteinheit kann eine Kante Transportieren $ f(e)$ (\textbf{Flussfunktion}), $u(e)$ (\textbf{Kapazität})
+    \item Massenbalance: Alles was in den Knoten reinfließt muss auch wieder herausfließen. Bei einem Fluss von 0, ist die Balance erfüllt
+    \item Excess: Überschuss eines Knoten $e(v)$. Gibt es nur Transportknoten, so hat man eine Zirkulation. $e(v)=\sum_{(v,w) \in E} f(v,w) - \sum_{(u,w)f(u,v)}$, Differenz von Aus- und Eingang.
+    \begin{itemize}
+        \item Einspeiseknoten $e(v) > 0$
+        \item Entnahmeknoten $e(v) < 0$
+        \item Transportknoten $e(v) = 0$
+    \end{itemize}
+\end{itemize}
+
+\subsection*{Maxflow}
+Graph mit Knoten s und t. Das Netzwerk soll benutzt werden, um möglich viel von s nach t zu transportieren/fließen zu lassen.
+Ziel ist, den Überschuss bei t zu maximieren. Suche Zirkulation, die den Fluss maximiert. Suche eine Flussfunktion mit:
+\begin{enumerate}
+ \item Kapazitätsbedingung Jede Kante hat weniger Fluss, als Kapazität
+ \item Massenbalance
+ \item Alle Kanten außer Einspeise und Entnahmeknoten sind Transportknoten.
+ \item $e(s) = -e(t)$ maximal
+\end{enumerate}
+
+
+
+\section{Kürzeste (billigste) Wege}
+Problem: Finde für 2 Knoten v und w den billigsten Pfad von v nach w.
+\paragraph{Kosten eines Pfades} $\underbrace{v_0 \rightarrow^{e_1} v_1 \rightarrow^{e_2} ... \rightarrow^{e_l} v_l}_{c(P):= \sum^{l}_{i=1}c(e_i)}$. 
+
+\paragraph{Distanz} dist(v,w) = $ inf\{ c(P) | P \text{ ist Pfad von v nach w} \}$. Die Distanz kann positiv oder negativ unendlich sein. Negativ, wenn negatice Zyklen existieren, positiv, wenn kein Pfad existiert.
+
+\subsection{Single Source Shortest Paths - Problem}
+Gesucht: dist(s, v)  für alle $v\in V$.
+\paragraph{Beobachtung} DIST[v] erfüllt die Dreiecksungleichung: Ist dist(s,w) der kürzeste Pfad, so gilt $dist(s,w) \leq dist(s,v) + c(v,w)$.
+
+\paragraph{Algorithmus} Verwende DIST[v] für temporäre dist-labels. Der Algorithmus überprüft die Dreiecksungleichung für die alle Knoten (von s aus) und stellt diese her.
+
+\begin{algorithm}[H]
+\caption{dist, Label correcting}
+$\forall v\in V $ do DIST[v] $\gets \infty$ \;
+DIST[s] $\gets 0$ \;
+
+\While{$\exists$ Kante (u,v) mit DIST[v] > DIST[u]+c(u,v)}{
+    wähle eine solche Kante (u,v)\;
+    DIST[v] $\gets$ DIST[u]+c(u,v)\;
+}
+\end{algorithm}
+
+\paragraph{Verfeinerung des Algorithmus}
+\begin{enumerate}
+    \item Speichere alle Knoten, aus denen Kanten ausgehen können die die Dreiecksungleichung verletzen in einer Kandidatenmenge U. (nach der Initialisierung ist das nur Knoten s, da alle anderen Kosten $\infty$ haben)
+    \item Wähle $u \in U$ und teste alle ausgeheden Kanten auf Verletzung der Dreiecksungleichung.
+    \item Immer, wenn DIST[v] vermindert wird, dann nimm v in U auf.
+\end{enumerate}
+
+\begin{algorithm}[H]
+\caption{dist - verfeinert}
+$\forall v\in V $ do DIST[v] $\gets \infty$ \;
+DIST[s] $\gets 0$ \;
+U $\gets s$ \;
+\While{$U \neq \emptyset$}{
+    wähle einen beliebigen Knoten $u \in U$; // Wahlmöglichkeit \\
+    $U \gets U\backslash \{u\}$\;
+    \For{$v\in V$ mit (u,v) $\in E$}{
+        $d \gets$ DIST[u] + c(u,v)\;
+        \If{DIST[v] > d} {
+        DIST[v] $\gets d$\;
+        $U \gets U \cup v $\;
+        }
+    }
+}
+\end{algorithm}
+
+\subsubsection*{Lemma 2}
+Falls G keine negativen Zyklen enthält, dann gilt folgendes
+\begin{enumerate}[a)]
+    \item Falls $v \notin U $, dann gilt für alle ausgehenden Kanten $(v,w)$: \\
+    $DIST[w] \leq DIST[v] + c(v,w)$ (dh. Dreiecks-Ungleichung erfüllt)
+    \item Sei $v_0,..., v_k$ ein kürzester Pfad von s nach v (dh, $v_0 = s, v_k = v$). Falls nun $DIST[v]>dist(s,v)$, dann existiert ein $i (0 \leq i \leq k-1)$ mit $DIST[v_i]= dist(c,v_i)$ und $v_i \in U$. Dh, wenn noch ein Knoten mit einem zu großen DIST-Label existiert, dann ist einer der Knoten auf dem Pfad zu diesem Knoten in der Kandiatenmenge U und hat bereits das korrekte DIST-Label.
+    \item Es existiert immer ein $u \in U$ mit $DIST[u] = dist(s,u)$. Also gibt es immer einen Knoten mit einem korrekten DIST-Label in der Kandidatenmenge.
+    \item Wenn bei der Auswahl des Kandidatenknoten in Zeile 5 der 'perfekte Knoten', also ein u mit $DIST[u]=dist(s,u)$ gewählt wird, dann wird die while-Schleife für jeden Knoten höchstens einmal ausgeführt.
+\end{enumerate}
+Bei Verletzung dieser Eigenschaften, existiert ein negativer Zyklus.
+
+\subsubsection*{Beweis}
+
+\begin{enumerate}[a)]
+    \item Induktion über die Schleifendurchläufe. Annahme: Vor der Durchführung gilt die Bedingung, dann zeige, dass sie danach auch noch gilt. 
+    \item Widerspruchsbeweis, indem angemommen wird, dass der Knoten $v_i$ mit maximalem i nicht in U ist. Da auf einem kürzesten Pfad ist die Dreiecks-Ungleichung mit Gleichheit erfüllt ist, ergibt sich der Widerspruch daraus, dass nun Bedingung a) für $v_i$ gilt und damit $v_{i+1}$ eigentlich der maximal (rechte) Knoten wäre.
+    \item Wenn das DIST-Label zu groß ist, dann existiert nach b) ein Knoten auf dem Pfad mit korrektem DIST-Label.
+    \item Wird die perfekte Wahl getroffen, kann dieser nicht wieder hinzugefügt werden, da der Wert sonst vermindert würde. Gesamtaufwand: $$ \sum_{v\in V} ( 1+ outdeg(v) + \text{Verwaltung der Menge }U) $$
+\end{enumerate}
+
+\subsection{Die Perfekte Wahl aus der Kandidatenmenge}
+\subsubsection{Allgemeiner Fall}
+Eventuel existieren negative Kreise im Graphen. 
+\paragraph{Idee} Realisiere U als FIFO Schlange.
+\begin{itemize}
+    \item append: hinten
+    \item pop: vorne
+\end{itemize}
+Annahme, dass keine neg Zyklen existieren. Nach Lemma 2 existiert ein perfekter Knoten mit korrektem DIST-Label. Zwischen 2 Entnahmenn desselben Knotens wird mindestens ein pefekter Knoten entfernt und U wird kleiner. Jeder Knoten wird dadurch maximal n-mal entfernt. Wird öfter, als n mal entfern, dann existiert nach Lemma 2 ein negativer Zyklus.
+
+\paragraph{Bellman/Ford}
+
+
+\subsubsection{Azyklischer Graph}
+Topologische Sortierung des Graphen ist möglich. 
+
+
+\subsubsection{Nicht-Negative Netzwerke}
+$cost: E \rightarrow  \mathbb{R}^+_0$, also keine negativen Kosten.
+
+
