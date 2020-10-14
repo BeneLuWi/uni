@@ -1,0 +1,216 @@
+%=====================================================
+%=====================================================
+%=====================================================
+\section{Bellman/Ford - Allgemeiner Graph}
+Geben Sie den Bellman/Ford Algorithmus an und analysieren Sie seine Laufzeit.
+\par 
+\begin{algorithm}
+ \caption{Bellman/Ford}
+  \SetKwInOut{Input}{input} 
+ \Input{Graph $G(V,E)$ \newline
+ Knoten $s$\newline
+ Kostenfunktion $c$\newline
+ Knotenarray $DIST$\newline
+ Knotenarray $PRED$}
+ 
+ Queue $Q$; \hspace{5cm} //Kandidatenmenge\\
+ Nodearray $count \gets (G, 0)$ \\
+ 
+ \For{$v\in G$}{
+ $DIST[v] \gets \infty$\\ 
+ $PRED[v] \gets NULL$\\
+ }
+ 
+ $DIST[s] \gets 0$\\
+ $Q \gets Q \cup s$\\
+ \While{$Q \neq \emptyset$}{
+    $u \gets Q.pop()$\\    
+    $count[u]++$\\
+    \uIf{$count[u] > |V|$}{
+        \Return negativer Zyklus gefunden\\
+    }
+    \For{$e \in u.out\_edges()$}{
+        $v \gets e.target()$\\
+        \uIf{$DIST[u] + c(e) < DIST[v]$} {
+        $DIST[v] = DIST[u] + c(e)$\\
+        $PRED[v] = e$\\
+        $Q \gets Q\cup v$\\
+        }
+        
+    }
+ }
+ \Return kein negativer Zyklus gefunden \\
+\end{algorithm}
+
+$PRED$ wird dazu verwendet, um nachher den kürzesten Weg zu einem Knoten nachverfolgen zu könnten. $PRED$-Verweise ändern sich daher, wenn sich der kürzeste Weg ändert.
+
+
+\paragraph{Laufzeit} 
+\[
+ n \cdot (\underbrace{\text{Iterationen über alle Knoten} | \text{ausgehende Kanten}}_{O\underbrace{(\sum_{v\in V} (1 + outdeg(v)))}_{n+m}})
+\]
+$\Rightarrow O(n (n+m))$ als Gesamtlaufzeit. Ist der Graph zusammenhängend, so gilt $m \geq n -1$ und die Laufzeit wird von $m\cdot n$ dominiert $\Rightarrow O(nm)$
+
+
+
+%=====================================================
+%=====================================================
+%=====================================================
+\section{SSSP-Algorithmus ohne neagtive Zyklen - Dijkstra}
+\label{sec-1}
+Geben Sie einen SSSP-Algorithmus an, der O(n + m) als Laufzeit hat und auf nicht-negativen Netzwerken funktioniert.
+\par 
+\begin{algorithm}[H]
+\caption{dist - verfeinert}
+\For{$v\in G$}{
+ $DIST[v] \gets \infty$\\ 
+ $PRED[v] \gets NULL$\\
+ }
+DIST[s] $\gets 0$ \\
+Priority Queue $PQ.insert(s,0)$ \\
+\While{$PQ \neq \emptyset$}{
+    wähle Knoten $u \in PQ$ mit $DIST[u]$ minimal: $PQ.del\_min()$;\\
+    \For{$v\in V$ mit e = (u,v) $\in E$}{
+        $d \gets DIST[u] + c(e)$\\
+        \If{DIST[v] > d} {
+        \uIf{$DIST[v] = \infty$}{
+            $PQ.insert(v, d)$\\
+        }
+        \uElse{
+            $PQ.decrease\_p(v, d)$\\
+        }
+        $DIST[v] \gets d$\\
+        $PRED[v] \gets e$
+        }
+    }
+}
+\end{algorithm}
+Priority = Distanz
+
+\paragraph{Laufzeit} $O(n+m)$ durch perfekte Wahl.
+\begin{itemize}
+ \item Operationen auf dem Graphen: $O(n+m)$
+ \item Priority Queue 
+\end{itemize}
+$\Rightarrow$ Gesamtlaufzeit $O(n \cdot (T_{insert}(n) + T_{delmin}(n)+ T_{empty}(n)) + m \cdot T_{decrease}(n) )$\\
+$m$ ist der Flaschenhals des Algorithmus.
+\paragraph{Realisierung der Datenstruktur}
+\begin{itemize}
+ \item binärer Min-Heap
+ \item balancierter Baum
+ \item[$\Rightarrow$] $O((n+m)\log n)$
+\end{itemize}
+
+Mit Fibonacci Heap: Insert $O(1)$, Delmin $(\log n)$) $ \Rightarrow O(n \log(n) + m)$ (Decrease $O(1)$, 
+
+%=====================================================
+%=====================================================
+%=====================================================
+\section{SSSP-Algorithmus azyklische Netzwerke}
+Geben Sie einen SSSP-Algorithmus an, der O(n + m) als Laufzeit hat und auf azyklischen Graphen funktioniert.
+\par
+Azyklische Graphen besitzen eine topologische Sortierung.
+
+\begin{algorithm}
+ \caption{SSSP-Alogrithmus mit Topsort}
+ \SetKwInOut{Input}{input}
+ \Input{Graph $G$, Knoten $s$, Kostenfunktion $c$, Knotenarray $DIST$}
+ Knotenarray $INDEG(G,0)$ \\
+ 
+\end{algorithm}
+
+\paragraph{Laufzeit} $O(n+m)$ durch perfekte Wahl mit topologischem Sortieren
+
+
+
+
+
+%=====================================================
+%=====================================================
+%=====================================================
+\section{SSSP-Algorithmus mit negativen Zyklen}
+\label{sec-2}
+Geben Sie einen SSSP-Algorithmus an, der negative Zyklen erkennt und ihn ausgibt.
+Wie ist die Laufzeit?
+\par
+Bellman/Ford
+
+
+
+
+
+
+
+
+%=====================================================
+%=====================================================
+%=====================================================
+\section{Maxflow Labeling}
+\label{sec-3}
+Geben Sie einen Labeling-Algorithmus zur Lösung des Maxflow-Problems in Pseudo-Code an und analysieren Sie die Laufzeit.
+\par
+
+
+
+
+
+
+
+
+
+
+
+
+%=====================================================
+%=====================================================
+%=====================================================
+\section{Capacity-Scaling}
+\label{sec-4}
+Geben Sie CAPACITY-SCALING unter Verwendungen des Maxflow Labeling Algorithmus an. Begründen Sie die Laufzeit.
+
+
+
+
+
+
+
+
+
+%=====================================================
+%=====================================================
+%=====================================================
+\section{Feasible Flow}
+\label{sec-5}
+
+\subsection{Berechnung des Feasible Flows}
+Definieren Sie feasible flow. Formulieren Sie einen Algorithmus zur Berechnung eines feasible flows.
+
+
+\subsection{Verwendung bei Maxflow}
+ Wie kann man Maxflow damit lösen?
+
+
+
+
+%=====================================================
+%=====================================================
+%=====================================================
+\section{Min-Cost-Flow-Problem}
+Wie lautet die reduzierte Kosten-Optimalität für das Min-Cost-Flow-Problem? Folgern Sie aus ihrer Gültigkeit, dass im Restnetzwerk keine negativen Zyklen existieren.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
