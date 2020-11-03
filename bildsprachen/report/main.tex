@@ -1,0 +1,259 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{stmaryrd}
+\usepackage{amsthm}
+\newtheorem{ex}{Example}
+\title{Two Dimensional Picture Languages: \\ Tiling Systems, Domino Systems and Weighted Finite Automata}
+\author{Benedikt Lüken-Winkels }
+\date{September 2020}
+
+\begin{document}
+
+\maketitle
+
+\section*{Introduction}
+This report provides an overview and a summary of the works of Gimmarresi and Restivo \cite{DBLP:reference/hfl/GiammarresiR97} and Culik and Kari \cite{DBLP:conf/mfcs/CulikK93} on two-dimensional languages, especially focussing on Tiling Systems, Domino Systems and Weighted Finite Automata.
+
+
+
+
+
+
+\section{Tiling Systems}
+The basic idea of a tiling system is to use the ability of finite automata to recognize a string language by projecting a local language in the two-dimensional world. Therefore the local language can be obtained from a finite set $\Theta$ of square \textit{tiles} of size $2\times2$. Then a two-dimensional language is `tiling recognizable`, if it can be projected from the local picture language.
+
+
+A tiling system $\mathcal{T}$ is defined as a 4-tuple $\mathcal{T} =\{\Sigma, \Gamma, \Theta, \pi \}$. Let $\Sigma$ and $\Gamma$ be finite alphabets. A language $L \subseteq \Sigma^{**}$ is tiling recognizable, if there is a local language $L' \subseteq \Gamma^{**}$ that can be obtained exactly from tiles taken from the finite set of tiles $\Theta$ over the alphabet $\Gamma \cup \{\#\}$ and a projection $\pi: \Theta \rightarrow \Gamma$. When $L'$ can be obtained from $\Theta$ it can be written as $L' = L(\Theta)$. A computational approach on verifying the locality of $L'$ is to scan a picture from $L'$ with a $2\times2$ window and checking, if every tile is included in $\Theta$.
+
+The recognition of a Language $L$ by a tiling system $\mathcal{T}$ can be written as $L=L(\mathcal{T})$, when $L$ is a projection of some local language. and $L \in \mathcal{L}(TS)$ ($L$ lies in the family of two-dimensional languages recognizable by tiling systems).
+
+\paragraph{Example 1} Let $\Sigma = \{a\}$ be a one-letter alphabet and let $L$ be the language of all pictures over $\Sigma$ with 3 rows. \\ \textit{Claim:} Language $L$ is tiling recognizable.
+
+$$Let\ \Theta = 
+\left\{
+\begin{array}{c}
+\begin{array}{|cc|}
+ \hline
+ \# & \# \\
+ \# & 1 \\
+ \hline
+\end{array},
+\begin{array}{|cc|}
+ \hline
+ \# & \# \\
+ 1 & 1 \\
+ \hline
+\end{array},
+\begin{array}{|cc|}
+ \hline
+ \# & \# \\
+ 1 & \# \\
+ \hline
+\end{array}\vspace{3mm}\\
+\begin{array}{|cc|}
+ \hline
+ \# & 1 \\
+ \# & 2 \\
+ \hline
+\end{array},
+\begin{array}{|cc|}
+ \hline
+ 1 & 1 \\
+ 2 & 2 \\
+ \hline
+\end{array},
+\begin{array}{|cc|}
+ \hline
+ 1 & \# \\
+ 2 & \# \\
+ \hline
+\end{array}\vspace{3mm}\\
+\begin{array}{|cc|}
+ \hline
+ \# & 2 \\
+ \# & 3 \\
+ \hline
+\end{array},
+\begin{array}{|cc|}
+ \hline
+ 2 & 2 \\
+ 3 & 3 \\
+ \hline
+\end{array},
+\begin{array}{|cc|}
+ \hline
+ 2 & \# \\
+ 3 & \# \\
+ \hline
+\end{array}\vspace{3mm}\\
+\begin{array}{|cc|}
+ \hline
+ \# & 3 \\
+ \# & \# \\
+ \hline
+\end{array},
+\begin{array}{|cc|}
+ \hline
+ 3 & 3 \\
+ \# & \# \\
+ \hline
+\end{array},
+\begin{array}{|cc|}
+ \hline
+ 3 & \# \\
+ \# & \# \\
+ \hline
+\end{array}
+
+\end{array}\right\}$$
+Then a picture $p \in L(\Theta)$ can look like this:
+$$
+\begin{array}{|ccccccc|}
+ \hline
+ \# & \# & \#& \#& \#& \# & \#\\
+ \# & 1 & 1& 1& 1& 1& \# \\
+ \# & 2 & 2& 2& 2& 2& \#\\
+ \# & 3 & 3& 3& 3& 3& \#\\
+ \# & \# & \#& \#& \# & \#& \#\\
+ \hline
+\end{array}
+$$
+Using the previously explained method a $2\times2$ window traversing $p$ will always contain a tile from $\Theta$. Now with $\pi$ being defined as $\pi(1) = \pi(2) = \pi(3) = a$, one can see, that $L$ is \textit{tiling recognizable}, so $L \in \mathcal{L}(TS)$.$\qed$\\
+
+This approach works for languages with any number of rows, with a corresponding size of $\Gamma$, since for each row there has to be a dedicated symbol in the alphabet to keep track of the number of rows in each picture from $L' = L(\Theta)$.
+
+
+\subsection{Closure Properties}
+
+\paragraph{Projection} Let $\Sigma_1$ and $\Sigma_2$ be finite alphabets and $\rho : \Sigma_1 \rightarrow \Sigma_2$ a projection. If $L_1 \subseteq \Sigma_1^{**}$ is tiling recognizable, then $L_2 = \rho(L_1)\ (L_2\subseteq \Sigma_2^{**})$ is too. 
+Let $\mathcal{T}_1 = (\Sigma_1, \Gamma, \Theta,\pi_1)$ be recognizing tiling system of $L_1$ and $\mathcal{T}_2 = (\Sigma_2, \Gamma, \Theta,\pi_2)$. Now if $\pi_2$ is defined as $\pi_2 = \rho \circ \pi_1 : \Gamma \rightarrow \Sigma_2$, one can see, that $L_2$ is recognized by $\mathcal{T}_2$. Therefore $L_1,L_2 \in \mathcal{L}(TS)$.
+
+$\Rightarrow$ $\mathcal{L}(TS)$ is closed under projection.
+
+\paragraph{Row and column concatenation} Let $L_1$ and $L_2$ be picture languages over an alphabet $\Sigma$ and let $L = L_1 \varominus L_2$ be the language corresponding to the row concatenation of $L_1$ and $L_2$. Furthermore let $\mathcal{T}_1 = (\Sigma, \Gamma_1, \Theta_1, \pi_1)$ and $\mathcal{T}_2 = (\Sigma, \Gamma_2, \Theta_2, \pi_2)$ be tiling systems for $L_1$ and $L_2$. In a tiling system $\mathcal{T}=(\Sigma, \Gamma, \Theta, \pi$ for $L$, $\Theta$ has to contain 
+\begin{itemize}
+ \item[] each tile from $\Theta_1$ without its bottom borders 
+ $$\Theta_1'=\left\{\ 
+ \begin{array}{|cc|}
+ \hline
+ a_1 & b_1 \\
+ c_1 & d_1 \\
+ \hline
+ \end{array}
+ \ |\  
+ \begin{array}{|cc|}
+ \hline
+ a_1 & b_1 \\
+ c_1 & d_1 \\
+ \hline
+ \end{array} \in \Theta_1\ and\ c_1,d_1 \neq \#
+ \ \right\},
+ $$
+ \item[] each tile from $\Theta_2$ without its upper borders
+  $$\Theta_2'=\left\{\ 
+ \begin{array}{|cc|}
+ \hline
+ a_1 & b_1 \\
+ c_1 & d_1 \\
+ \hline
+ \end{array}
+ \ |\  
+ \begin{array}{|cc|}
+ \hline
+ a_1 & b_1 \\
+ c_1 & d_1 \\
+ \hline
+ \end{array} \in \Theta_2\ and\ a_1,b_1 \neq \#
+ \ \right\}  \textrm{ and}
+ $$
+ \item[] connecting (gluing) tiles
+ $$\Theta_{12}=\left\{\ 
+ \begin{array}{|cc|}
+ \hline
+ \# & a_1 \\
+ \# & a_2 \\
+ \hline
+ \end{array},
+  \begin{array}{|cc|}
+ \hline
+ b_1 & \# \\
+ b_2 & \# \\
+ \hline
+ \end{array},
+  \begin{array}{|cc|}
+ \hline
+ c_1 & d_1 \\
+ c_2 & d_2 \\
+ \hline
+ \end{array}
+ \ |\                    
+ \begin{array}{c}
+\begin{array}{|cc|}     % Begin Theta 1
+ \hline
+ \# & a_1 \\
+ \# & \# \\
+ \hline
+ \end{array},
+  \begin{array}{|cc|}
+ \hline
+ b_1 & \# \\
+ \# & \# \\
+ \hline
+ \end{array},
+  \begin{array}{|cc|}
+ \hline
+ c_1 & d_1 \\
+ \# & \# \\
+ \hline
+ \end{array} \in \Theta_1\\
+\begin{array}{|cc|}     % Begin Theta 2
+ \hline
+ \# & \# \\
+ \# & a_2 \\
+ \hline
+ \end{array},
+  \begin{array}{|cc|}
+ \hline
+ \# & \# \\
+ b_2 & \# \\
+ \hline
+ \end{array},
+  \begin{array}{|cc|}
+ \hline
+ \# & \# \\
+ c_2 & d_2 \\
+ \hline
+ \end{array} \in \Theta_2
+ \end{array}
+ \ \right\}.
+ $$
+ 
+\end{itemize}
+
+
+
+
+\paragraph{Row and column closure} 
+
+\paragraph{Union and intersection}
+
+\paragraph{Complement}
+
+\paragraph{Rotation}
+
+\section{Domino Systems}
+
+
+
+\section{Weighted Finite (Picture) Automata}
+
+
+
+
+
+\newpage
+\nocite{*}
+\bibliography{sources.bib}
+\bibliographystyle{plain}
+\end{document}
+ 
