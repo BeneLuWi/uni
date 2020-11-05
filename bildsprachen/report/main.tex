@@ -130,7 +130,7 @@ Let $\mathcal{T}_1 = (\Sigma_1, \Gamma, \Theta,\pi_1)$ be recognizing tiling sys
 
 $\Rightarrow$ $\mathcal{L}(TS)$ is closed under projection.
 
-\paragraph{Row and column concatenation} Let $L_1$ and $L_2$ be picture languages over an alphabet $\Sigma$ and let $L = L_1 \varominus L_2$ be the language corresponding to the row concatenation of $L_1$ and $L_2$. Furthermore let $\mathcal{T}_1 = (\Sigma, \Gamma_1, \Theta_1, \pi_1)$ and $\mathcal{T}_2 = (\Sigma, \Gamma_2, \Theta_2, \pi_2)$ be tiling systems for $L_1$ and $L_2$. In a tiling system $\mathcal{T}=(\Sigma, \Gamma, \Theta, \pi$ for $L$, $\Theta$ has to contain 
+\paragraph{Row and column concatenation} Let $L_1$ and $L_2$ be picture languages over an alphabet $\Sigma$ and let $L = L_1 \varominus L_2$ be the language corresponding to the row concatenation of $L_1$ and $L_2$. Furthermore let $\mathcal{T}_1 = (\Sigma, \Gamma_1, \Theta_1, \pi_1)$ and $\mathcal{T}_2 = (\Sigma, \Gamma_2, \Theta_2, \pi_2)$ be tiling systems for $L_1$ and $L_2$. In a tiling system $\mathcal{T}=(\Sigma, \Gamma, \Theta, \pi)$ for $L$ with $\Gamma = \Gamma_1 \cup \Gamma_2$, $\Theta$ has to contain 
 \begin{itemize}
  \item[] each tile from $\Theta_1$ without its bottom borders 
  $$\Theta_1'=\left\{\ 
@@ -226,20 +226,67 @@ $\Rightarrow$ $\mathcal{L}(TS)$ is closed under projection.
  \end{array} \in \Theta_2
  \end{array}
  \ \right\}.
- $$
- 
+ $$ 
 \end{itemize}
+Then $\Theta = \Theta_1 \cup \Theta_2 \cup \Theta_{12}$ and $\pi : \Gamma \rightarrow \Sigma$ maps the tile's symbols corresponding to their 'origins':
+$$\forall a \in \Gamma, \hspace{5mm} \pi(a) = \left\{d
+\begin{array}{cc}
+ \pi_1(a) & \textrm{if } a\in \Gamma_1 \\
+ \pi_2(a) & \textrm{if } a\in \Gamma_2 \backslash \{\Gamma_1 \cap \Gamma_2\} \\
+\end{array}\right.$$
+
+
+For the \textit{column concatenation} $L = L_1 \varobar L_2 $ there is a similar approach, but in this case with $\Theta_1$ including all but the right and $\Theta_2$ all but the left bordered tiles. The 'gluing' set of tiles $\Theta_{12}$ corresponds to the columns where the pictures are concatenated.
+
+$\Rightarrow$ $\mathcal{L}(TS)$ is closed row and column concatenation.
+
+\paragraph{Row and column closure} For a tiling system $(\Sigma, \Gamma, \Theta, \pi)$ for $L^{*\varominus}$, two different tiling systems can be used to build $\Gamma$ as the union of sets of tiles without upper and lower borders and the set of gluing tiles, as shown above. With the same technique a tiling system for $L^{*\varobar}$ can be defined.
+
+
+$\Rightarrow$ $\mathcal{L}(TS)$ is closed row and column closure operations.
 
 
 
+\paragraph{Union and intersection} Let $L_1$ and $L_2$ be picture languages over an alphabet $\Sigma$ and let $L = L_1 \cup L_2$ be the language corresponding to the union of $L_1$ and $L_2$. Furthermore let $(\Sigma, \Gamma_1, \Theta_1, \pi_1)$ and $(\Sigma, \Gamma_2, \Theta_2, \pi_2)$ be tiling systems for $L_1$ and $L_2$, respectively. A tiling system $(\Sigma, \Gamma, \Theta, \pi)$ for $L$ has $\Gamma = \Gamma_1 \cup \Gamma_2$ with $\Theta = \Theta_1 \cup \Theta_2$. The projection $\pi$ is defined corresponding to $\pi_1$ and $\pi_2$ as above.
 
-\paragraph{Row and column closure} 
+$(\Sigma, \Gamma, \Theta, \pi)$ for the language $L= L_1 \cap L_2$ uses as local alphabet $\Gamma$ a subset of $\Gamma_1 \times \Gamma_2$ to identify tiles that occur in both $\Theta_1$ and $\Theta_2$. Two symbols that map to the same symbol in $\Sigma$ create a pair, that belongs to $\Gamma$: 
+$$(a_1, a_2) \in \Gamma \Leftrightarrow \pi_1(a_1) = \pi_2(a_2)$$
+Now $\Theta$ consists of tiles, where these pairs of symbols correspond to their origins:
+ $$\Theta=\left\{\ 
+ \begin{array}{|cc|}
+ \hline
+ (a_1,a_2) & (b_1, b_2) \\
+ (c_1, c_2) & (d_1, d_2) \\
+ \hline
+ \end{array}
+ \ |\  
+ \begin{array}{|cc|}
+ \hline
+ a_1 & b_1 \\
+ c_1 & d_1 \\
+ \hline
+ \end{array} \in \Theta_1\ and\
+  \begin{array}{|cc|}
+ \hline
+ a_2 & b_2 \\
+ c_2 & d_2 \\
+ \hline
+ \end{array} \in \Theta_2\
+ \ \right\},
+ $$
 
-\paragraph{Union and intersection}
 
-\paragraph{Complement}
+$\Rightarrow$ $\mathcal{L}(TS)$ is closed under union and intersection.
 
-\paragraph{Rotation}
+\paragraph{Complement} Let $\Sigma = \{a,b\}$ and let $L = \{p \in \Sigma^{**} | p = s\varominus s \textrm{ wheres is a square}\}$ be the language of rectangles with identical upper and lower halfs. If $L \in \mathcal{L}(TS)$, then there is a local $L'$ over an alphabet $\Gamma$ from which $L$ can be obtained by projection. In general $|\Sigma| \leq |\Gamma|$, as seen in previous examples. 
+
+
+$\Rightarrow$ $\mathcal{L}(TS)$ is not closed under complement.
+
+\paragraph{Rotation} To obtain a tiling system for the rotation $L^R$ of a language $L$ with tiling system $(\Sigma, \Gamma, \Theta, \pi)$, the tiles in $\Theta$ are rotated. $(\Sigma, \Gamma, \Theta^R, \pi)$ recognizes $L^R$.
+
+
+$\Rightarrow$ $\mathcal{L}(TS)$ is closed under rotation.
 
 \section{Domino Systems}
 

@@ -1,0 +1,18 @@
+\begin{thebibliography}{1}
+
+\bibitem{DBLP:reference/hfl/GiammarresiR97}
+Dora Giammarresi and Antonio Restivo.
+\newblock Two-dimensional languages.
+\newblock In Grzegorz Rozenberg and Arto Salomaa, editors, {\em Handbook of
+  Formal Languages, Volume 3: Beyond Words}, pages 215--267. Springer, 1997.
+
+\bibitem{DBLP:conf/mfcs/CulikK93}
+Karel~Culik II and Jarkko Kari.
+\newblock Image compression using weighted finite automata.
+\newblock In Andrzej~M. Borzyszkowski and Stefan Sokolowski, editors, {\em
+  Mathematical Foundations of Computer Science 1993, 18th International
+  Symposium, MFCS'93, Gdansk, Poland, August 30 - September 3, 1993,
+  Proceedings}, volume 711 of {\em Lecture Notes in Computer Science}, pages
+  392--402. Springer, 1993.
+
+\end{thebibliography}
