@@ -17,6 +17,7 @@ Makefile
 *.gz
 *.fdb_latexmk
 *.tex~
+*.blg
 ## Intermediate documents:
 *.dvi
 *.xdv
