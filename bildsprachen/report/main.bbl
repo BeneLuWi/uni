@@ -15,4 +15,13 @@ Karel~Culik II and Jarkko Kari.
   Proceedings}, volume 711 of {\em Lecture Notes in Computer Science}, pages
   392--402. Springer, 1993.
 
+\bibitem{DBLP:conf/bigdata/RajuSKPS15}
+U.~S.~N. Raju, Irlanki Sandeep, Nattam~Sai Karthik, Rayapudi~Siva Praveen, and
+  Mayank~Singh Sachan.
+\newblock Weighted finite automata based image compression on hadoop mapreduce
+  framework.
+\newblock In Barbara Carminati and Latifur Khan, editors, {\em 2015 {IEEE}
+  International Congress on Big Data, New York City, NY, USA, June 27 - July 2,
+  2015}, pages 653--656. {IEEE} Computer Society, 2015.
+
 \end{thebibliography}

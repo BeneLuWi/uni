@@ -2,6 +2,11 @@
 \usepackage[utf8]{inputenc}
 \usepackage{stmaryrd}
 \usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{hyperref}
+\usepackage[ruled,vlined,linesnumbered]{algorithm2e}
 \newtheorem{ex}{Example}
 \title{Two Dimensional Picture Languages: \\ Tiling Systems, Domino Systems and Weighted Finite Automata}
 \author{Benedikt Lüken-Winkels }
@@ -278,7 +283,11 @@ Now $\Theta$ consists of tiles, where these pairs of symbols correspond to their
 
 $\Rightarrow$ $\mathcal{L}(TS)$ is closed under union and intersection.
 
-\paragraph{Complement} Let $\Sigma = \{a,b\}$ and let $L = \{p \in \Sigma^{**} | p = s\varominus s \textrm{ wheres is a square}\}$ be the language of rectangles with identical upper and lower halfs. If $L \in \mathcal{L}(TS)$, then there is a local $L'$ over an alphabet $\Gamma$ from which $L$ can be obtained by projection. In general $|\Sigma| \leq |\Gamma|$, as seen in previous examples. 
+\paragraph{Complement} Let $\Sigma = \{a,b\}$ and let $L = \{p \in \Sigma^{**} | p = s\varominus s \textrm{ wheres is a square}\}$ be the language of rectangles with identical upper and lower halves. If $L \in \mathcal{L}(TS)$, then there is a local $L'$ over an alphabet $\Gamma$ from which $L$ can be obtained by projection. In general $|\Sigma| \leq |\Gamma|$, as seen in previous examples. Now, let $L_n$ be the language of rectangles with identical squares as upper and lower halves of size $n$ and $L'_n$ the local language over $\Gamma$ that can be projected to $L_n$ by $\pi$. There are $|\Sigma|^{n^2}$ possible pictures of $L_n$ and $|\Gamma|^{2n}$ possible $n$-th and $(n+1)$-th rows in pictures of $L'_n$. So for a large $n$ there will be two pictures $p' = s_p' \varominus s_p''$ and $q' = s_q' \varominus s_q''$ in $L'_n$ with identical $n$-th and $(n+1)$-th rows and projections $p = s_p \varominus s_p$ and $q = s_q \varominus s_q$ in $L_n$ with $s_p \neq s_q$. Since the $n$-th and $(n+1)$-th rows are identical $\Theta$ contains tiles that allow to obtain the picture $v' = s_p' \varominus s_q''$ with $\pi(v') = s_p \varominus s_q$, creating a picture not in $L_n$. 
+
+
+The complement of $L$ $^cL$ can be written as $^cL = L_1 \cup L_2$, the union of the language with rectangles of size $\neq (2n,n)$ and the language of rectangles of size $(2n,n)$ with different top and bottom halves. $L_1$ is recognizable by a tiling system, that creates a rectangle using descending stairs, two by one, starting in the top left corner and then missing the last square on the bottom right. $L_2$ can be decomposed in several languages that are recognized by tiling systems using the same technique as for $L_1$.\\
+Now one can see, that $L \notin \mathcal{L}(TS)$, while $^cL \in \mathcal{L}(TS)$.
 
 
 $\Rightarrow$ $\mathcal{L}(TS)$ is not closed under complement.
@@ -289,18 +298,202 @@ $\Rightarrow$ $\mathcal{L}(TS)$ is not closed under complement.
 $\Rightarrow$ $\mathcal{L}(TS)$ is closed under rotation.
 
 \section{Domino Systems}
+In domino systems, the definition of the local language is altered and called hv-local language. Instead of using $(2\times2)$-tiles, horizontal and vertical dominoes of sizes $(1,2)$ and $(2,1)$ define the new set of tiles. A two-dimensional language $L \subseteq \Gamma^{**}$ is hv-local, if there exists a finite set of dominoes $\Delta$ over $\Gamma \cup \{\#\}$ that exactly 'produces' $L$. 
+A domino system is a 4-tuple $\mathcal{D}=(\Sigma, \Gamma, \Delta, \pi)$ where $\Sigma$ and $\Gamma$ are finite alphabets, $\Delta$ is the set of dominoes over $\Gamma \cup \{\#\}$ and $\pi: \Gamma \rightarrow \Sigma$. 
+
+\paragraph{Proposition} $L$ is an hv-local language, then $L$ is a local language, too. 
+
+Let $L=L(\Delta)$ and $\Theta$ be a finite set of tiles, that consist of dominoes from $\Delta$. To show, that also $L=L(\Theta)$, let $p\in L(\Theta)$ and $q \in L(\Delta)$. As defined, in $p$ any ($1\times2$) sub-block $B_{1,2}(\widehat{p})$ and ($2\times1$) sub-block in $B_{1,2}(\widehat{p})$ is included in $\Delta$. So $p \in L(\Theta)$.
+
+Any ($2\times2$) sub-block $B_{2,2}(\widehat{q})$ of $q$ is a tile from $\Theta$. Since those tiles are made of dominoes from $\Delta$, $q \in L(\Delta)$.$\qed$ \newline
+There are local languages that are not hv-local, so the converse of this proposition does not hold.
+
+\paragraph{Theorem $\mathcal{L}(TS) = \mathcal{L}(DS)$}
 
 
 
-\section{Weighted Finite (Picture) Automata}
 
 
 
 
 
+
+
+
+\section{Weighted Finite Automata}
+
+A WFA describes a grey-scale picture by focussing on the relation between parts and subparts of the image. Therefore the image is recursively partitioned into four quadrants which can be addressed by a quadtree. \\
+Let $\Sigma = \{ (0,0), (0,1), (1,0),(1,1)\}$ be the alphabet for words $w \in \Sigma^*$ which form a path through the quadtree to either find a $node$, i.e. a subsquare in the image, or a $leaf$, i.e. the smallest unit in the image, a $pixel$ for images with finite resolution. A finite finite-resolution image usually consists of $(2^n \times 2^n)$ pixels whith a fixed $n$, while a multi-resolution image is a collection of several images, with $n=0,1,\dots$ . Then the addressing scheme works as seen in figure \ref{fig:addr}, starting from the bottom left corner with the entire image having the address $\varepsilon$.
+\begin{figure}[ht]
+\centering
+\input{addressing} 
+\caption{Example for addressing subsquares in images for WFA}
+\label{fig:addr}
+\end{figure}
+
+Let $f: \Sigma^* \rightarrow \mathbb{R}$ be the greyness function that assigns a greyness value to a subsquare. To describe an rgb color picture, three images are necessary.
+
+A function $f: \Sigma^* \rightarrow \mathbb{R}$ is average preserving, if 
+$$f(w) = \frac{1}{4}[f(w(0,0)) + f(w(0,1)) + f(w(1,0)) + f(w(1,1))] $$
+for each $w \in \Sigma^*$. This means, that the average greyness of the subsquare with the address $w$ of a picture $p$ is equal to the average greyness of its subsquares. 
+
+A weighted finite automaton is a 5-tuple $\mathcal{A}= (Q, \Sigma, f, \alpha, \beta)$, with 
+\begin{itemize}
+ \item $Q$ the finite set of states,
+ \item $\Sigma$ the finite alphabet to form the addresses of the subsquares\\($\Sigma = \{(0,0), (0,1),(1,0),(1,1)\}$),
+ \item $f: Q \times \Sigma \times Q \rightarrow [-\infty, \infty]$ the function assigning weights to the transitions in the automaton,
+ \item $\alpha: Q \rightarrow [-\infty, \infty]$ the initial distribution and
+ \item $\beta \rightarrow [-\infty, \infty]$ the final distribution on the greyness scale.
+\end{itemize}
+
+If $f(p,a,q) \neq 0$, $(p,a,q)$ is a transition.
+Now the distribution function $\delta: Q \times \Sigma^* \rightarrow [-\infty, \infty]$ is defined as 
+\begin{align*}
+\delta(q,\varepsilon) &= \alpha(q),\ \forall q\in Q \\
+\delta(q,wa)&= \sum_{p\in Q} \delta(p,w) \cdot f(p,a,q),\ \forall p\in Q, w\in \Sigma^* \text{ and }a\in \Sigma
+\end{align*}
+With this, the WFA $\mathcal{A}$ defines the function $\phi_{\mathcal{A}}:\Sigma^* \rightarrow [-\infty, \infty]$, which returns the greyness value of a subsquare with a given word (address) $w \in \Sigma^*$, by summing up the initial distribution of the starting state, the final distribution of the final state and the weights of the transitions for each path in the automaton that forms the input word $w$:
+$$\phi_{\mathcal{A}}(w) = \sum_{q_0,\dots,q_n \in Q} \alpha(q_0) \cdot f(q_0,a_1,q_1) \cdot \dots \cdot f(q_{n-1}, a_n, q_n ) \cdot \beta(q_n)$$
+In other words, the sum of the weights on all paths leading from state $p$ to $q$ corresponds to the effect, the state $q$ has on the image.
+
+A WFA $\mathcal{A}$ is average preserving, iff 
+
+$$\forall p \in Q:\ \sum_{a\in \Sigma, q\in Q} (f(p,a,q) \cdot \beta(q)) = 4 \cdot \beta(p)$$
+so the sum of the greyness values (distribution) after all possible state transitions from state $p$ is equal to four times its final distribution value $\beta(p)$. Then, if $\mathcal{A}$ is average perserving, $\phi_{\mathcal A}$ is average preserving.
+
+\subsection{Encoding an image with a WFA}
+The encoding of an image with a WFA means being able to reconstruct the image up to a certain resolution. A $2^k$ by $2^k$ resolution would create a quadtree of height $k$, where all values are on one level. Then, propagating towards the root each node is assigned the average value of its children.
+
+The encoding algorithm generates a WFA $\mathcal A$ and $\phi_\mathcal A$ for a given distribution function $\phi$, such that $\phi_\mathcal A = \phi$. The goal is to find an automaton with as few states as possible. There are several ways to improve the algorithm, when used in practise. By introducing an error margin $e$, the amount of transitions can be reduced. If the transition weight lies below a certain value it is set to 0 and is no longer taken into account. The result is, that the encoded image is no longer equal to image to be encoded, but is still similar (depending on the size of $e$). In addition the size of the automaton decreases.
+
+Algorithm \ref{algo:wfa} shows the encoding procedure of an image given by $\phi$ to a WFA $\mathcal{A}$ and the corresponding $\phi_\mathcal A$.
+\newline
+
+
+\begin{algorithm}[H]
+\label{algo:wfa}
+\SetAlgoLined
+\label{algo:add}
+\SetKwInOut{Input}{input}
+\SetKwRepeat{Do}{do}{while}
+\Input{Distribution function $\phi$ for the given image}
+$N \gets 0$\\
+$i \gets 0$\\
+$\beta(q_0) \gets \phi(\varepsilon)$\\
+$\gamma(q_0) \gets \varepsilon$\\
+\Do{$i\leq N$}{
+    $w\gets \gamma(q_i)$\\
+    \ForEach{$a\in \{(0,0),(0,1), (1,0), (1,1) \}$}{
+        Find $c:=c_0,\dots,c_N$ such that $\phi_{wa}=c_0\phi_0+\dots+c_N\phi_N$ (for each $a$), where $\phi_j$ corresponds to the subsquare of the $j$-th state $q_j$ ($\phi_{\gamma(q_j)}$)\\
+        
+        \uIf{c exists}{
+            \For{$j=0,\dots,N$}{
+                $f(q_i,a,q_j)\gets c_j$
+            }
+        }\Else{
+            $\gamma(q_{N+1}) \gets wa$\\
+            $\beta(q_{N+1}) \gets \phi(wa)$ \\
+            $f(q_i, a, q_{N+1}) \gets 1$ \\
+            $N \gets N + 1$
+        }
+    }
+    $i\gets i+1$
+}
+$\alpha(q_0) \gets 1$\\
+\For{$j = 1,\dots, N$}{
+    $\alpha(q_j) \gets 0$
+}
+
+
+\caption{Construct WFA $\mathcal{A}$ and $\phi_\mathcal{A}$ for image given by $\phi$}
+\end{algorithm}
+
+\paragraph{Example 2} Figure \ref{fig:automaton} shows the automaton, that can be used to generate the image shown in figure \ref{fig:img}. Using the WFA-encoding algorithm (algorithm \ref{algo:wfa}) this automaton is created in as follows:
+\begin{enumerate}
+ \item $q_0$ is assigned to the entire square $\varepsilon$ and  $\beta(q_0):= 0.5$.
+ \item Now with $w = \varepsilon$, iterate over the subsquares $\{(0,0),(0,1), (1,0), (1,1) \}$ and try to find $c = c_0,\dots,c_N$.
+\begin{enumerate}
+  \item $\varepsilon 00:$ For $\phi_{\varepsilon00} = c_0\phi_0 $ $c_0$ gets the value $1.25 \Rightarrow$ $f(q_0,00,q_0):= 1.25$
+  \item $\varepsilon 01:$ For $\phi_{\varepsilon01} = c_0\phi_0 $ $c_0$ gets the value $1 \Rightarrow$ $f(q_0,01,q_0):= 1$
+  \item $\varepsilon 10:$ For $\phi_{\varepsilon10} = c_0\phi_0 $ $c_0$ gets the value $1\ \Rightarrow$ $f(q_0,10,q_0):= 1$
+  \item $\varepsilon 11:$ For $\phi_{\varepsilon11} = c_0\phi_0 $ $c_0$ gets the value $0.5\ \Rightarrow$ $f(q_0,11,q_0):= 0.5$
+ \end{enumerate}
+
+ 
+ 
+\item $\alpha(q_0) := 1$
+\end{enumerate}
+
+\begin{figure}[ht]
+ \centering
+\begin{tikzpicture}[scale=0.2]
+\tikzstyle{every node}+=[inner sep=0pt]
+\draw [black] (37.7,-21.6) circle (3);
+\draw (37.7,-21.6) node {$q_0$};
+\draw [black] (36.377,-18.92) arc (234:-54:2.25);
+\draw (37.7,-14.35) node [above] {$00,\mbox{ }1.25$};
+\fill [black] (39.02,-18.92) -- (39.9,-18.57) -- (39.09,-17.98);
+\draw [black] (40.38,-20.277) arc (144:-144:2.25);
+\draw (44.95,-21.6) node [right] {$01,\mbox{ }1$};
+\fill [black] (40.38,-22.92) -- (40.73,-23.8) -- (41.32,-22.99);
+\draw [black] (39.023,-24.28) arc (54:-234:2.25);
+\draw (37.7,-28.85) node [below] {$10,\mbox{ }1$};
+\fill [black] (36.38,-24.28) -- (35.5,-24.63) -- (36.31,-25.22);
+\draw [black] (35.02,-22.923) arc (-36:-324:2.25);
+\draw (30.45,-21.6) node [left] {$11,\mbox{ }0.5$};
+\fill [black] (35.02,-20.28) -- (34.67,-19.4) -- (34.08,-20.21);
+\end{tikzpicture}
+\caption{Automaton to generate figure \ref{fig:img}}
+\label{fig:automaton}
+\end{figure}
+
+
+\begin{figure}[ht]
+$$\renewcommand\arraystretch{1.3}\begin{array}{|c|c|}
+ \hline
+ \frac{1}{4} & \frac{1}{2} \\
+ \hline
+ \frac{3}{4} & \frac{1}{2} \\
+ \hline
+\end{array}$$
+\caption{Example image with greyscale}
+\label{fig:img}
+\end{figure}
 \newpage
 \nocite{*}
 \bibliography{sources.bib}
 \bibliographystyle{plain}
 \end{document}
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  
