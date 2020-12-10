@@ -113,9 +113,33 @@ Azyklische Graphen besitzen eine topologische Sortierung.
 
 \begin{algorithm}
  \caption{SSSP-Alogrithmus mit Topsort}
- \SetKwInOut{Input}{input}
- \Input{Graph $G$, Knoten $s$, Kostenfunktion $c$, Knotenarray $DIST$}
+ \SetKwInOut{Input}{input} 
  Knotenarray $INDEG(G,0)$ \\
+ \For{$v \ in V$}{
+    $INDEG[v] \gets indeg(v)$ \\
+    \If{$INDEG[v] = 0$} {
+        $zero.append(v)$\\
+        }
+    $DIST[v] \gets \infty$
+
+    }
+    $DIST[s] \gets 0$\\
+    \While{$zero$ is not empty}{
+        $u \gets zero.pop()$\\
+        \For{$(u,v) \in E$}{
+            $INDEG[v] \gets INDEG[v] -1$\\
+        
+        \If{$INDEG[v] = 0$}{
+            $zero.append(v)$\\
+        }
+        $d \gets DIST[u] + c((u,v))$\\
+        \If{$DIST[v] > d$}{
+            $DIST[v] \gets d$
+        }
+        }
+    }
+ 
+ 
  
 \end{algorithm}
 
@@ -140,7 +164,7 @@ Bellman/Ford
 
 
 
-
+\newpage
 
 %=====================================================
 %=====================================================
@@ -148,59 +172,414 @@ Bellman/Ford
 \section{Maxflow Labeling}
 \label{sec-3}
 Geben Sie einen Labeling-Algorithmus zur Lösung des Maxflow-Problems in Pseudo-Code an und analysieren Sie die Laufzeit.
-\par
+
+\paragraph{Bemerkung} Der Wert des maximalen Flusses ist gleich der Kapazität eines minimalen (s,t)-Schnittes
+
+\paragraph{Laufzeit} In jeder Iteration von Augment erhöht der Algorithmus den Flusswert um min 1. Daher können maximal $F_{max} \leq n\cdot U$ Iterationen benötigt werden. ($U =$ maximale Kapazität). Eine Labeling Iteration kostet $O(n+m) \Rightarrow O(n^2 \cdot U + m \cdot n \cdot U)$.\\
+Ist G zusammenhängend, so git $m \geq n -1 \Rightarrow$ \textbf{Insgesamt} $O(n\cdot m \cdot U)$
+
+\underline{Worst Case:} U kann sehr groß sein, daher keine polynomielle Laufzeit in $m$ und $n$
+
+\begin{algorithm}[!htb]
+ \caption{Maxflow Labeling}
+ \SetKwInOut{Input}{input}
+ \Input{Graph $G = (V,E)$, Knoten $s,t$, Kapazitätsfunktion $u$, Flussfunktion $x$}
+
+ Liste $S\gets [\ ]$\\
+ Knotenarray $PRED(G, NULL)$\\
+ Kantenarray $labelled(G)$\\
+ \For{$v\in V$}{
+    $labelled[v] \gets false$
+ }
+ \While{true}{
+    $labelled[s] \gets true$\\
+    $S.append(s)$\\
+    \While{$!S.empty()$}{
+        $v \gets S.pop()$\\
+        
+        \For(\tcp*[f]{Forwärtskanten}){$e =(v,w) \in E,$}{
+            \If{$x(e) = u(e)$ or $labelled[w]$}{
+                continue \tcp*[f]{Restkapazität ist = 0 oder schon besucht}
+            }
+            $labelled[w] \gets true$\\
+            $PRED[w] \gets e$\\
+            $S.append(w)$\\
+        
+        }
+        \For(\tcp*[f]{Rückkanten}){$e =(w,v) \in E,$}{
+            \If{$x(e) = 0$ or $labelled[w]$}{
+                continue \tcp*[f]{Fluss ist = 0 oder schon besucht}
+            }
+            $labelled[w] \gets true$\\
+            $PRED[w] \gets e$\\
+            $S.append(w)$\\
+        }
+        \If{$labelled[t]$}{
+            $S.clear()$\\
+        }
+        
+    }
+    \uIf{$labelled[t]$}{
+        $AUGMENT(G, s, t, PRED, u, x)$\\
+    }
+    \Else{
+        $break$\\ 
+    }
+ }
+ 
+ 
+\end{algorithm}
 
 
+\begin{algorithm}[!htb]
+ \caption{Augment - Pfaderhöhung}
+ \SetKwInOut{Input}{input}
+ \Input{Graph $G = (V,E)$, Knoten $s,t$, Kapazitätsfunktion $u$, Flussfunktion $x$}
+ $\delta \gets \infty$\tcp*[f]{Restkapazität des Pfades P}\\
+ $v \gets t$\\
+ \While{$v\neq s$}{
+    $e \gets PRED[v]$\\
+    \uIf(\tcp*[f]{Rückkante}){$e = (v,w)$}{
+        $r \gets x(e)$\\
+        $v \gets w$\\
+    }
+    \Else(\tcp*[f]{$e = (w,v)$ Forwärtskante }){
+        $r \gets u(e) - x(e)$\\
+        $v \gets w$\\
+    }
+    \If{$r < delta$} {
+        $\delta \gets r$\tcp*[f]{neues minimum}
+    }
+    
+}
+$v \gets t$\\
+\While{$v\neq s$}{
+     $e \gets PRED[v]$\\
+    \uIf(\tcp*[f]{Rückkante}){$e = (v,w)$}{
+        $x(e) \gets x(e)- \delta$\\
+        $v \gets w$\\
+    }
+    \Else(\tcp*[f]{$e = (w,v)$ Forwärtskante}){
+        $x(e) \gets x(e) + \delta $\\
+        $v \gets w$\\
+    }
+}
+ 
+ 
+\end{algorithm}
 
 
-
-
-
-
-
-
-
-
+\newpage
 %=====================================================
 %=====================================================
 %=====================================================
 \section{Capacity-Scaling}
 \label{sec-4}
 Geben Sie CAPACITY-SCALING unter Verwendungen des Maxflow Labeling Algorithmus an. Begründen Sie die Laufzeit.
+\paragraph{Bemerkung} Maxflow mit möglichst hoher Restkapazität im Pfad P oder kürzesten erhöhenden Pfad. Letzte $\Delta$-Phase entspricht dem normalen Labeling Alogrithmus $\rightarrow$ Korrektheit.
+
+\begin{algorithm}[!ht]
+ \caption{Capacity-Scaling}
+ \SetKwInOut{Input}{input}
+ \Input{Graph $G = (V,E)$, Knoten $s,t$, Kapazitätsfunktion $u$, Flussfunktion $x$, Maximale Kapazität $U$}
+
+ $\Delta \gets 2^{\log U}$\\
+  \While{$\Delta > 1 $}{
+    $MFLabeling(G, s, t, PRED, u, x)$\\
+    $\Delta \gets \frac{\Delta}{2}$
+  }
+
+ 
+\end{algorithm}
 
 
 
+\begin{algorithm}[!htb]
+ \caption{Maxflow Labeling mit $\Delta$}
+ \SetKwInOut{Input}{input}
+ \Input{Graph $G = (V,E)$, Knoten $s,t$, Kapazitätsfunktion $u$, Flussfunktion $x$, Restkapazitätsgrenzwert $\Delta$}
 
+ Liste $S\gets [\ ]$\\
+ Knotenarray $PRED(G, NULL)$\\
+ Kantenarray $labelled(G)$\\
+ \For{$v\in V$}{
+    $labelled[v] \gets false$
+ }
+ \While{true}{
+    $labelled[s] \gets true$\\
+    $S.append(s)$\\
+    \While{$!S.empty()$}{
+        $v \gets S.pop()$\\
+        
+        \For(\tcp*[f]{Forwärtskanten}){$e =(v,w) \in E,$}{
+            \If{$u(e) - x(e) < \Delta $ or $labelled[w]$}{
+                continue \tcp*[f]{Restkapazität ist $< \Delta$ oder schon besucht}
+            }
+            $labelled[w] \gets true$\\
+            $PRED[w] \gets e$\\
+            $S.append(w)$\\
+        
+        }
+        \For(\tcp*[f]{Rückkanten}){$e =(w,v) \in E,$}{
+            \If{$x(e) < \Delta$ or $labelled[w]$}{
+                continue \tcp*[f]{Fluss ist $< \Delta$ oder schon besucht}
+            }
+            $labelled[w] \gets true$\\
+            $PRED[w] \gets e$\\
+            $S.append(w)$\\
+        }
+        \If{$labelled[t]$}{
+            $S.clear()$\\
+        }
+        
+    }
+    \uIf{$labelled[t]$}{
+        $AUGMENT(G, s, t, PRED, u, x)$\\
+    }
+    \Else{
+        $break$\\ 
+    }
+ }
+ 
+ 
+\end{algorithm}
 
+\paragraph{Laufzeit} Jede $\Delta$-Phase führt maximal $2m$ Erhöhungen aus. Die Restkapazität eines (s,t)-Schnittes $r[S,\overline{S}] \leq m\cdot \Delta$, da jede Kante zwischen $S$ und $\overline{S}$ höchstens Restkapazität $\Delta$ hat. Die nächste $\frac{\Delta}{2}$-Phase führt dann maximal $\frac{m\Delta}{\Delta/2} \leq 2m$ Erhöhungen aus. Die Laufzeit einer $\Delta$-Phase ist daher $O(2m \cdot m) \Rightarrow O(m^2)$ 
 
+Insgesamt ergibt sich die Laufzeit $O(m^2 \log U)$. Polynomiell, aber nicht streng polynomiell.
 
+\newpage
 
 
 %=====================================================
 %=====================================================
 %=====================================================
-\section{Feasible Flow}
+\section{Preflow Push}
 \label{sec-5}
+\paragraph{Admissible} Distanz-Funktion von $t\ d$ mit $d(t)= 0$. $d(i) \leq d(j)+ 1$ für alle Kanten $(i,j) \in G(x)$. Gilt für eine Kante $(i,j)$, dass $d(i) = d(j) + 1$, so ist sie $admissible$
 
-\subsection{Berechnung des Feasible Flows}
-Definieren Sie feasible flow. Formulieren Sie einen Algorithmus zur Berechnung eines feasible flows.
+\subsection{Generisch}
+\paragraph{Laufzeit}
+\begin{itemize}
+ \item Relabel: $O(2n^2)$. $d(i)$ ist $< 2n$ und da jedes mal nur um 1 erhöht wird ergibt $n \cdot 2n$
+ \item Saturierende Push-Operationen: $O(nm)$. Zwischen 2 SatPush-Operationen derselben Kante muss $d$ und 2 erhöht worden sein. Da das $d(i) < 2n$, geht das für jede Kante $n$ mal.
+ \item Nicht-Saturierende Push-Operationen: $O(n^2m)$. Potential (Zustand des Netzwerks als numerischer Wert) $\Phi$ als Summe aller Distanz-Labels aktiver Knoten $i\in I$ (also $e(i)>0$)
+ \begin{enumerate}
+  \item Anfang: $\Phi \leq 2n^2$
+  \item Bei Termination: $\Phi = 0$ und keine aktiven Knoten mehr.
+ \end{enumerate}
+ Nun werden 2 Fälle unterschieden:\\
+ \underline{Fall 1:} keine admissible Edge für $i$: $d(i)$ wird um mindestens 1 und höchstens $2n$ erhöht. Eine Erhöhung von $2n \cdot n = 2n^2$ ist also möglich.
+ 
+ 
+ \underline{Fall 2.1:} für die admissible Edge wird ein saturierendes Push ausgeführt: Die Anzahl der aktiven Knoten kann um 1 erhöht und das Potential um $2n$, also $2n \cdot nm$.
+ 
+ 
+ \underline{Fall 2.2:} für die admissible Edge wird ein nicht-saturierendes Push ausgeführt. Bei einem nicht saturierenden Push wird $\Phi$ um mindestens 1 verringert, da falls ein neuer Knoten $j$ aktiviert wird $d(i) = d(j) + 1$ gilt ($i$ ist nun deaktiviert).
+ 
+\end{itemize}
+Das Potential kann also auf $2n^2 + 2n^2 + 2n^2m$ (Anfangswert + Fall 1 + Fall 2.1) wachsen. Die nicht-saturierenden Pushes verringern um min 1, also $O(n^2m)$ nicht saturierende Pushes.
+Die Laufzeit wird durch durch die Anzahl der nicht-saturierenden Pushes dominiert $\Rightarrow O(n^2m)$. Die Kapazität spielt hier keine Rolle mehr für die Laufzeit.
+
+\begin{algorithm}
+ \caption{Generischer Preflow-Push Algorithmus}
+ \For{$i\in V$}{
+    $d(i)\gets 0$\\
+    $e(i)\gets 0$\\
+ }
+ \For{$(i,j) \in E$}{
+    $x_{ij}\gets 0$
+ }
+ \For(\tcp*[f]{Saturiere alle aus s ausgehenden Kanten}){$j\in V$ mit $(s,j) \in E$}{
+    $x_{sj}\gets u_{sj}$\\
+    $e(s)\gets e(s) - u_{sj}$\\
+    $e(j)\gets e(j) + u_{sj}$
+ }
+ $d(s) \gets n$\tcp*[f]{Hebe $s$ auf auf Level $n$}\\
+ \While{$\exists i \in V\ mit\ e(i) >0$}{
+    Wähle $i$\\
+    PUSH/RELABEL($i$)
+ }
+ 
+ 
+ 
+\end{algorithm}
 
 
-\subsection{Verwendung bei Maxflow}
- Wie kann man Maxflow damit lösen?
+
+\begin{algorithm}
+ \caption{Push/Relabel}
+ \uIf(\tcp*[f]{Push}){$i$ hat eine admissible Kante $(i,j)\in G(x)$}{
+    Wähle Kante $(i,j)$\\
+    $\delta \gets \min\{e(i), r_{ij}\}$\\
+    $x_{ij} \gets x_{ij} + \delta$\\
+    $e(i) \gets e(i) - \delta$\\
+    $e(j) \gets e(j) + \delta$
+ }
+ \Else(\tcp*[f]{Relabel}){
+    $d(i) \gets \min\{ d(j) | (i,j) \in G(x) \} + 1$
+ }
+ 
+ 
+ 
+\end{algorithm}
+
+
+
+\subsection{FIFO Preflow-Push}
+Aktive Knoten sind in einer Queue. Folge von Operationen auf einem Knoten sind möglich.
+\paragraph{Laufzeit} Der Ablauf wird in Phasen eingeteilt. $i$-te Phase ist die Behandlung aller Knoten, die sich nach Phase $i-1$ in $Q$ befinden. Anzahl der Phasen ist $\leq 2n^2$. Pro Phase wird jeder Knoten maximal einmal behandelt und führt für jeden Knoten maximal ein nicht-saturierendes Push. $\Rightarrow n\cdot 2n^2 = O(n^3)$
+
+
+\begin{algorithm}
+ \caption{FIFO-Queue Preflow-Push Algorithmus}
+ $Q\gets empty\ Queue$\tcp*[f]{Alle aktiven Knoten mit $e> 0$}\\
+ \For{$i\in V$}{
+    $d(i)\gets 0$\\
+    $e(i)\gets 0$\\
+ }
+ \For{$(i,j) \in E$}{
+    $x_{ij}\gets 0$
+ }
+ \For(\tcp*[f]{Saturiere alle aus s ausgehenden Kanten}){$j\in V$ mit $(s,j) \in E$}{
+    $x_{sj}\gets u_{sj}$\\
+    $e(s)\gets e(s) - u_{sj}$\\
+    $e(j)\gets e(j) + u_{sj}$\\
+    $Q.append(j)$\\
+ }
+ $d(s) \gets n$\tcp*[f]{Hebe $s$ auf auf Level $n$}\\
+ 
+ 
+ 
+ \While{Q is not empty}{
+    $i \gets Q.pop()$\\
+    \For{$(i,j) \in G(x)$}{
+        \If(\tcp*[f]{Wähle eine admissible Kante}){d(i) = d(j) + 1} {
+            $\delta \gets \min\{e(i), r_{ij}\}$\tcp*[f]{Push}\\
+            $x_{ij} \gets x_{ij} + \delta$\\
+            $e(i) \gets e(i) - \delta$\\
+            $e(j) \gets e(j) + \delta$\\
+            \If{$e(j)\neq 0$}{
+            $Q.append(j)$
+            }
+        }
+        \If{e(i) = 0} {
+        \textbf{break}
+        }
+    }
+    \If(\tcp*[f]{Keine admissible Kante verfügbar}){$e(i) > 0$} {
+        $d(i) \gets \min\{ d(j) | (i,j) \in G(x) \} + 1$\tcp*[f]{Relabel}\\
+        $Q.append(i)$
+    }
+    
+ }
+ 
+ 
+\end{algorithm}
+
+\newpage
+
+\subsection{Highest-Label Preflow-Push}
+Wähle einen Knoten mit maximalen Dist-Label in Priority-Queue. Da sich die Dist-Labels auf das Intervall $\{0,\dots, 2n \}$ beschränken sind Buckets möglich.
+\paragraph{Realisierung der Priority Queue} Distanzen sind aus einem beschränkten Intervall $\{0, \dots,  2n\}\Rightarrow$ Feld von Listen (Bucket-Array). Pointer auf das maximale Bucket
+\paragraph{Laufzeit} 
+\begin{itemize}
+ \item Q.insert: füge i in das entsprechende Bucket und überprüfe max-Pointer $\Rightarrow O(1)$
+ \item Q.delmax: Entferne vorderstes Element eines Buckets und aktualisiere max-Pointer $\Rightarrow O(n)$
+\end{itemize}
+
+$O(n^2 \sqrt{m})$
+
+
+\begin{algorithm}
+ \caption{Priority Queue Preflow-Push (Highest Label)}
+ $Q\gets empty\ Queue$\tcp*[f]{Alle aktiven Knoten mit $e> 0$}\\
+ \For{$i\in V$}{
+    $d(i)\gets 0$\\
+    $e(i)\gets 0$\\
+ }
+ \For{$(i,j) \in E$}{
+    $x_{ij}\gets 0$
+
+ }
+ \For(\tcp*[f]{Saturiere alle aus s ausgehenden Kanten}){$j\in V$ mit $(s,j) \in E$}{
+    $x_{sj}\gets u_{sj}$\\
+    $e(s)\gets e(s) - u_{sj}$\\
+    $e(j)\gets e(j) + u_{sj}$\\
+    $Q.insert(j, d(j))$
+ }
+ $d(s) \gets n$\tcp*[f]{Hebe $s$ auf auf Level $n$}\\
+ 
+ 
+ 
+ \While{Q is not empty}{
+    $i \gets Q.delmax()$\\
+    \For{$(i,j) \in G(x)$}{
+        \If(\tcp*[f]{Wähle eine admissible Kante}){d(i) = d(j) + 1} {
+            $\delta \gets \min\{e(i), r_{ij}\}$\tcp*[f]{Push}\\
+            $x_{ij} \gets x_{ij} + \delta$\\
+            $e(i) \gets e(i) - \delta$\\
+            $e(j) \gets e(j) + \delta$\\
+            \If{$e(j)\neq 0$}{
+                $Q.insert(j,d(j))$
+            }
+        }
+        \If{e(i) = 0} {
+        \textbf{break}
+        }
+    }
+    \If(\tcp*[f]{Keine admissible Kante verfügbar}){$e(i) > 0$} {
+        $d(i) \gets \min\{ d(j) | (i,j) \in G(x) \} + 1$\tcp*[f]{Relabel}\\
+        $Q.insert(i,d(i))$
+    }
+ }
+ 
+\end{algorithm}
 
 
 
 
+
+
+\newpage
 %=====================================================
 %=====================================================
 %=====================================================
-\section{Min-Cost-Flow-Problem}
+\section{Min-Cost-Flow-Problem (MCF)}
 Wie lautet die reduzierte Kosten-Optimalität für das Min-Cost-Flow-Problem? Folgern Sie aus ihrer Gültigkeit, dass im Restnetzwerk keine negativen Zyklen existieren.
+\paragraph{Eingaben} Kostenfunktion $c$, Supplyfunktion $b$, Flussfunktion $x$, Kapazitätsfunktion $u$
+\paragraph{Feasible} Ein Fluss $x$, für den alle Kanten  Kapazitätsbedingung und  Massebalance gelten, ist feasible.
+
+\paragraph{Optimalitätsbedingung (Negative Cycle Optimality)} Wenn im Restnetzwerk $G(x)$ kein negativer Zyklus enthalten ist.
+
+\paragraph{Reduzierte Kosten} Potentialfunktion $\pi$. $c_{ij}^{\pi} = c_{ij} + \underbrace{\pi(j) - \pi(i)}_{\Delta \pi}$
+
+\paragraph{Reduzierte Kostenoptimalität} $x$ optimal $\Leftrightarrow \exists \text{ Potential } \pi: \forall (i,j) \in G(x) : c_{ij}^{\pi} \geq 0$ also alle Kosten mit addiertem Potential (zB negative Distanz)
+
+
+\paragraph{Complementary Slackness Optimality} arbeitet auf G.
+
+\paragraph{Laufzeit} $U = \max u_{ij}$, $C = \max |c_{ij}|$. 
+\begin{itemize}
+ \item Pro Iteration wird um mindestens 1 reduziert. 
+ \item Die Spanne der Kosten geht von $-mCU$ bis $mCU$, also $\leq mCU$ Iterationen
+ \item Eine Iteration kostet $O(nm)$ (Bellman/Ford)
+\end{itemize}
+$\Rightarrow O(nm^2 CU )$
 
 
 
-
+\begin{algorithm}
+ \caption{Negative Cycle Canceling - Eleminierung von negativen Zyklen}
+  Erstelle einen Maxflow in G\\
+ $W \gets Bellman/Ford/negCycle(G)$ \\
+ \While{$W \neq NULL$}{
+    $\delta \gets \min\{r_{ij}: (i,j)\in W \}$\\
+    $augment(W, \delta)$
+  
+  }
+ 
+\end{algorithm}
 
 
 

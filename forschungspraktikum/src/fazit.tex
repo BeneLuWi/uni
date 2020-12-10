@@ -1,0 +1,20 @@
+%% zusammenf.tex
+%% $Id: zusammenf.tex 61 2012-05-03 13:58:03Z bless $
+%%
+
+\chapter{Diskussion und Ausblick}
+\label{ch:fazit}
+%% ==============================
+\section{TODO}
+\begin{itemize}
+    \item 'Runden' für rationale Zahlen auf dyadische Zahlen: Abschneiden einer Dezimalzahl, wo die Genauigkeit zu groß wird und dann Einführen eines Taylormodells, dass den 'vorderen Teil der Zahl' als Kernel und die nun fehlende Genauigkeit als im Lambda umschließt.
+    \item Finden oder Entwickeln von Heuristiken, die entscheiden, welche Fehlersymbole am besten gesweept werden sollten, wenn der Grad eines Monoms reduziert werden soll. Bei einer Reihe von Tests, wo bestimmte Konfigurationen zum Sweepen verwendet wurden, gab es Anzeichen darauf, dass die Qualität des Ergebnisses der Evaluation/Linearisierung von der Reihenfolge abhängt mit der die einzelnen Fehlersymbole entfernt werden.
+    \item Lineare Lösung versuchen, bis der Fehler zu groß wird.
+\end{itemize}
+
+Zum aktuellen Zeitpunkt beschränkt sich diese Forschungsarbeit auf die Anwendung der Taylormodelle bei Iterationen der logistischen Abbildung, da es sich hierbei um ein gut verstandenes und viel untersuchtes Problem handelt. Diese Beschränkung birgt jedoch die Gefahr des 'Overfittings' der Implementierung auf dieses spezielle Problem, weshalb im Weiteren Verlauf des Forschungsprojekt auch andere Probleme betrachtet werden, wie zum Beispiel die Henon-Abbildung.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "thesis"
+%%% End: 

@@ -1,0 +1,97 @@
+\chapter{Taylormodelle}
+
+Ein Taylormodell, in \cite{makino2001} eingeführt und in \cite{DBLP:conf/macis/BrausseKM15} erweitert, ist ein Polynom $T = \sum_n c_n \lambda^n$, mit $k$ Variablen. $\lambda_i$ ist ein Fehlersymbol aus $\lambda = (\lambda_1, ... , \lambda_k)$, dem Vektor der Fehlersymbole, wodurch funktionale Abhängigkeiten zwischen Monomen und anderen Taylormodellen hergestellt werden können. Die Koeffizienten des Polynoms sind Intervalle $c_i = [\Tilde{c}_i \pm e_i] \subseteq \mathbb{R}$ mit denen der aktuelle Rechenfehler ('approximation error') abgeschätzt wird. Ist ein Wert genau bekann, also ohne Ungenauigkeit oder Fehler, kann dieser als Punktintervall mit $c_i = [\Tilde{c}_i \pm 0]$ definiert werden, also mit einem Zentrum ohne Radius.
+
+
+\section{Darstellung}
+Ein Taylormodell besteht in der Implementierung aus dem Kernintervall \verb+kernel+, einer Liste von sortierten von Monomen und einer Liste von Supportintervallen, den Intervallen, der Fehlersymbole. Die Liste der Supportintervalle ist für jedes Taylormodell dieselbe.
+
+
+\section{Spezielle Operationen auf Taylormodellen}
+\paragraph{Quadratisches Sweeping}
+Um die Länge der Polynome und deren Grad in den Taylormodellen zu kontrollieren können einzelne 
+Fehlersymbole in einem Monom durch ihr Intervall ersetzt werden. So erhöht sich zwar die Breite des 
+Koeffizienten, allerdings wird auch das Verrechnen mit einem anderen, nun gleichen Monom 
+ermöglicht. Dieses \textit{Sweeping} bietet eine natürliche Möglichkeit, den durch die 
+Fehlersymbole eingeführten Fehler klein zu halten, indem versucht wird, bei
+\textit{quadratischen} Terme nicht ein Fehlersymbol nach dem anderen zu Sweepen, sondern deren 
+Quadrate einzusetzen: \par
+Gegeben sei ein Monom eines Polynoms $...+ c \cdot \lambda^3 + ...$ mit $\lambda \in [-1.5, 1.5]$. Nun sieht man, dass zwar $\lambda$ sowohl positiv, als auch negativ sein kann, jedoch das Quadrat nicht. Daher kann man statt
+\begin{align*}
+    & ... + c \cdot \lambda^3 + ... \\
+    \rightarrow & ...+ c \cdot [-1.5, 1.5] \cdot \lambda^2  +... \\
+    \rightarrow & ...+ c \cdot [-1.5, 1.5] \cdot [-1.5, 1.5] \cdot \lambda +... \\
+    \rightarrow & ...+ c \cdot [-2.25, 2.25] \cdot \lambda+... \\
+\end{align*}
+das Quadrat einsetzen
+\begin{align*}
+    & ... + c \cdot \lambda^3 + ... \\
+    \rightarrow & ...+ c \cdot [0, 2.25] \cdot \lambda +...
+\end{align*}
+und somit das Wachstum des Rechenfehlers verlangsamen. 
+\paragraph{Polishing}
+Rechenoperationen auf Intervallen sorgen dafür, dass sich diese Vergrößern. Mit gut gewählten Sweeping-Stategien kann dieser Effekt zwar verlansamt, aber nicht aufgehalten werden. Wie in Kapitel \ref{ch:Evaluierung} zu sehen ist, kann ab einer bestimmten Intervallbreite keine 
+Aussage mehr über das Ergebnis getroffen werden. Mit \textit{Polishing} \cite{DBLP:conf/macis/BrausseKM15} kann ein zu großes Intervall eines Koeffizienten in zwei Monome mit jeweils einem Punktintervall und einem neuen Fehlersymbol aufgeteilt werden. Das verlängert zwar das Polynom, verhindert jedoch ein zu großes Wachstum der Intervallbreite. Eine Implementierung in \verb+hotm+ ist  derzeit nicht vorhanden, aber angedacht.
+
+
+\section{Sweeping-Strategien}
+In einer linearen Implementierung der Taylormodelle und deren Polynome, muss Sweeping in jeder Multiplikation geschehen, da sich sonst der Grad des Polynome erhöhte. Folgt man der Idee des \textit{quadratischen Sweepens}, so ergibt sich bei der Multiplikation zweier Polynome und dementsprechend der paarweisen Multiplikation der Monome: 
+$$(c_1 \cdot \lambda_i) \cdot (c_2 \cdot \lambda_j) = \begin{cases}
+
+c_1 c_2 s_j \lambda_i & \text{wenn } i \neq j \text{ und } s_i > s_j \\
+c_1 c_2 s_i \lambda_j & \text{wenn } i \neq j \text{ und } s_i \leq s_j \\
+c_1 c_2 s_i^2 & \text{wenn } i = j
+\end{cases} \quad \quad \lambda_i \in s_i, \lambda_j \in s_j $$
+
+Im dritten Fall, also bei $i = j$, wird das Ergebnis der Multiplikation zum Kernintervall addiert. Das Problem bei dieser Herangehensweise ist, dass ein Fehler, der ins Kernintervall gesweept wurde, nicht mehr mit einem Fehlersymbol ($\lambda$) assoziiert werden kann und damit keinerlei Abhängigkeitsinformationen mehr enthält. Zwar tritt dieser Fall nicht so häufig auf, wie die beiden anderen, allerdings bedeutet das auch, dass nicht so häufig quadratisch gesweept wird. Eine nicht-lineare Implementierung erlaubt ein Wachsen der Grade der Polynome und andere Sweeping-Strategien. In \verb+hotm+ geschieht das Sweeping eines Taylormodells \textit{t} per Funktionsaufruf unter Angabe der zu verwendenden Sweeping-Strategie und dem Grad, auf den \textit{t} reduziert werden soll. Wird beispielsweise als Grad \glqq 1\grqq\ mitgegeben, ist die Ausgabe höchstens linear, es werden also keine Monome auf den Grad 0 reduziert. Um ein Taylomodell zu evaluieren und auf ein einziges Intervall zu reduzieren, muss der Zielgrad \glqq 0\grqq\ sein.
+
+\begin{algorithm}
+\SetAlgoLined
+\label{algo:mult}
+\SetKwInOut{Input}{input}
+\Input{Taylormodell $t$, Grad $deg$, Strategie $strat$}
+$Polynomial\ p \gets [\ ]$\;
+\ForEach{$Monomial\ m \in t.polynomial$}{
+    $rest \gets degree(m) - deg $\;
+    \uIf{$rest < 1$} {
+        $p.insert(m)$\;
+    } \uElse{
+        \ForEach{$ErrorSymbol\ es \in m$}{
+            \uIf{rest < threshold}{
+                break\;
+            }
+            Sweep according to Strategy\;
+            $rest \gets rest - \text{amount swept}$\;
+        }
+        $p.insert(m)$\;
+    }
+    
+}
+
+
+\Return $t$
+
+ \caption{Sweeping eines (nicht-linearen) Taylormodells}
+\end{algorithm}
+
+Da sich der Grad eines Polynoms nach dem Grad des größten Monoms richtet, muss jedes Monom auf den Zielgrad reduziert werden. Dafür wird über die Fehlersymbole der einzelnen Monome iteriert und eine der Strategien angewandt:
+
+\paragraph{square\_only}
+Das Sweeping wird auf quadratisches Sweeping beschränkt. Für jedes Fehlersymbol mit einem Exponenten $> 1$ wird versucht, einen möglichst großen, geraden Wert von demselben abzuziehen. \\
+\textbf{Beispiel sweep\_to(1):}
+\begin{align*}
+   ...+ c \cdot \lambda_1^2 \lambda_2^5 \lambda_3^1 +... & \quad (\lambda_i \in s_i) \\
+    ...+ cs_1^2 \cdot \lambda_2^5 \lambda_3^1 +... & \quad \lambda_1 \text{ wird quadriert und somit quasi weggekürzt} \\
+    ...+ cs_1^2s_2^{2^2} \cdot \lambda_2^1 \lambda_3^1 +... & \quad \lambda_2 \text{ kann nur 2-mal quad. gesweept werden}
+\end{align*}
+Unter Verwendung von \verb+square_only+ ist es möglich, dass das Ergebnis, wie im Beispiel, nicht den angegebenen Zielgrad erreicht. 
+
+
+\paragraph{square\_first / simple}
+Hier wird zunächst \verb+square_only+ auf das Monom angewandt, um danach die restlichen Grade ohne quadratisches Sweeping zu reduzieren. Allerdings hat diese Methode keinerlei Vorteile gegenüber \verb+simple+, da der Effekt des Quadrierens von einem nicht-quadratischen Sweep wieder aufgehoben wird.
+
+
+
+
+% \input{graphs/swpsimple}
+% \input{graphs/swpsquare}

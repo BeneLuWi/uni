@@ -1,0 +1,48 @@
+%% Einleitung.tex
+%% $Id: einleitung.tex 61 2012-05-03 13:58:03Z bless $
+%%
+
+\chapter{Einleitung}
+\label{ch:Einleitung}
+%% ==============================
+Das Berechnen reeler Zahlen und Funktionen am Computer bringt einige Probleme mit sich, da diese nicht ohne Weiteres durch eine endliche Menge von Informationen dargestellt werden können (TTE). Mit der Verwendung von Intervallalgorithmen kann der Rechenfehler, beziehungsweise die Ungenauigkeit, welche sich durch die Approximation der Zahlen ergibt, berücksichtigt werden. Das Ziel dabei ist, den Fehler möglichst klein zu halten und dabei so wenig Geschwindigkeit, wie möglich bei der Berechnung zu verlieren. Mit Taylormodellen werden multivariate reelle Funktionen $f: \subseteq \mathbb{R}^k \rightarrow \mathbb{R}$ durch Polynome mit Intervallkoeffizienen zur lokalen Fehlerabschätzungen und Fehlersymbolen für Abhängigkeiten zwischen den einzelnen Monomen, dargestellt. Diese Herangehensweise soll das Problem der Überschätzung (des 'blow-ups') der Funktionswerte duch die Fehlerintervalle angehen, was man leicht an einem Beispiel verdeutlichen kann: \par
+Seien $x_0 \in [1,2], x_1 \in [2,3] $. Es existiert also die Information, in welchen 
+Wertebereichen $x_0$ und $x_1$ jeweils liegen, beziehungsweise wie ungenau die einzelnen Werte bekannt sind. Werden diese nun ohne Berücksichtigung der 
+Abhängigkeiten verrechnet wie hier,
+\begin{align*}
+    (x_0 + x_1) - x_0  \rightarrow & [1 + 2, 2 + 3] - [1, 2]\\
+     =& [1,4]
+\end{align*}
+so entsteht beim Zusammenrechnen die Überschätzung $[1, 4]$, während das tatsächliche Ergebnis $[2,3]$ 
+einen deutlich kleineren Bereich abdeckt. Zwar ist auch die Überschätzung korrekt, jedoch könnte das Ergebnis genauer errechnet werden. Bei iterierenden Funktionen, wie 
+$$x_{n+1} = c \cdot x_n \cdot (1-x_n)$$
+welche in dieser Forschungsarbeit häufiger betrachtet wird. Für verschiedene Werte von $c$ und $x_0$ weist die Funktion sowohl konvergierendes, als auch chaotisches Verhalten auf.
+
+In dieser Forschungsarbeit wird in $x_0$ ein gewisser Fehler kodiert, um beispielsweise Messungenauigkeiten zu simulieren. Dieser Fehler ergibt in jeder Iteration eine wachsendende Überschätzung, da $x_0$ nicht als genauer Wert vorliegt. Unkontrolliert wächst dieses Wrapping sehr schnell, sodass nach einigen Iterationen keine genauen Aussagen mehr über ein Ergebnis getroffen werden können. 
+Durch verschiedene Techniken wird daher versucht, die Intervallbreite zu beschränken und klein zu halten, indem neue Variablen (Fehlersymbole) eingeführt werden, welche den Fehler und dessen Ursprung repräsentieren.
+Je länger die Abhängigkeitsinformationen über diese Fehler bei einer wachsenden Anzahl von Iterationen beibehalten, also die Intervalle nicht wieder eingesetzt werden, desto größer wird das berechnete Polynom und dessen Grad. Es ergibt sich ein Trade-off zwischen der Menge an behaltener Information und Wartbarkeit des zu berechnenden Polynoms.
+\par
+Eine Herangehensweise an dieses Problem ist die Verwendung von Taylormodellen (\cite{makino2001}, \cite{DBLP:conf/macis/BrausseKM15}), welche im Fokus dieser Forschungsarbeit stehen. Die Implementierung im Rahmen dieses Forschungsprojektes geschah in der Programmiersprache \textit{C++}, wobei für die Koeffizienten (und die Intervalle der Fehlersymbole) zum Einen die Rationalen Zahlen \verb+mpq_class+ der \verb+GMP+-Bibliothek (\cite{gmp}) und zum Anderen die reellen Zahlen der \verb+iRRAM+-Bibliothek (\cite{iRRAM}) verwendet wurden. In beiden Fällen wurde das Programm \verb+Tangentspace+\footnote{\url{http://informatik.uni-trier.de/~mueller/Research/Tangentspace/}}, einem Programm zum Erstellen linearer Schranken für nichtlinearer Funktionen an einem gegebenen Punkt, derart erweitert, als dass die bei den Berechungen entstehenden Polynome Grade $> 1$ erreichen können. Um ein Produkt zweier Taylormodelle (zweier Polynome) linear zu halten, wird beim paarweisen Multiplizieren der Monome jeweils ein Fehlersymbol durch sein Intervall ersetzt, wodurch sich das Intervall des Koeffizienten und damit die Ungenauigkeit der Berechnung vergrößert. Wird dies nicht getan, bleiben die Fehlerintervalle zunächst klein, jedoch nicht das Polynom, welches in Grad und Anzahl der Monome wächst. 
+Mit dem im Rahmen dieses Forschungsprojektes entstandenen Programm \verb+hotm+ (High Order Taylor Models) soll das bestmögliche Maß zwischen der Reduzierung des Grades, beziehungsweise der Vereinfachung der Polynome und dem Erhalt der Abhängigkeitsinformationen gefunden werden, um dann an verschiedenen Stellen verwendet zu werden.
+
+
+\section{Anwendung}
+
+Taylormodelle höherer Ordung könnten in \verb+Tangentspace+ dazu verwenden werden, um diese in CDCL-artigen (Conflict Driven Clause Learning) SMT Programmen einzupflegen, wo derzeit lineare Taylormodelle verwendet werden. Außerdem können sie als Zahlentyp zur Berechnung reeller Funktionen, wie zum Beispiel Iterationen der Hénon-Abbildung dienen. \par
+Betrachtet man die Fehlerintervalle, beziehungsweise deren Breite als Rauschen, können Taylormodelle dazu genutzt werden, physikalische Vorgänge, die eine gewisse Unsicherheit der Werte haben, darzustellen. Hierzu kann der Fehler durch die Definition des Startwertes als Taylormodell ausgedrückt werden. Um eine sich ändernde Umgebung darzustellen könnte im Falle der Anwendung bei der Logistic Map durch die Konstante in jeder Iteration ein neues, leicht verändertes Fehlersymbol eingeführt werden; oder zu jeder Iteration wird ein bestimmes Fehlerintervall addiert.
+
+
+
+%% ==============================
+\section{Gliederung}
+%% ==============================
+\label{ch:Einleitung:sec:Gliederung}
+
+In diesem Forschungsbericht wird der Aufbau und die Funktionsweise der einzelnen Bestandteile der Implementierung der \verb+hotm+ neben der Hintergrund für dieselben beschrieben. 
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "thesis"
+%%% End: 

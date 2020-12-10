@@ -1,4 +1,7 @@
 ## C++ :
+*.kile
+sources/
+*.kilepr
 Makefile
 .idea/
 ## Core latex/pdflatex auxiliary files:
