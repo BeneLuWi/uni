@@ -1,8 +1,10 @@
-\chapter{iRRAM}
+\chapter{Durchführung}
+
+\section{Verwendung der iRRAM-REALs}
 Die Software-Bibliothek \verb+iRRAM+ \cite{Mller2009EnhancingIE} basiert auf Intervallen als Zahlentyp, um diese mit einer beliebigen Genauigkeit darstellen zu können. Zunächst wird mit Double-Präzision (64-Bit Zahlen) gerechnet, welche verwendet werden, bis das Ergebnis für die angefragte Präzision nicht mehr genau ausgegeben werden kann, beziehungsweise bis zu einer bestimmten Anzahl an Bits. Ist dies der Fall, geschieht eine Iteration mit einer erhöhten Genauigkeit, also längeren Zahlen, welche dann mit Hilfe von \verb+MPFR+ dargestellt werden.
 Für eine solche Iteration werden gerade so viele Zwischenergebnisse während der Berechnung gespeichert, dass eine Wiederholung der Schritte mit höherer Präzision möglich ist. Da nicht die gesamte Berechnung in jeder Iteration wiederholt wird, müssen während der Laufzeit Sichtbarkeit von Variablen und Zwischenergebnisse für den Nutzer genau kontrolliert und unter Umständen beschränkt werden, da sonst unerwartetes Verhalten und Exceptions entstehen können, indem die zugegriffenen Werte gegebenfall nicht in der aktuellen Iteration existieren.
 
-\section{Verwendung der iRRAM-REALs}
+
 Einige der für rationale Zahlen zur Verfügung stehenden Funktionen, wie der Vergleich zweier Zahlen, sind mit reellen Zahlen nicht ohne Weiteres Möglich. Dies gilt insbesondere für den Test auf Gleichheit und die Vorzeichenfunktion $sign$. Bei all diesen Funktionen handelt es sich im Reellen (und bei der \verb+iRRAM+) um mehrwertige Funktionen, da sich das jeweilige Ergebnis mit veränderter Präzsion in der Darstellung der Zahlen ändern kann. Dieses Problem wird in \verb+hotm+ durch den \verb+SignType+ adressiert. Zusätzlich zu den Werten 'positiv' (=\verb+POS+) und 'negativ' (=\verb+NEG+),  kann die Vorzeichenfunktion \verb+sign+ den Wert 'ambivalent' (=\verb+AMBI+) ausgeben, wenn nicht entscheidbar ist, wo genau die reelle Zahl um die Null liegt. Hierfür erhält die Vorzeichenfunktion einen Parameter, der den Bereich er Unsicherheit definiert. Ist der Ausgabewert 'ambivalent', so wird in den Funktionen, welche die Vorzeichenfunktion aufrufen, der schlechteste Fall im Hinblick auf die Genauigkeit des Ergebnisses angenommen. 
 
 
@@ -30,12 +32,15 @@ Die \verb+iRRAM+ bietet die Möglichkeit, zwischen \textit{absoluter} und \texti
 Für der Vergleich wurde $x_{1000}$ mit $x_n = c \cdot x_{n-1} \cdot (1 - x_{n-1})$ mit der folgenden Konfiguration berechnet:
 \begin{enumerate}
  \item Nur quadratisches Sweeping zur 0,
+ \item Entfernen aller Fehlersymbole, bis auf die 3 zuletzt hinzugefügten,
  \item Micro-Housekeeping (Cleaning) ab einem Fehler $\chi$ auf Zahlenebene $>10^{-100}$,
  \item Macro-Housekeeping (Polish) ab einer Intervallbreite $\psi$ $>10^{-50}$,
  \item $x_0 = 0,5$ und
  \item Ausgabe des Ergebnisses auf 20 Stellen genau.
 \end{enumerate}
-Zu Beginn einer jeden Iteration wird zunächst gesweept (1.), dann der Fehler und die Intervalle bereinigt (2.) und zuletzt das Polynom poliert (3.), bevor erneut multipliziert wird. Für $c = 3.25$ konvergiert die Funktion gegen zwei Werte und lässt sich sehr genau bestimmen.
+Zu Beginn einer jeden Iteration werden zunächst die höhergradigen Monome gesweept (1.), dann die älteren Fehlersymbole (2.). Im nächsten Schritt wird der Fehler und die Intervalle bereinigt (3.) und zuletzt das Polynom poliert (4.), bevor erneut multipliziert wird. 
+
+Für $c = 3.25$ konvergiert die Funktion gegen zwei Werte und lässt sich sehr genau bestimmen.
 
 \begin{center}
 \begin{tabular}{|r|c|c|}
@@ -71,7 +76,7 @@ Wie in der Tabelle zu sehen ist, benötigt die Berechnung mit relativer Genauigk
 
 Die Ergenisse werden ohne Housekeeping erheblich schneller berechnet, allerdings auf Kosten der benötigten Bits für die Zahlendarstellung. Da hier kein Polieren geschieht, wird auch kein Taylormodell als solches initialisiert, das heißt, es werden keine Fehlersymbole eingesetzt und rein auf der Ebene der reellen Zahlen der \verb+iRRAM+ gerechnet.
 
-Für $c=3.75$, einem Wert, bei dem die Funktion chaotisches Verhalten aufweist und zwischen vielen Werten hin- und herspringt, ist erkennbar, dass ein Rechnen mit diesen Housekeeping-Parametern und absoluter Genauigkeit nicht praktikabel ist, da die Berechnung bereits nach 64 Iterationen eine Laufzeit von über 15 Sekunden hat, welche scheinbar exponentiell steigt. Für relative Genauigkeit is die Berechnung zwar zeitaufwändiger, liefert jedoch ein (korrektes) Ergebnis.
+Für $c=3.75$, einem Wert, bei dem die Funktion chaotisches Verhalten aufweist und zwischen vielen Werten hin- und herspringt, ist erkennbar, dass ein Rechnen mit diesen Housekeeping-Parametern und absoluter Genauigkeit nicht praktikabel ist, da die Berechnung bereits nach 60 Iterationen eine Laufzeit von über 15 Sekunden hat, welche scheinbar exponentiell steigt. Für relative Genauigkeit ist die Berechnung zwar zeitaufwändig, liefert jedoch ein (korrektes) Ergebnis und benötigt weniger Bits, als eine Berechnung ohne Housekeeping. Die Parameter mussten hier auf $\psi = 10^{-140}$ und $\chi = 10^ {-150}$ angepasst werden, damit die Grenzwerte erreicht werden.
 
 \begin{center}
 \begin{tabular}{|r|c|c|}
@@ -81,9 +86,9 @@ Für $c=3.75$, einem Wert, bei dem die Funktion chaotisches Verhalten aufweist u
  mit Housekeeping &relative Genauigkeit & absolute Genauigkeit \\
  \hline
  \hline
- Anzahl Polishs & 5511 & ?\\
- Präzision (Bits) & 7440 & ?\\
- CPU-Zeit & 4.02s & >60s\\
+ Anzahl Polishs & 64 & ?\\
+ Präzision (Bits) & 5894 & ?\\
+ CPU-Zeit & 8.2s & >60s\\
  \hline
 \end{tabular}
 \end{center}
@@ -112,7 +117,7 @@ Insgesamt lässt sich beobachten, dass die Berechnung der Interationen mit relat
 \section{Housekeeping}
 Die Werte der Parameter für die Housekeeping-Methoden hängen unmittelbar voneinander ab: Je größer der Wert des Cleaning $\chi$, also as Umlagern des Rechenfehlers eines Koeffizienten auf den Mittelpunkt des Radius', desto schneller wird der Grenzwert des Polishs $\psi$, also des Einführens eines neuen Fehlersymbols erreicht.
 
-Für $c=3.25$ kann $x_{1000}$ mit $\psi = 10^{-50}$ in \verb+double+ -Präzision berechnet werden, solange $\psi \geq \chi$ gilt. Je mehr sich $\psi$ und $\chi$ annähern, desto öfter überschreitet der Radius eines Koeffizienten den Grenzwert $\psi$ und wird poliert, wie in Grafik \ref{fig:polish} zu sehen ist.
+Für $c=3.25$ kann $x_{1000}$ mit $\psi = 10^{-50}$ in \verb+double+-Präzision berechnet werden. Je mehr sich $\psi$ und $\chi$ annähern, desto öfter überschreitet der Radius eines Koeffizienten den Grenzwert $\psi$ und wird poliert, wie in Grafik \ref{fig:polish} zu sehen ist.
 
 \begin{figure}[ht]
     \centering
@@ -147,7 +152,7 @@ Für $c=3.25$ kann $x_{1000}$ mit $\psi = 10^{-50}$ in \verb+double+ -Präzision
 (-70,369)
 (-60,650)
 (-50,1110)
-        };
+        };  
 
         
     \end{axis}
@@ -156,39 +161,13 @@ Für $c=3.25$ kann $x_{1000}$ mit $\psi = 10^{-50}$ in \verb+double+ -Präzision
     \label{fig:polish}
 \end{figure}
 
-Wird stattdessen $\chi>\psi$ definiert, so erhöht sich weiterhin die Anzahl der Polishs, als auch die benötigten Bits für die Ausgabe des Ergebnisses:
 
+Ab einem $\chi < 10^{-70}$ und $\psi < 0.1$ und mit $\chi < 10^{-50}$ mit $\psi < 10^{-50}$ mit \verb+double+-Präzision genau berechenbar. In Tabelle \ref{tab:thresholds} sind dies die Werte mit 50 Bit Genauigkeit.
+
+Für $c = 3.75$ ist $\chi=10^{-150}$ und $\psi=10^{-140}$ eine gute Konfiguration mit 5894 benötigten Bits für $x_{1000}$. Dieser Wert wird bei keiner der getesteten Konfigurationen unterschritten, was mit Hilfe des Lyapunov Exponenten für diese spezielle Iteration erklärt werden kann. Der Lyapunov Exponent gibt eine Annäherung an die untere Schranke der pro Iteration durch Rundungsfehler verlorenen Bits an, die für $c=3.25$ niedriger ist, als für $c=3.75$, welhalb eine Berechnung mit \verb+double+-Präzision möglich ist \cite{DBLP:spandl}.
 
 \begin{center}
-\begin{tabular}{|c|c|c|c|}
-\hline
-\multicolumn{4}{|c|}{$x_{1000}$ mit $c=3.75$}\\
-\hline
- $\psi$ & $\chi$ & Bits & Polishs\\
- \hline
-    & $10^{-50}$ & \verb+double+ & 1110 \\
-    & $10^{-40}$ & 2876 & 2907\\
-$10^{-50}$& $10^{-30}$ & 2876 & 3890\\
-    & $10^{-25}$ & 2876 & 5542\\ 
-    & $10^{-24}$ & 2876 & 5998\\ 
-    & $10^{-20}$ & 375 & 1594\\
-    & $10^{-15}$ & 2876 & 72\\
-    & $10^{-10}$ & 2876 &103\\
-    & $10^{-5}$ & 7440 & 0\\
- \hline
-\end{tabular}
-\end{center}
-
-
-
-Ab einer bestimmten 
-
-\begin{landscape}
 \begin{table}
-
- 
- \small
-
 \renewcommand{\arraystretch}{1.2}
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|}
 \hline
@@ -198,154 +177,201 @@ Ab einer bestimmten
   \end{tabular}& 0 & 10 & 20 & 30 & 40 & 50 & 60 & 70 & 80 & 90& 100 \\
 \hline 
 0&
-\shortstack{ \\7440\\ 0\\ 1.6326 s}& 
-\shortstack{ \\7440\\ 0\\ 1.83337 s}& 
-\shortstack{ \\7440\\ 0\\ 1.94407 s}& 
-\shortstack{ \\7440\\ 0\\ 2.04077 s}& 
-\shortstack{ \\7440\\ 0\\ 2.11908 s}& 
-\shortstack{ \\7440\\ 0\\ 2.21374 s}& 
-\shortstack{ \\7440\\ 0\\ 2.29907 s}& 
-\shortstack{ \\7440\\ 0\\ 2.38224 s}& 
-\shortstack{ \\7440\\ 0\\ 2.467 s}& 
-\shortstack{ \\7440\\ 0\\ 2.55054 s}& 
-\shortstack{ \\7440\\ 0\\ 2.63597 s} \\
+\shortstack{ \\7440\\ 0}& 
+\shortstack{ \\7440\\ 0}& 
+\shortstack{ \\7440\\ 0}& 
+\shortstack{ \\7440\\ 0}& 
+\shortstack{ \\7440\\ 0}& 
+\shortstack{ \\7440\\ 0}& 
+\shortstack{ \\7440\\ 0}& 
+\shortstack{ \\7440\\ 0}& 
+\shortstack{ \\7440\\ 0}& 
+\shortstack{ \\7440\\ 0}& 
+\shortstack{ \\7440\\ 0} \\
 \hline
 10&
-\shortstack{ \\7440\\ 0\\ 2.78598 s}& 
-\shortstack{ \\9372\\ 0\\ 5.52392 s}& 
-\shortstack{ \\2876\\ 172\\ 5.02589 s}& 
-\shortstack{ \\2876\\ 124\\ 5.00488 s}& 
-\shortstack{ \\2876\\ 113\\ 5.07724 s}& 
-\shortstack{ \\2876\\ 103\\ 5.54921 s}& 
-\shortstack{ \\2876\\ 101\\ 5.35356 s}& 
-\shortstack{ \\2876\\ 107\\ 5.4392 s}& 
-\shortstack{ \\2876\\ 124\\ 5.68067 s}& 
-\shortstack{ \\2876\\ 130\\ 5.85416 s}& 
-\shortstack{ \\2876\\ 142\\ 6.06347 s}\\ 
+\shortstack{ \\7440\\ 0}& 
+\shortstack{ \\9372\\ 0}& 
+\shortstack{ \\2876\\ 172}& 
+\shortstack{ \\2876\\ 124}& 
+\shortstack{ \\2876\\ 113}& 
+\shortstack{ \\2876\\ 103}& 
+\shortstack{ \\2876\\ 101}& 
+\shortstack{ \\2876\\ 107}& 
+\shortstack{ \\2876\\ 124}& 
+\shortstack{ \\2876\\ 130}& 
+\shortstack{ \\2876\\ 142}\\ 
 \hline
 20&
-\shortstack{ \\7440\\ 0\\ 3.94074 s}& 
-\shortstack{ \\242\\ 1277\\ 8.10701 s}& 
-\shortstack{ \\50\\ 2780\\ 4.72946 s}& 
-\shortstack{ \\748\\ 565\\ 9.75293 s}& 
-\shortstack{ \\748\\ 555\\ 8.68541 s}& 
-\shortstack{ \\375\\ 1594\\ 8.93876 s}& 
-\shortstack{ \\375\\ 1880\\ 25.4399 s}& 
-\shortstack{ \\748\\ 913\\ 22.1312 s}& 
-\shortstack{ \\1008\\ 672\\ 26.4569 s}& 
-\shortstack{ \\375\\ 2790\\ 36.9133 s}& 
-\shortstack{ \\1008\\ 793\\ 35.4304 s}\\
+\shortstack{ \\7440\\ 0}& 
+\shortstack{ \\242\\ 1277}& 
+\shortstack{ \\50\\ 2780}& 
+\shortstack{ \\748\\ 565}& 
+\shortstack{ \\748\\ 555}& 
+\shortstack{ \\375\\ 1594}& 
+\shortstack{ \\375\\ 1880}& 
+\shortstack{ \\748\\ 913}& 
+\shortstack{ \\1008\\ 672}& 
+\shortstack{ \\375\\ 2790}& 
+\shortstack{ \\1008\\ 793}\\
 \hline
 30&
-\shortstack{ \\7440\\ 0\\ 13.1344 s}& 
-\shortstack{ \\242\\ 1231\\ 24.1473 s}& 
-\shortstack{ \\2876\\ 178\\ 49.0635 s}& 
-\shortstack{ \\2876\\ 103\\ 80.8316 s}& 
-\shortstack{ \\2876\\ 78\\ 184.06 s}& 
-\shortstack{ \\2876\\ 74\\ 250.773 s}& 
-\shortstack{ \\2876\\ 55\\ 365.989 s}& 
-\shortstack{ \\2876\\ 51\\ 511.508 s}& 
-\shortstack{ \\2876\\ 49\\ 684.393 s}& 
-\shortstack{ \\2876\\ 51\\ 848.406 s}& 
-\shortstack{ \\2876\\ 55\\ 997.68 s}\\
+\shortstack{ \\7440\\ 0}& 
+\shortstack{ \\242\\ 1231}& 
+\shortstack{ \\2876\\ 178}& 
+\shortstack{ \\2876\\ 103}& 
+\shortstack{ \\2876\\ 78}& 
+\shortstack{ \\2876\\ 74}& 
+\shortstack{ \\2876\\ 55}& 
+\shortstack{ \\2876\\ 51}& 
+\shortstack{ \\2876\\ 49}& 
+\shortstack{ \\2876\\ 51}& 
+\shortstack{ \\2876\\ 55}\\
 \hline
 40&
-\shortstack{ \\7440\\ 0\\ 53.3362 s}& 
-\shortstack{ \\50\\ 1256\\ 29.1948 s}& 
-\shortstack{ \\2876\\ 176\\ 99.8966 s}& 
-\shortstack{ \\2876\\ 103\\ 125.306 s}& 
-\shortstack{ \\748\\ 830\\ 143.597 s}& 
-\shortstack{ \\2876\\ 59\\ 478.68 s}& 
-\shortstack{ \\2876\\ 51\\ 529.705 s}& 
-\shortstack{ \\2876\\ 48\\ 629.886 s}& 
-\shortstack{ \\2876\\ 45\\ 861.242 s}& 
-\shortstack{ \\2876\\ 47\\ 937.462 s}& 
-\shortstack{ \\1008\\ 3249\\ 970.695 s}\\
+\shortstack{ \\7440\\ 0}& 
+\shortstack{ \\50\\ 1256}& 
+\shortstack{ \\2876\\ 176}& 
+\shortstack{ \\2876\\ 103}& 
+\shortstack{ \\748\\ 830}& 
+\shortstack{ \\2876\\ 59}& 
+\shortstack{ \\2876\\ 51}& 
+\shortstack{ \\2876\\ 48}& 
+\shortstack{ \\2876\\ 45}& 
+\shortstack{ \\2876\\ 47}& 
+\shortstack{ \\1008\\ 3249}\\
 \hline
 50&
-\shortstack{ \\7440\\ 0\\ 75.4545 s}& 
-\shortstack{ \\541\\ 1092\\ 197.334 s}& 
-\shortstack{ \\2876\\ 157\\ 102.602 s}& 
-\shortstack{ \\2876\\ 100\\ 105.98 s}& 
-\shortstack{ \\136\\ 626\\ 42.8746 s}& 
-\shortstack{ \\50\\ 1110\\ 36.735 s}& 
-\shortstack{ \\50\\ 2058\\ 67.4805 s}& 
-\shortstack{ \\50\\ 3061\\ 99.8092 s}& 
-\shortstack{ \\50\\ 3104\\ 101.562 s}& 
-\shortstack{ \\50\\ 3252\\ 106.672 s}& 
-\shortstack{ \\50\\ 4307\\ 141.643 s}\\
+\shortstack{ \\7440\\ 0}& 
+\shortstack{ \\541\\ 1092}& 
+\shortstack{ \\2876\\ 157}& 
+\shortstack{ \\2876\\ 100}& 
+\shortstack{ \\136\\ 626}& 
+\shortstack{ \\50\\ 1110}& 
+\shortstack{ \\50\\ 2058}& 
+\shortstack{ \\50\\ 3061}& 
+\shortstack{ \\50\\ 3104}& 
+\shortstack{ \\50\\ 3252}& 
+\shortstack{ \\50\\ 4307}\\
 \hline
 60&
-\shortstack{ \\7440\\ 0\\ 77.9164 s}& 
-\shortstack{ \\50\\ 1330\\ 44.7121 s}& 
-\shortstack{ \\2876\\ 197\\ 109.461 s}& 
-\shortstack{ \\2876\\ 102\\ 77.7069 s}& 
-\shortstack{ \\50\\ 360\\ 12.852 s}& 
-\shortstack{ \\50\\ 650\\ 22.519 s}& 
-\shortstack{ \\50\\ 793\\ 27.3169 s}& 
-\shortstack{ \\50\\ 1478\\ 49.8977 s}& 
-\shortstack{ \\50\\ 2831\\ 94.8471 s}& 
-\shortstack{ \\50\\ 3006\\ 101.299 s}& 
-\shortstack{ \\50\\ 3046\\ 102.522 s}\\
+\shortstack{ \\7440\\ 0}& 
+\shortstack{ \\50\\ 1330}& 
+\shortstack{ \\2876\\ 197}& 
+\shortstack{ \\2876\\ 102}& 
+\shortstack{ \\50\\ 360}& 
+\shortstack{ \\50\\ 650}& 
+\shortstack{ \\50\\ 793}& 
+\shortstack{ \\50\\ 1478}& 
+\shortstack{ \\50\\ 2831}& 
+\shortstack{ \\50\\ 3006}& 
+\shortstack{ \\50\\ 3046}\\
 \hline
 70&
-\shortstack{ \\7440\\ 0\\ 78.5848 s}& 
-\shortstack{ \\50\\ 1209\\ 41.5528 s}& 
-\shortstack{ \\50\\ 305\\ 11.2421 s}& 
-\shortstack{ \\50\\ 182\\ 7.14775 s}& 
-\shortstack{ \\50\\ 244\\ 9.10952 s}& 
-\shortstack{ \\50\\ 369\\ 13.3082 s}& 
-\shortstack{ \\50\\ 585\\ 20.5524 s}& 
-\shortstack{ \\50\\ 730\\ 25.4535 s}& 
-\shortstack{ \\50\\ 1498\\ 51.1763 s}& 
-\shortstack{ \\50\\ 2198\\ 74.7332 s}& 
-\shortstack{ \\50\\ 3052\\ 103.7 s}\\
+\shortstack{ \\7440\\ 0}& 
+\shortstack{ \\50\\ 1209}& 
+\shortstack{ \\50\\ 305}& 
+\shortstack{ \\50\\ 182}& 
+\shortstack{ \\50\\ 244}& 
+\shortstack{ \\50\\ 369}& 
+\shortstack{ \\50\\ 585}& 
+\shortstack{ \\50\\ 730}& 
+\shortstack{ \\50\\ 1498}& 
+\shortstack{ \\50\\ 2198}& 
+\shortstack{ \\50\\ 3052}\\
 \hline
 80&
-\shortstack{ \\7440\\ 0\\ 80.0082 s}& 
-\shortstack{ \\50\\ 1265\\ 44.0294 s}& 
-\shortstack{ \\50\\ 283\\ 10.6252 s}& 
-\shortstack{ \\50\\ 209\\ 8.17959 s}& 
-\shortstack{ \\50\\ 193\\ 7.62534 s}& 
-\shortstack{ \\50\\ 223\\ 8.50545 s}& 
-\shortstack{ \\50\\ 346\\ 12.6874 s}& 
-\shortstack{ \\50\\ 618\\ 21.9991 s}& 
-\shortstack{ \\50\\ 619\\ 21.985 s}& 
-\shortstack{ \\50\\ 2099\\ 72.5467 s}& 
-\shortstack{ \\50\\ 2540\\ 87.2578 s}\\ 
+\shortstack{ \\7440\\ 0}& 
+\shortstack{ \\50\\ 1265}& 
+\shortstack{ \\50\\ 283}& 
+\shortstack{ \\50\\ 209}& 
+\shortstack{ \\50\\ 193}& 
+\shortstack{ \\50\\ 223}& 
+\shortstack{ \\50\\ 346}& 
+\shortstack{ \\50\\ 618}& 
+\shortstack{ \\50\\ 619}& 
+\shortstack{ \\50\\ 2099}& 
+\shortstack{ \\50\\ 2540}\\ 
 \hline
 90&
-\shortstack{ \\7440\\ 0\\ 81.4708 s}& 
-\shortstack{ \\50\\ 1279\\ 44.8837 s}& 
-\shortstack{ \\50\\ 285\\ 10.7928 s}& 
-\shortstack{ \\50\\ 179\\ 7.13232 s}& 
-\shortstack{ \\50\\ 133\\ 5.57989 s}& 
-\shortstack{ \\50\\ 191\\ 7.4692 s}& 
-\shortstack{ \\50\\ 229\\ 8.78794 s}& 
-\shortstack{ \\50\\ 365\\ 13.5734 s}& 
-\shortstack{ \\50\\ 651\\ 23.2493 s}& 
-\shortstack{ \\50\\ 851\\ 30.1336 s}& 
-\shortstack{ \\50\\ 1760\\ 61.3092 s}\\
+\shortstack{ \\7440\\ 0}& 
+\shortstack{ \\50\\ 1279}& 
+\shortstack{ \\50\\ 285}& 
+\shortstack{ \\50\\ 179}& 
+\shortstack{ \\50\\ 133}& 
+\shortstack{ \\50\\ 191}& 
+\shortstack{ \\50\\ 229}& 
+\shortstack{ \\50\\ 365}& 
+\shortstack{ \\50\\ 651}& 
+\shortstack{ \\50\\ 851}& 
+\shortstack{ \\50\\ 1760}\\
 \hline
 100&
-\shortstack{ \\7440\\ 0\\ 83.1739 s}& 
-\shortstack{ \\50\\ 1181\\ 42.1948 s}& 
-\shortstack{ \\50\\ 332\\ 12.458 s}& 
-\shortstack{ \\50\\ 184\\ 7.5799 s}& 
-\shortstack{ \\50\\ 134\\ 5.65369 s}& 
-\shortstack{ \\50\\ 142\\ 5.86399 s}& 
-\shortstack{ \\50\\ 199\\ 7.81504 s}& 
-\shortstack{ \\50\\ 236\\ 9.11688 s}& 
-\shortstack{ \\50\\ 391\\ 14.4456 s}& 
-\shortstack{ \\50\\ 571\\ 20.7529 s}& 
-\shortstack{ \\50\\ 709\\ 25.5848 s}\\
+\shortstack{ \\7440\\ 0}& 
+\shortstack{ \\50\\ 1181}& 
+\shortstack{ \\50\\ 332}& 
+\shortstack{ \\50\\ 184}& 
+\shortstack{ \\50\\ 134}& 
+\shortstack{ \\50\\ 142}& 
+\shortstack{ \\50\\ 199}& 
+\shortstack{ \\50\\ 236}& 
+\shortstack{ \\50\\ 391}& 
+\shortstack{ \\50\\ 571}& 
+\shortstack{ \\50\\ 709}\\
 \hline
 \end{tabular}
 
-\caption[Kombinationsmöglichkeiten der Grenzwerte für Housekeeping-Methoden]{Kombinationsmöglichkeiten der Grenzwerte für Housekeeping-Methoden. Die Zelle besteht aus den benötigten Bits für die Ausgabe, der Anzahl der Polishs und der CPU-Zeit für die Berechnung von $x_{1000}$ für $c=3.25$, wie in Kapitel \ref{sec:precision} beschrieben}
+\caption[Kombinationsmöglichkeiten der Grenzwerte für Housekeeping-Methoden]{Kombinationsmöglichkeiten der Grenzwerte für Housekeeping-Methoden. Die Zelle besteht aus den benötigten Bits für die Ausgabe und der Anzahl der Polishs für die Berechnung von $x_{1000}$ für $c=3.25$, wie in Kapitel \ref{sec:precision} beschrieben}
 \label{tab:thresholds}
 \end{table}
-\end{landscape}
+\end{center}
+
+
+
+\section{Messungenauigkeiten}
+
+Die feingranularen Konfigurationsmöglichkeiten ermögleichen eine manuelle Eingabe eines Rechenfehlers zu Beginn der Berechnung, wodurch bespielsweise das Rechnen mit ungenauen Werten simuliert werden kann. Für $x_n = x_{n-1} \cdot c \cdot (1 - x_{n-1})$ und $x_0 = 0.5$ kann $x_0$ als Taylormodell mit Intervallkoeffizienteneinen solchen Rechenfehler an verschiedenen Stellen enthalten:
+\begin{align}  
+    x_0 &= [0 \pm 0] + [1 \pm 0] \cdot \lambda & \lambda \in [0.5 \pm \varepsilon] \label{tm1} \\  
+    x_0 &= [0.5 \pm 0] + [1 \pm 0] \cdot \lambda & \lambda \in [0 \pm \varepsilon] \label{tm2} \\  
+    x_0 &= [0.5 \pm 0] + [\varepsilon \pm 0] \cdot \lambda & \lambda \in [0 \pm 1] \label{tm3} \\   
+    x_0 &= [0 \pm 0] + [0.5 \pm \varepsilon] \cdot \lambda & \lambda \in [1 \pm 0] \label{tm4} \\    
+    x_0 &= [0.5 \pm 0] + [0 \pm \varepsilon] \cdot \lambda & \lambda \in [1 \pm 0] \label{tm5} \\ 
+    x_0 &= [0.5 \pm \varepsilon] \label{tm6}
+\end{align}
+
+Bei einem Fehler $\varepsilon = 10^{-200}$ und $c=3.25$ kann bei \ref{tm1} und \ref{tm4} bereits nach wenigen Iterationen keine Aussage mehr über das Ergebnis getroffen werden, da die Intervalle zu stark wachsen, beziehungsweise zu breit werden. Mit den restlichen Definitionen kann die Berechnung auch bei höheren Iterationszahlen ($n=1000, n=10000$) mit \verb+double+-Präzision ausgeführt werden.  
+   
+
+Für die Iteration mit $c=3.75$, also einem Wert mit größerem Informationsverlust pro Iteration verhalten sich die Berechnungen etwas anders. Mit derselben manuell auf 743 Bit fixierten Genauigkeit entwickelt sich die Intervallbreite des Ergebnisses stark abhängig von der Darstellung von $x_0$, wie in Grafik \ref{fig:tm} zu sehen ist.  
+          
+\input{src/375.tex}
+
+Die Intervallbreite wächst ab einer bestimmten Iterationszahl exponentiell an und lässt keine genaue Ausgabe des Ergebnisses für die aktuelle Präzision mehr zu. Für das Taylormodell \ref{tm2} wächst das Intervall hierbei am spätesten, die Ergebnisse bleiben also länger aussagekräftig. Wie auch bei $c=3.25$ sind die Taylormodelle \ref{tm1} und \ref{tm4}, also solche mit 0-Kernel am schlechtesten geeignet.
+
+
+Als Genauigkeit wurde 743 Bit gewählt, da sich hier große Unterschiede zwischen den Taylormodell-Definitionen gezeigt haben. Bei einem kleineren Wert zeigten sich diese zwar auch, jedoch war dann keine so hohe Iterationszahl möglich.
+
+% \begin{center}
+% \begin{tabular}{|c|c|c|c|}
+% \hline
+% \multicolumn{4}{|c|}{$x_{1000}$ mit $c=3.75$}\\
+% \hline 
+%  $\psi$ & $\chi$ & Bits & Polishs\\
+%  \hline
+%     & $10^{-50}$ & \verb+double+ & 1110 \\  
+%     & $10^{-40}$ & 2876 & 2907\\
+% $10^{-50}$& $10^{-30}$ & 2876 & 3890\\
+%     & $10^{-25}$ & 2876 & 5542\\ 
+%     & $10^{-24}$ & 2876 & 5998\\ 
+%     & $10^{-20}$ & 375 & 1594\\ 
+%     & $10^{-15}$ & 2876 & 72\\
+%     & $10^{-10}$ & 2876 &103\\    
+%     & $10^{-5}$ & 7440 & 0\\
+%  \hline
+% \end{tabular}
+% \end{center}
+
 % 
 % \begin{table}[ht]
 %     \centering

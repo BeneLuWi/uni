@@ -6,15 +6,7 @@
 %% ==============================
 Mit verschiedenen Sweepingstrategien, Zahlentypen, Definitionsmöglichkeiten der Taylormodelle, initialer Ungenauigkeit, Genauigkeitsmodell (absolute oder relative Genauigkeit) und weiteren Einstellungsmöglichkeiten, ergibt sich ein sehr großer Suchraum zum Finden der optimalen Konfiguration für nichtlineare Taylormodelle. Allerdings ermöglichen sich dadurch sehr feingranulare Vergleiche, um herauszufinden, ob eine Implementierung nichtlinearer Taylormodelle in der Praxis schneller oder genauer als eine lineare sein kann. In diesem Kapitel werden Ergebnisse einige dieser Optionen betrachtet und versucht, die beobachteten Effekte zu erklären.
 
-\section{Messungenauigkeiten}
-\begin{align}
-    x_0 &= [0 \pm 0] + [1 \pm 0] \cdot \lambda & \lambda \in [0.5 \pm \varepsilon] \label{tm1} \\ 
-    x_0 &= [0.5 \pm 0] + [1 \pm 0] \cdot \lambda & \lambda \in [0 \pm \varepsilon] \label{tm2} \\
-    x_0 &= [0.5 \pm 0] + [\varepsilon \pm 0] \cdot \lambda & \lambda \in [0 \pm 1] \label{tm3} \\
-    x_0 &= [0 \pm 0] + [0.5 \pm \varepsilon] \cdot \lambda & \lambda \in [1 \pm 0] \label{tm4} \\
-    x_0 &= [0.5 \pm 0] + [0 \pm \varepsilon] \cdot \lambda & \lambda \in [1 \pm 0] \label{tm5} \\
-    x_0 &= [0.5 \pm \varepsilon] \label{tm6}
-\end{align}
+
 
 
 % \input{graphs/5.1.tex}

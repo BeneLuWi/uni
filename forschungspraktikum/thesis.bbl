@@ -44,6 +44,15 @@ N.~M{\"u}ller.
 \newblock Enhancing imperative exact real arithmetic with functions and logic.
 \newblock 2009.
 
+\bibitem[Span10]{DBLP:spandl}
+C.~Spandl.
+\newblock Computational Complexity of Iterated Maps on the Interval (Extended
+  Abstract).
+\newblock In X.~Zheng und N.~Zhong (Hrsg.), {\em Proceedings Seventh
+  International Conference on Computability and Complexity in Analysis, {CCA}
+  2010, Zhenjiang, China, 21-25th June 2010}, Band~24 der {\em {EPTCS}}, 2010,
+  S.~139--150.
+
 \bibitem[Weih00]{weihrauch}
 K.~Weihrauch.
 \newblock {\em Computable Analysis - An Introduction}.
