@@ -1,6 +1,7 @@
 \chapter{Durchführung}
 
 \section{Verwendung der iRRAM-REALs}
+\label{sec:irram}
 Die Software-Bibliothek \verb+iRRAM+ \cite{Mller2009EnhancingIE} basiert auf Intervallen als Zahlentyp, um diese mit einer beliebigen Genauigkeit darstellen zu können. Zunächst wird mit Double-Präzision (64-Bit Zahlen) gerechnet, welche verwendet werden, bis das Ergebnis für die angefragte Präzision nicht mehr genau ausgegeben werden kann, beziehungsweise bis zu einer bestimmten Anzahl an Bits. Ist dies der Fall, geschieht eine Iteration mit einer erhöhten Genauigkeit, also längeren Zahlen, welche dann mit Hilfe von \verb+MPFR+ dargestellt werden.
 Für eine solche Iteration werden gerade so viele Zwischenergebnisse während der Berechnung gespeichert, dass eine Wiederholung der Schritte mit höherer Präzision möglich ist. Da nicht die gesamte Berechnung in jeder Iteration wiederholt wird, müssen während der Laufzeit Sichtbarkeit von Variablen und Zwischenergebnisse für den Nutzer genau kontrolliert und unter Umständen beschränkt werden, da sonst unerwartetes Verhalten und Exceptions entstehen können, indem die zugegriffenen Werte gegebenfall nicht in der aktuellen Iteration existieren.
 
@@ -34,7 +35,7 @@ Für der Vergleich wurde $x_{1000}$ mit $x_n = c \cdot x_{n-1} \cdot (1 - x_{n-1
  \item Nur quadratisches Sweeping zur 0,
  \item Entfernen aller Fehlersymbole, bis auf die 3 zuletzt hinzugefügten,
  \item Micro-Housekeeping (Cleaning) ab einem Fehler $\chi$ auf Zahlenebene $>10^{-100}$,
- \item Macro-Housekeeping (Polish) ab einer Intervallbreite $\psi$ $>10^{-50}$,
+ \item Macro-Housekeeping (Splitting) ab einer Intervallbreite $\psi$ $>10^{-50}$,
  \item $x_0 = 0,5$ und
  \item Ausgabe des Ergebnisses auf 20 Stellen genau.
 \end{enumerate}
@@ -50,7 +51,7 @@ Für $c = 3.25$ konvergiert die Funktion gegen zwei Werte und lässt sich sehr g
  mit Housekeeping&relative Genauigkeit & absolute Genauigkeit \\
  \hline
  \hline
- Anzahl Polishs & 142 & 6961 \\
+ Anzahl Splits & 142 & 6961 \\
  Präzision (Bits) & \verb+double+ & 136 \\
  CPU-Zeit & 0.8s & 4.43s\\
  \hline
@@ -67,7 +68,7 @@ Wie in der Tabelle zu sehen ist, benötigt die Berechnung mit relativer Genauigk
  ohne Housekeeping &relative Genauigkeit & absolute Genauigkeit \\
  \hline
  \hline
- Anzahl Polishs & -& -\\
+ Anzahl Splits & -& -\\
  Präzision (Bits) & 7440 & 7440 \\
  CPU-Zeit & 0.120s & 0.118s\\
  \hline
@@ -86,7 +87,7 @@ Für $c=3.75$, einem Wert, bei dem die Funktion chaotisches Verhalten aufweist u
  mit Housekeeping &relative Genauigkeit & absolute Genauigkeit \\
  \hline
  \hline
- Anzahl Polishs & 64 & ?\\
+ Anzahl Splits & 64 & ?\\
  Präzision (Bits) & 5894 & ?\\
  CPU-Zeit & 8.2s & >60s\\
  \hline
@@ -104,7 +105,7 @@ Wie oben zeigt sich zwischen relativer und absoluter Genauigkeit bei der Verwend
  ohne Housekeeping &relative Genauigkeit & absolute Genauigkeit \\
  \hline
  \hline
- Anzahl Polishs & - & -\\
+ Anzahl Splits & - & -\\
  Präzision (Bits) & 7440 & 7440\\
  CPU-Zeit & 0.12s & 0.12s\\
  \hline
@@ -115,7 +116,8 @@ Wie oben zeigt sich zwischen relativer und absoluter Genauigkeit bei der Verwend
 Insgesamt lässt sich beobachten, dass die Berechnung der Interationen mit relativer Genauigkeit in den untersuchten Fällen bessere Ergebnisse liefert, weshalb diese im Folgenden zugrunde liegt.
 
 \section{Housekeeping}
-Die Werte der Parameter für die Housekeeping-Methoden hängen unmittelbar voneinander ab: Je größer der Wert des Cleaning $\chi$, also as Umlagern des Rechenfehlers eines Koeffizienten auf den Mittelpunkt des Radius', desto schneller wird der Grenzwert des Polishs $\psi$, also des Einführens eines neuen Fehlersymbols erreicht.
+\label{sec:housekeeping}
+Die Werte der Parameter für die Housekeeping-Methoden hängen unmittelbar voneinander ab: Je größer der Wert des Cleaning $\chi$, also as Umlagern des Rechenfehlers eines Koeffizienten auf den Mittelpunkt des Radius', desto schneller wird der Grenzwert des Splitings $\psi$, also des Einführens eines neuen Fehlersymbols erreicht.
 
 Für $c=3.25$ kann $x_{1000}$ mit $\psi = 10^{-50}$ in \verb+double+-Präzision berechnet werden. Je mehr sich $\psi$ und $\chi$ annähern, desto öfter überschreitet der Radius eines Koeffizienten den Grenzwert $\psi$ und wird poliert, wie in Grafik \ref{fig:polish} zu sehen ist.
 
@@ -126,7 +128,7 @@ Für $c=3.25$ kann $x_{1000}$ mit $\psi = 10^{-50}$ in \verb+double+-Präzision 
     width=0.7\textwidth,
     height=0.5\textwidth,
         xlabel={Grenzwert $\chi$ [$\cdot 10^{x}$]},
-        ylabel={Anzahl der Polishs},
+        ylabel={Anzahl der Splits},
         legend pos=north west,
         xmin=-200,xmax=-50,
         ymajorgrids=true,
@@ -157,7 +159,7 @@ Für $c=3.25$ kann $x_{1000}$ mit $\psi = 10^{-50}$ in \verb+double+-Präzision 
         
     \end{axis}
     \end{tikzpicture}
-    \caption[Grenzwertvergleich]{Anzahl der Polishs für $x_{1000}$ bei \\ $\psi = 10^{-50}$ und wachsendem $\chi$}
+    \caption[Grenzwertvergleich]{Anzahl der Splits für $x_{1000}$ bei \\ $\psi = 10^{-50}$ und wachsendem $\chi$}
     \label{fig:polish}
 \end{figure}
 
@@ -321,7 +323,7 @@ Für $c = 3.75$ ist $\chi=10^{-150}$ und $\psi=10^{-140}$ eine gute Konfiguratio
 \hline
 \end{tabular}
 
-\caption[Kombinationsmöglichkeiten der Grenzwerte für Housekeeping-Methoden]{Kombinationsmöglichkeiten der Grenzwerte für Housekeeping-Methoden. Die Zelle besteht aus den benötigten Bits für die Ausgabe und der Anzahl der Polishs für die Berechnung von $x_{1000}$ für $c=3.25$, wie in Kapitel \ref{sec:precision} beschrieben}
+\caption[Kombinationsmöglichkeiten der Grenzwerte für Housekeeping-Methoden]{Kombinationsmöglichkeiten der Grenzwerte für Housekeeping-Methoden. Die Zelle besteht aus den benötigten Bits für die Ausgabe und der Anzahl der Splits für die Berechnung von $x_{1000}$ für $c=3.25$, wie in Kapitel \ref{sec:precision} beschrieben}
 \label{tab:thresholds}
 \end{table}
 \end{center}
@@ -351,6 +353,22 @@ Die Intervallbreite wächst ab einer bestimmten Iterationszahl exponentiell an u
 
 
 Als Genauigkeit wurde 743 Bit gewählt, da sich hier große Unterschiede zwischen den Taylormodell-Definitionen gezeigt haben. Bei einem kleineren Wert zeigten sich diese zwar auch, jedoch war dann keine so hohe Iterationszahl möglich.
+
+
+
+
+\section{Lineare Taylormodelle}
+Mit der in Abschnitt \ref{sec:precision} beschriebenen Konfiguration ist die Berechnung von $x_{1000}$ mit $c=3.25$ und linearen Taylormodellen in der \verb+hotm+-Implementierung nicht mit \verb+double+-Präzision möglich, da die Intervalle bereits nach zirka 70 Iterationen zu groß werden, um ein Ergebnis zu bestimmen.
+
+Ein Grund hierfür könnte sein, dass die Cleaning Operation nur für den Kernel verwendet werden kann, da sonst ein nichtlineares Monom entstünde. So kann der Fehler auf Zahlenebene (siehe Grafik \ref{fig:levels}) ungehindert wachsen.
+
+
+
+
+
+
+
+
 
 % \begin{center}
 % \begin{tabular}{|c|c|c|c|}

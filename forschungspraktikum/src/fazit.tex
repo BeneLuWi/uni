@@ -2,18 +2,22 @@
 %% $Id: zusammenf.tex 61 2012-05-03 13:58:03Z bless $
 %%
 
-\chapter{Diskussion und Ausblick}
+\chapter{Ausblick}
 \label{ch:fazit}
-%% ==============================
-\section{TODO}
-\begin{itemize}
-    \item 'Runden' für rationale Zahlen auf dyadische Zahlen: Abschneiden einer Dezimalzahl, wo die Genauigkeit zu groß wird und dann Einführen eines Taylormodells, dass den 'vorderen Teil der Zahl' als Kernel und die nun fehlende Genauigkeit als im Lambda umschließt.
-    \item Finden oder Entwickeln von Heuristiken, die entscheiden, welche Fehlersymbole am besten gesweept werden sollten, wenn der Grad eines Monoms reduziert werden soll. Bei einer Reihe von Tests, wo bestimmte Konfigurationen zum Sweepen verwendet wurden, gab es Anzeichen darauf, dass die Qualität des Ergebnisses der Evaluation/Linearisierung von der Reihenfolge abhängt mit der die einzelnen Fehlersymbole entfernt werden.
-    \item Anzahl der zu behaltenen Fehlersymbole pro Iteration beobachten.
-    \item Metawissen über die Intervalle verwenden: Punktintervalle gesondert behandeln und den Radius nicht als iRRAM-Real mit Wert 0.
-\end{itemize}
+Diese Forschungsarbeit bildet den Grundstein für eine weiterführende UNtersuchung nichtlinearer Taylormodelle und ob diese in der Praxis bessere Resultate liefern, als die lineare Variante. Es wird sich hauptsächlich auf Iterationen der logistischen Gleichung beschränkt, da es sich hierbei um ein gut verstandenes und viel untersuchtes Problem handelt. Diese Einschränkung birgt jedoch die Gefahr des Overfittings der Parameter auf dieses spezielle Problem, weshalb im weiteren Verlauf des Forschungsprojektes auch andere Probleme in den Fokus rücken. Zudem sind noch viele Aspekte und Bereiche der Implementierung der Taylormodelle unbehandelt:
 
-Zum aktuellen Zeitpunkt beschränkt sich diese Forschungsarbeit auf die Anwendung der Taylormodelle bei Iterationen der logistischen Abbildung, da es sich hierbei um ein gut verstandenes und viel untersuchtes Problem handelt. Diese Beschränkung birgt jedoch die Gefahr des 'Overfittings' der Implementierung auf dieses spezielle Problem, weshalb im Weiteren Verlauf des Forschungsprojekt auch andere Probleme betrachtet werden, wie zum Beispiel die Henon-Abbildung.
+%% ==============================
+\begin{itemize}
+    \item Das Cleaning (siehe Kapitel \ref{sec:housekeeping}) ist bisher nur für die \verb+iRRAM+-Reals implementiert. Für rationale Zahlen (\verb+mpq+) ist dies allerdings auch möglich. Eine effiziente Methode könnte das Runden auf dyadische Zahlen sein, indem die Dezimalzahl des zu reinigenden Koeffizienten bei einer bestimmten Bitzahl, also wenn die benötigte Genauigkeit zu groß wird, abgeschnitten und die nun fehlende Genauigkeit durch ein Monom mit neuem Fehlersymbol dargestellt wird.
+    
+    \item Die Reihenfolge, in der die einzelnen Fehlersymbole gesweept werden kann einen großen Einfluss auf die Aussagekranft des Ergebnisses haben. Besonders wenn unendliche Intervallschranken möglich sind, zeigen sich hier Unterschiede. Hier gilt es, Heuristiken zu entwickeln, die dabei helfen, eine möglichst optimale Reihenfolge beim Sweepen zu finden, beziehungsweise Fehlersymbole identifizieren, die zunächst nicht gesweept werden sollten.
+    
+    \item Durch Splitting entstehen während einer Berechnung mit den Taylormodellen immer neue Fehlersymbole, sodassd er Grad der Polynome wächst. Wird zum Beispiel bei einer iterierenden Funktion zu einem linearen Taylormodell gesweept, so müssen einige der Fehlersymbole entfernt werden, da sonst zu lange Polynome entstehen. Wieviele Fehlersymbole jedoch behalten werden sollten, hängt von der Anwendung ab. Für eine eindimensionale Guntkion, wie die logistische Abbildung reichen wenige Fehlersymbole aus. Das Verhalten in anderen Fällen gilt es zu untersuchen.
+    
+    \item Metawissen über die Intervalle verwenden: Punktintervalle gesondert behandeln und den Radius nicht als iRRAM-Real mit Wert 0.
+    
+    \item Eine reelle Zahl in der \verb+iRRAM+ hat stets einen kleinen Fehler, was besonders bei der Darstellung der Null zu Überschätzungen führen kann. Die derzeitige Implementierung stellt Punktintervalle als Intervall mit Radius $=0$ dar, wordurch bei arithmetischen Operationen mit der '\verb+iRRAM+-Null' (also nur fast Null) gerechnet wird. Eine gesonderte Behandlung der Punktintervalle, die zum Beispiel durch Splitting entstehen, sollte den Grad der Überschätzung der Intervalle reduzieren.
+\end{itemize}
 
 %%% Local Variables: 
 %%% mode: latex
