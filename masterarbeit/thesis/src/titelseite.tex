@@ -1,0 +1,65 @@
+%% Titelseite
+%% Vorlage $Id: titelseite.tex 61 2012-05-03 13:58:03Z bless $
+
+\def\usesf{}
+\let\usesf\sffamily % diese Zeile auskommentieren für normalen TeX Font
+
+\newsavebox{\Erstgutachter}
+\savebox{\Erstgutachter}{\usesf Prof. Dr. Norbert Müller}
+\newsavebox{\Zweitgutachter}
+\savebox{\Zweitgutachter}{\usesf Prof Dr. Stephan Näher}
+\newsavebox{\Betreuer}
+\savebox{\Betreuer}{\usesf xxxxxxxxxx}
+
+\begin{titlepage}
+\setlength{\unitlength}{1pt}
+\begin{picture}(0,0)(85,770)
+%\includegraphics[width=\paperwidth]{logos/KIT_Deckblatt}
+\end{picture}
+
+\thispagestyle{empty}
+
+%\begin{titlepage}
+%%\let\footnotesize\small \let\footnoterule\relax
+\begin{center}
+\hbox{}
+\vfill
+{\usesf
+{\huge\bfseries Untersuchungen zur H\'{e}non Iteration \par}
+\vskip 1.8cm
+{\huge Masterarbeit}\\
+\vskip 0.5cm
+zur Erlangung des akademischen Grades\\
+Master of Science (M.Sc.) 
+\vskip 1.5cm
+
+{\large Universität Trier\\
+FB IV - Informatikwissenschaften\\
+Professur Arithmetische Algorithmen\\}
+
+\vskip 3cm
+\begin{tabular}{p{3.5cm}l}
+Erstgutachter: & \usebox{\Erstgutachter} \\
+Zweitgutachter: & \usebox{\Zweitgutachter} \\
+\end{tabular}
+\vskip 3cm
+Vorgelegt am xx.xx.xxxx von:\\
+\vskip .5cm
+Benedikt Lüken-Winkels\\
+Baltzstraße 6\\
+54296 Trier\\
+b.lueken.winkels@gmail.com\\
+Matr.-Nr. 1138844
+
+
+}
+\end{center}
+\vfill
+\end{titlepage}
+%% Titelseite Ende
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "thesis"
+%%% End: 
