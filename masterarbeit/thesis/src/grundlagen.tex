@@ -5,9 +5,57 @@
 \chapter{Grundlagen}
 \label{ch:Grundlagen}
 %% ==============================
+\section{H\e non-Abbildung}
+Die H\e non-Abbildung bietet eine Möglichkeit, das Verhalten eines seltsamen Attraktors (\textit{engl. \anf{strange attractor}}), wie dem des Lorenz Systems, mit einer recht einfachen Abbildung zu untersuchen.
+
+Konviergieren die Werte einer Funktion in einem bestimmten Wertebereich $R$, der Fangzone (\textit{engl. \anf{trap zone}}), gegen einen Punkt oder eine Kurve, spricht man von einem Attraktor. Dieser Attraktor kann jedoch auch eine komplexere Struktur haben. Auf einem solchen seltsamen Attraktor springen die Werte hin und her und reagieren hochempfindlich auf Änderungen der Initialbedingungen. Dieses Verhalten lässt mit der Abbildung $x_{i+1}=y_i + 1- a x_i^2, y_{i+1} = bx_i$, bzw 
+$$f(x,y) = (y + 1- a x^2,bx)$$
+beobachten. $f$ erfüllt dieselben Kriterien, wie der durch eine dreidimensionale Differenzialgleichung entstehenden Lorenz-Attraktor, allerdings wurde $f$ so definiert, dass auch höhere Iterationszahlen leichter zu berechnen und zu analysieren sein sollen. Die H\e non-Abbildung bildet den $\mathbb{R}^2$ auf sich selbst ab. Dieser Vorgang besteht aus drei Schritten. Man betrachte eine Fläche entlang der $x$-Achse gelegen:
+
+\textbf{Dehnen und Falten}
+$$T': x'=x, y'= 1+ y - ax^2$$
+Mit dem Parameter $a$ kann die Stärke der Biegung gesteuert werden.
+
+
+\textbf{Kontrahieren}
+$$T'': x''= b\cdot x, y''= y'$$
+Ein $|b|<1$ bedeutet, dass sich die Fläche zusammen zieht. Wird $b$ zu groß gewählt, so entsteht eine zu große Kontraktion und der Attraktor ist schwerer erkennbar. Ist $b$ zu klein, ist der Effekt zu gering und das Verhalten der Abbildung ist nicht mehr chaotisch.
+
+
+\textbf{Rotieren}
+$$T''': x'''= y'', y'''= x''$$
+Im letzten Schritt werden die Achsen vertauscht und somit dir Fläche um rotiert.
+
+
+Die entstehende Abbildung hat unter Anderem folgende Eigenschaften:
+\begin{itemize}
+ \item Invertierbar: $(x_{n+1}, y_{n+1})$ kann eindeutig auf $(x_n, y_n)$ zurückgeführt werden.
+ \item Kontrahiert Flächen: Mit $|b|<1$ werden Flächen kleiner.
+ \item Besitzt eine Fangzone, die einen Attraktor enthält. Allerdings landen nicht immer alle Orbits in der Fangzone, da wegen $x^2$ Terme bestimmter Größe nach $\infty$ laufen können.
+\end{itemize}
+
+
+Abbildung \ref{fig:henonevo} zeigt die einzelnen Schritte einer Evolution der H\e non-Abbildung anhand eines Rechtecks, welches als nichtlineares Taylormodell definiert wurde.
+$$x_0 = 0 + 1 \cdot \lambda_1 \hspace{.5cm} (\lambda_1 \in [0 \pm 0.4])$$
+$$\ y_0 = 0 + 1 \cdot \lambda_2 \hspace{.5cm} (\lambda_2 \in [0 \pm 0.05])$$
+Das Rechteck wird gedehnt und gefaltet, dann kontrahiert und zuletzt rotiert, beziehungsweise gespiegelt. 
+
+\Abbildungps{tbh}{.7}{img/henon_evo.pdf}{fig:henonevo}{H\e non-Abbildung: einfache Evolution}{Einfache Evolution der H\e non Abbildung, aufgeteilt in das initiale Rechteck und die drei Zwischenschritte.}
+
+Für die Parameter $a=1,4$ und $b=0.3$ ergibt sich eine Fangzone in der sich die Funktionswerte auf einem seltsamen Attraktor bewegen. Das bedeutet, dass ein Punkt, in der Fangzone, beziehungsweise auf dem Attraktor liegt, wiederum auf diesen abgebildet wird. Der Attraktor ist in Abbildung \ref{fig:strangeattractor} zu sehen. Hier wurden, ausgehend vom Punkt $(0,0)$, 10000 Iterationen der H\e non-Abbildung berechnet und jeweils das Ergebnis eingezeichnet. Es ist deutlich erkennbar, dass sich der Attraktor teils nahe am Rande der Fangzone bewegt. Bereits bei einer leichten Überschätzung des Ergebnisses kann dies dazu führen, dass die Funktionswerte die Fangzone verlassen und die Werte nicht mehr aussagekräftig sind.
+
+\Abbildungps{tbh}{.7}{img/attractor.pdf}{fig:strangeattractor}{H\e non-Abbildung: Attraktor}{Seltsamer Attraktor der H\e non-Abbildung für $a=1,4$ und $b=0.3$ mit 10000 Punkten.}
+
+Mit fortlaufenden Interationen wird das Rechteck immer weiter verzerrt. In Abbildung \ref{fig:henonevocolored} ist der Farbkodierung folgend, der Ursprung der Regionen im Initalrechteck erkennbar.
+
+\Abbildungps{tbh}{.7}{img/henon_evo_colored.pdf}{fig:henonevocolored}{H\e non-Abbildung: einfache Evolution mit Farbkodierung}{Einfache Evolution der H\e non Abbildung, aufgeteilt in das initiale Rechteck und die drei Zwischenschritte mit Farbkodierung zur Rückführung der Regionen.}     
+
+
+\Abbildungps{tbh}{.9}{img/7iter_w_sweep.pdf}{fig:7iter}{H\e non-Abbildung: Mehrere Iterationen mit Farbkodierung}{Mehrere Iterationen mit Farbkodierung}
 
 
 %%% Local Variables: 
 %%% mode: latex
 %%% TeX-master: "thesis"
 %%% End: 
+ 

@@ -19,13 +19,15 @@
 % Weitere packages: (Dokumentation dazu durch "latex <package>.dtx")
 \usepackage[numbers,sort&compress]{natbib}
 % \usepackage{varioref}
-% \usepackage{verbatim}
+\usepackage{verbatim}
 % \usepackage{float}    %z.B. \floatstyle{ruled}\restylefloat{figure}
 % \usepackage{subfigure}
 % \usepackage{fancybox} % für schattierte,ovale Boxen etc.
 % \usepackage{tabularx} % automatische Spaltenbreite
 % \usepackage{supertab} % mehrseitige Tabellen
 % \usepackage[svnon,svnfoot]{svnver} % SVN Versionsinformation 
+\usepackage{amssymb}
+\usepackage[width=.75\textwidth]{caption}
 %% ---------------- end of usepackages -------------
 
 %\svnversion{$Id: thesis.tex 65 2012-05-10 10:32:11Z bless $} % In case that you want to include version information in the footer
@@ -121,7 +123,7 @@
 %  zitierte Referenzen abgedruckt
 
 \cleardoublepage
-\phantomsection
+\phantomsection  
 \addcontentsline{toc}{chapter}{\bibname}
 %%
 \nocite{*} % nur angeben, wenn auch nicht im Text zitierte Quellen 
