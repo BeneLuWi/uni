@@ -88,7 +88,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Anführungszeichen oben und unten
 %%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand{\anf}[1]{"`{#1}"'}
+\newcommand{\anf}[1]{`{#1}'}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Tiefstellen von Text
@@ -142,11 +142,11 @@
 %% Abbps
 %% Graphik, skaliert, Angabe der Position
 %% 5 Argumente: Position, Breite (0 bis 1.0), Datei, Label, Unterschrift
-\newcommand{\Abbildungps}[5]{%
+\newcommand{\Abbildungps}[6]{%
 \begin{figure}[#1]%
 \begin{center}
 \scalebox{\gsf}{\includegraphics*[width=#2\textwidth]{#3}}%
-\caption{#5}%
+\caption[#5]{#6}%
 \label{#4}%
 \end{center}
 \end{figure}%
@@ -177,6 +177,8 @@
 
 \newcommand{\refAbb}[1]{%
 s.~Abbildung \ref{#1}}
+
+\newcommand{\e}{\'{e}}
 
 %%%%%%%%%%%%%%%%%%%%
 %% end of macros.tex
