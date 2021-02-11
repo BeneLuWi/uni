@@ -1,0 +1,72 @@
+\begin{thebibliography}{BrKM15}
+
+\bibitem[BrKM15]{DBLP:conf/macis/BrausseKM15}
+F.~Brau{\ss}e, M.~V. Korovina und N.~T. M{\"u}ller.
+\newblock Using Taylor Models in Exact Real Arithmetic.
+\newblock In I.~S. Kotsireas, S.~M. Rump und C.~K. Yap (Hrsg.), {\em
+  Mathematical Aspects of Computer and Information Sciences - 6th International
+  Conference, {MACIS} 2015, Berlin, Germany, November 11-13, 2015, Revised
+  Selected Papers}, Band 9582 der {\em Lecture Notes in Computer Science}.
+  Springer, 2015, S.~474--488.
+
+\bibitem[Grtdt20]{gmp}
+T.~Granlund und G.~the~development team.
+\newblock {\em {GNU MP}: {T}he {GNU} {M}ultiple {P}recision {A}rithmetic
+  {L}ibrary}, 6.2.0.~Auflage, 2020.
+\newblock \url{http://gmplib.org/}.
+
+\bibitem[Hén76]{henon1976}
+M.~Hénon.
+\newblock A two-dimensional mapping with a strange attractor.
+\newblock {\em Comm. Math. Phys.} 50(1), 1976, S.~69--77.
+
+\bibitem[MaBe01]{makino2001}
+K.~Makino und M.~Berz.
+\newblock Higher order verified inclusions of multidimensional systems by
+  taylor models.
+\newblock {\em Nonlinear Analysis: Theory, Mehtods and Applications} 47(5),
+  2001, S.~3514--3503.
+
+\bibitem[MoPe07]{geobucketsmulti}
+M.~B. Monagan und R.~Pearce.
+\newblock Polynomial Division Using Dynamic Arrays, Heaps, and Packed Exponent
+  Vectors.
+\newblock In V.~G. Ganzha, E.~W. Mayr und E.~V. Vorozhtsov (Hrsg.), {\em
+  Computer Algebra in Scientific Computing, 10th International Workshop, {CASC}
+  2007, Bonn, Germany, September 16-20, 2007, Proceedings}, Band 4770 der {\em
+  Lecture Notes in Computer Science}. Springer, 2007, S.~295--315.
+
+\bibitem[M{\"u}ll00]{iRRAM}
+N.~T. M{\"u}ller.
+\newblock The iRRAM: Exact Arithmetic in {C++}.
+\newblock In J.~Blanck, V.~Brattka und P.~Hertling (Hrsg.), {\em Computability
+  and Complexity in Analysis, 4th International Workshop, {CCA} 2000, Swansea,
+  UK, September 17-19, 2000, Selected Papers}, Band 2064 der {\em Lecture Notes
+  in Computer Science}. Springer, 2000, S.~222--252.
+
+\bibitem[M{\"u}ll09]{Mller2009EnhancingIE}
+N.~M{\"u}ller.
+\newblock Enhancing imperative exact real arithmetic with functions and logic.
+\newblock 2009.
+
+\bibitem[Span10]{DBLP:spandl}
+C.~Spandl.
+\newblock Computational Complexity of Iterated Maps on the Interval (Extended
+  Abstract).
+\newblock In X.~Zheng und N.~Zhong (Hrsg.), {\em Proceedings Seventh
+  International Conference on Computability and Complexity in Analysis, {CCA}
+  2010, Zhenjiang, China, 21-25th June 2010}, Band~24 der {\em {EPTCS}}, 2010,
+  S.~139--150.
+
+\bibitem[Weih00]{weihrauch}
+K.~Weihrauch.
+\newblock {\em Computable Analysis - An Introduction}.
+\newblock Texts in Theoretical Computer Science. An {EATCS} Series. Springer.
+\newblock 2000.
+
+\bibitem[Yan98]{geobuckets}
+T.~Yan.
+\newblock The Geobucket Data Structure for Polynomials.
+\newblock {\em J. Symb. Comput.} 25(3), 1998, S.~285--293.
+
+\end{thebibliography}
