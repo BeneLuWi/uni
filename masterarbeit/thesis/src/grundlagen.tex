@@ -55,10 +55,30 @@ Für die Parameter $a=1.4$ und $b=0.3$ ergibt sich eine Fangzone in der sich die
 % \Abbildungps{tbh}{.9}{img/7iter_w_sweep.pdf}{fig:7iter}{H\e non-Abbildung: Mehrere Iterationen mit Farbkodierung}{Mehrere Iterationen mit Farbkodierung}
 
 \section{Taylormodell}
-Ein Taylormodell im Sinne der Erweiterung von \cite{DBLP:conf/macis/BrausseKM15} des Grundmodells von \cite{makino2001} besteht aus einem Polynom $p$ mit $k\in \mathbb{N}$ Variablen und geschlossenen Intervallen als Koeffizienten. Eine Variable oder ein Fehlersymbol $\lambda_i$ aus dem Vektor $\lambda = (\lambda_1, \dots, \lambda_k)$ steht für einen Wert aus dem dazugehörigen Supportintervall aus $S=(s_1, \dots, s_k)$ mit $\lambda_i \in s_i$ und wird dazu verwendet, unbekannte Werte, Rechenungenauigkeiten und funktionale Abhängigkeiten innerhalb eines oder zwischen mehreren Taylormodellen abzubilden. Die verwendeten Intervalle $c_n = [\tilde{c}_n \pm \varepsilon_n] \subseteq \mathbb{R}$ haben in \verb+hotm+ reelle Endpunkte und stellen mit $c'_n = [\tilde{c}_n \pm 0]$ auch Punktintervalle dar. Mit einem so definierten Taylormodell $T=\Sigma_n c_n \lambda^n$ kann exakte reelle Arithmetik betrieben werden, indem Rundungsfehler und Ungenauigkeiten, die beim Rechnen mit endlicher Genauigkeit entstehen können als Intervalle in den Fehlersymbolen berücksichtigt werden. Dies ist zwar auch mit einfacher Intervallarithmetik möglich, jedoch leidet die Präzision des Ergebnisses einer solchen Berechnung stark unter der schnell wachsenden Überschätzung, die sich aus der Tendenz von Intervallen ergibt, bei jeder Rechenoperation zu wachsen.
+Ein Taylormodell im Sinne der Erweiterung von \cite{DBLP:conf/macis/BrausseKM15} des Grundmodells von \cite{makino2001} besteht aus einem Polynom $p$ mit $k\in \mathbb{N}$ Variablen, geschlossenen Intervallen als Koeffizienten. Darin enthalten ist immer einem Monom $c_0$ des Grades 0, der das Kernintervall (\textit{Kernel}) des Taylormodells darstellt. Eine Variable oder ein Fehlersymbol $\lambda_i$ aus dem Vektor $\lambda = (\lambda_1, \dots, \lambda_k)$ steht für einen Wert aus dem dazugehörigen Supportintervall aus $S=(s_1, \dots, s_k)$ mit $\lambda_i \in s_i$ und wird dazu verwendet, unbekannte Werte, Rechenungenauigkeiten und funktionale Abhängigkeiten innerhalb eines oder zwischen mehreren Taylormodellen abzubilden. Die verwendeten Intervalle $c_n = [\tilde{c}_n \pm \varepsilon_n] \subseteq \mathbb{R}$ haben in \verb+hotm+ reelle Endpunkte und stellen mit $c'_n = [\tilde{c}_n \pm 0]$ auch Punktintervalle dar. Mit einem so definierten Taylormodell $T=\Sigma_n c_n \lambda^n$ kann exakte reelle Arithmetik betrieben werden, indem Rundungsfehler und Ungenauigkeiten, die beim Rechnen mit endlicher Genauigkeit entstehen können als Intervalle in den Fehlersymbolen berücksichtigt werden. Dies ist zwar auch mit einfacher Intervallarithmetik möglich, jedoch leidet die Präzision des Ergebnisses einer solchen Berechnung stark unter der schnell wachsenden Überschätzung, die sich aus der Tendenz von Intervallen ergibt, bei jeder Rechenoperation zu wachsen.
 
 Des Weiteren können mit Taylormodellen im in dieser Arbeit behandelten zweidimensionalen Fall auch komplexere Flächen als achsenparallele Rechtecke mit Hilfe von Intervallen beschrieben werden.
 
+
+In \cite{DBLP:conf/macis/BrausseKM15} werden drei Unterfamilien von Taylormodellen identifiziert, die sich in der Definition des Polynoms und dessen Koeffizienten unterschieden:
+\begin{enumerate}
+ \item Affine Arithmetik: Polynome des Grades $\leq 1$ mit Punktintervallen, außer beim Kernel.
+ \item Generalisierte Intervallarithmetik: Polynome des Grades $\leq 1$ mit beliebigen Intervallen bei den Koeffizienten. \label{tm2}
+ \item Klassische Taylormodelle: Polynome beliebigen Grades mit Punktintervallen, außer beim Kernel. \label{tm3}
+\end{enumerate}
+
+Das in dieser Arbeit verwendete Taylormodell ist eine Kombination aus \ref{tm2} und \ref{tm3}, und besteht aus Polynomen beliebiger Ordnung mit beliebigen Intervallen als Koeffizienten. Dadurch kann mit zwei solchen \textit{nichtlinearen Taylormodellen} im Zweidimensionalen komplexere Strukturen, wie Kurven höherer Ordnung beschrieben werden.
+
+Abbildung \ref{fig:lin_vs_nonlin_1} zeigt lineare und eine nichtlineare Taylormodelle für
+\begin{align*}
+x = 0 + 1 \cdot \lambda_1 & \hspace{0.5cm} (\lambda_1 \in [0 \pm 0.4]) \\
+ y = 0 + 1 \cdot \lambda_2 & \hspace{0.5cm} (\lambda_2 \in [0 \pm 0.1])
+\end{align*}
+und deren Abbildungen durch $f(x,y) = (y + 1- 1.4 x^2,0.3x)$ mit einer Farbkodierung, die den Ursprung der abgebildeten Flächen indiziert.
+
+\Abbildungps{tbh}{.7}{img/lin_vs_nonlin_1.pdf}{fig:lin_vs_nonlin_1}{Linear und nichtlineare Taylormodelle: Vergleich}{Darstellung nichtlinearer und linearer Taylormodelle, die ein Rechteck beschreiben und deren Abbildung durch die Funktion $f(x,y) = (y + 1- 1.4 x^2,0.3x)$. Die Farbkodierung indiziert den Ursprung der abgebilteden Flächen.}
+
+Sowohl die linearen, als auch die nichlinearen Taylormodelle umschließen den korrekten Bereich der Funktionswerte, allerdings ist die abgebildete Fläche der Nichtlinearen näher an der Fläche, die sich ergäbe, betrachtete man das Rechteck als Menge Punkten und bildete sie einzeln ab. Es ergibt sich eine geringere Überschätzung, aber auch ein komplexeres Polynom.
 
 \section{Intervallarithmetik}
 
