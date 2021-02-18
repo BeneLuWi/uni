@@ -27,6 +27,12 @@ K.~Makino und M.~Berz.
 \newblock {\em Nonlinear Analysis: Theory, Mehtods and Applications} 47(5),
   2001, S.~3514--3503.
 
+\bibitem[Moor79]{moore1979}
+R.~E. Moore.
+\newblock {\em Methods and applications of interval analysis}.
+\newblock {SIAM} studies in applied mathematics. {SIAM}.
+\newblock 1979.
+
 \bibitem[MoPe07]{geobucketsmulti}
 M.~B. Monagan und R.~Pearce.
 \newblock Polynomial Division Using Dynamic Arrays, Heaps, and Packed Exponent

@@ -5,21 +5,180 @@
 \chapter{Implementierung}
 \label{ch:Implementierung}
 %% ==============================
-\ldots
+
+
+
+\section{iRRAM}
+\label{sec:irram}
+Die Software-Bibliothek \verb+iRRAM+ \cite{Mller2009EnhancingIE} basiert auf Intervallen als Zahlentyp, um diese mit einer beliebigen Genauigkeit darstellen zu können. Zunächst wird mit Double-Präzision, also 64-Bit Zahlen gerechnet, welche verwendet werden, bis das Ergebnis für die angefragte Präzision nicht mehr genau ausgegeben werden kann, beziehungsweise bis zu einer bestimmten Anzahl an Bits. Ist dies der Fall, geschieht eine Iteration mit einer erhöhten Genauigkeit, also längeren Zahlen, welche dann mit Hilfe von \verb+MPFR+ dargestellt werden.
+Für eine solche Iteration werden gerade so viele Zwischenergebnisse während der Berechnung gespeichert, dass eine Wiederholung der Schritte mit höherer Präzision möglich ist. Da nicht die gesamte Berechnung in jeder Iteration wiederholt wird, müssen während der Laufzeit Sichtbarkeit von Variablen und Zwischenergebnissen für den Nutzer genau kontrolliert und unter Umständen beschränkt werden, da sonst unerwartetes Verhalten und Exceptions entstehen können, indem die zugegriffenen Werte gegebenfalls nicht in der aktuellen Iteration existieren.
+
+
+Einige der für rationale Zahlen zur Verfügung stehenden Funktionen, wie der Vergleich zweier Zahlen, sind mit reellen Zahlen nicht ohne weiteres Möglich. Dies gilt insbesondere für den Test auf Gleichheit und die Vorzeichenfunktion $sign$. Bei all diesen Funktionen handelt es sich im Reellen (und bei der \verb+iRRAM+) um mehrwertige Funktionen, da sich das jeweilige Ergebnis mit veränderter Präzsion in der Darstellung der Zahlen ändern kann. Dieses Problem wird in \verb+hotm+ durch den \verb+SignType+ adressiert. Zusätzlich zu den Werten 'positiv' (=\verb+POS+) und 'negativ' (=\verb+NEG+),  kann die Vorzeichenfunktion \verb+sign+ den Wert 'ambivalent' (=\verb+AMBI+) ausgeben, wenn nicht entscheidbar ist, wo genau die reelle Zahl um die Null liegt. Hierfür erhält die Vorzeichenfunktion einen Parameter, der den Bereich er Unsicherheit definiert. Ist der Ausgabewert 'ambivalent', so wird in den Funktionen, welche die Vorzeichenfunktion aufrufen, der schlechteste Fall im Hinblick auf die Genauigkeit, beziehungsweise die Intervallbreite des Ergebnisses angenommen. 
+
+
+Eine weitere Besonderheit ergibt sich aus dem Aufbau der Zahlen. Es entstehen zwei Intervall-`Ebenen`: Zum Einen, die Darstellung des Koeffizienten als Intervall aus Mitte und Radius. Zum Anderen die Darstellung von Mitte und Radius, als \verb+iRRAM-REAL+, also auch wiederum jeweils als Intervall mit Wert und Fehler, wie in Grafik \ref{fig:levels} zu sehen ist. Im Vergleich zu den \verb+mpq-RATIONALS+ erhöht sich hier zwar die Komplexität deutlich, allerdings lassen sich Ungenauigkeiten sehr genau steuern, indem zum Beispiel der Rechenfehler des Mittelpunkts eines Koeffizienten auf den Radius 'verlagert' wird. So vergrößert sich zwar der Radius des Koeffizienten, welcher dadurch ungenauer wird, jedoch verkleinert sich der Rechenfehler auf der Zahlenebene der \verb+REAL+s. Ein ählicher Effekt sollte sich durch Rundung auch mit den \verb+mpq-RATIONALS+ erreichen lassen. 
+
+
+Das Verlagern der Ungenauigkeit ($e$ in der Grafik \ref{fig:levels}) auf den Wert des Radius' ($v$ in der Grafik) (Cleaning oder auch \textit{Micro-Housekeeping}) verringert die Intervallbreite und erzeugt Punktintervalle auf der Zahlenebene, allerdings werden die Intervalle auf der Intervallebene breiter. Hier greift dann wiederum der Polish-Mechanismus, der auf Polynomebene Monome hinzufügt, um aus den zu groß gewordenen Intervallen wiederum Punktintervalle zu machen (Splitting oder auch \textit{Macro-Housekeeping}). So wird der Rechenfehler von der untersten Ebene bis zur Polynomebene propagiert.
+Diese Housekeeping-Funktionen werden durch Parameter gesteuert, die bestimmen, ab wann ein Intervall zu breit ist und die jeweilige Prozedur angewandt werden soll.
+
+
+
+
+\begin{figure}[tbh]
+\begin{center}
+ 
+ \input{img/levels.tex}  
+ \caption{Ebenen der Polynomdarstellung mit REALs}
+ \label{fig:levels}
+ \end{center}
+\end{figure}
+
+
+\section{Intervallarithmetik}
+
+Arithmetik auf Taylormodellen zu betreiben bedeutet auf der untersten Ebene, mit Intervallen zu rechnen. Um diese wiederum als Zahlentyp zu verwenden, müssen die Operationen angepasst werden \cite{moore1979}.
+
+\paragraph{Grundrechenarten}
+\begin{itemize}
+    \item[] $[x_1, x_2] + [y_1, y_2] = [x_1 + y_1, x_2 + y_2]$
+    \item[] $[x_1, x_2] - [y_1, y_2] = [x_1 - y_2, x_2 - y_1]$
+    \item[] $[x_1, x_2] \cdot [y_1, y_2] = [min(x_1 y_1, x_1 y_2, x_2 y_1, x_2 y_2), max(x_1 y_1, x_1 y_2, x_2 y_1, x_2 y_2)]$
+    \item[] $[x_1, x_2] / [y_1, y_2] = [min(x_1 / y_1, x_1 / y_2, x_2 / y_1, x_2 / y_2),$\\ $max(x_1 /y_1, x_1 /y_2, x_2 /y_1, x_2 /y_2)]$
+\end{itemize}
+\paragraph{Potenzfunktion}
+Die Potenzfunktion unterscheidet zwischen geradem und ungeradem Exponenten.
+$$[x_1, x_2]^n =
+ \begin{cases}
+    [x_1^n, x_2^n] & falls\ x_1 > 0\ oder\ n\ ungerade; \\
+    [x_2^n, x_1^n] & falls\ x_2 < 0\ und\ n\ gerade, \\
+    [0, max(x_1^n, x_2^n)] & falls\ 0\in [x_1, x_2] \ und\ n\ gerade;
+ \end{cases}$$
+
+\paragraph{Kehrwert}
+Der Kehrwert eines Intervalls kann nur bestimmt werden, wenn es nicht die 0 enthält:
+$$
+1/[x_1, x_2] = [1/x_2, 1/x_1]
+$$
+Wenn $x_1 \leq 0\leq x_2$, bedeutet das, dass für ein $x\in [x_1, x_2]$, $\frac{1}{x} \geq \frac{1}{x_2}$ oder $\frac{1}{x} \leq \frac{1}{x_1}$ gelten muss und das Intervall damit unbegrenzt ist.
+
+
+Die im Basisprogramm \verb+tangentspace+ vorhandene Implementierung wurde erweitert, um Punktintervalle gesondert zu behandeln und die nun auf reellen Zahlen basierenden Intervalldefinitionen zu verwenden. Dies hat zur Folge, dass die Mehrwertigkeit der Vorzeichenfunktion berücksichtigt werden muss. Tritt der Fall der Unsicherheit ein, so muss mit einer Überschätzung gerechnet werden, die in jedem Fall korrekt ist.
 
 %% ==============================
-\section{Abschnitt 1}
+\section{Darstellung der Taylormodelle}
+
+
+
+
+%% ==============================
+\section{Polynommultiplikation}
 %% ==============================
 \label{ch:Implementierung:sec:Abschnitt1}
 
-\ldots
+In einer linearen Implementierung der Taylormodelle wird bei der Multiplikation immer eines der Fehlersymbole gesweept, sodass die Länge eines Polynoms nicht über die Dimension hinausgeht und somit der Schwerpunkt bei der Intervallarithmetik liegt. Lässt man allerdings höhere Ordnungen zu, werden auch die Polynome länger und ein weiteres Problem tritt auf. Um die oben (\ref{def:order}) definierte Ordnung $\prec$ auf dem Polynom $p = p_1 \cdot p_2$ zu erhalten, müssen die $n\cdot m$ Monome ($n := \#p_1, m := \#p_2$), die bei der Multiplikation entstehen, sortiert werden. Werden diese sequentiell zu $p$ hinzugefügt bedeutet das 2 Vergleiche, dann 3, dann 4, und so weiter, bis hin zu $nm$ Vergleichen:
+$$ 2 + 3 + 4 + 5 + ... + nm = \frac{nm \cdot (nm + 1)}{2} - 1$$
+So ergibt sich für die naive Multiplikation eine quadratische Laufzeit in $O$-Notation von $O(nm + (nm)^2)$
+\par
+Für effizientere Polynommultiplikation existieren verschiedene Algorithmen. Viele der schnellen bekannten Algorithmen basieren  auf der Schnellen-Fourier-Transformation, wobei die Polynome in Stützvektoren und wieder zurück umgewandelt werden. Da es sich bei den Koeffizienten den Monome um Intervalle mit möglicherweise unendlichen Schranken handelt, ist das Rückführen eines Stützvektors nicht immer ohne Weiteres möglich. \par
+Ein weiterer Ansatz besteht darin, die Anzahl der benötigten Monomvergleiche zu reduzieren, wenn die Monome einsortiert werden müssen. Betrachtet man die Summe dreier Polynome $p_1 + p_2 + p_3$ mit $\#p_1 >> \#p_2 = \#p_3 = 1$, benötigt das Aufsummieren von links nach rechts $2\#p_1 + 1$ Vergleiche, da mit dem oben verwendeten Additionsverfahren zweifach in $p_1$ eingefügt wird. Summiert man jedoch von rechts nach links so werden lediglich $\#p_1 + 2$ Vergleiche benötigt. Nach dieser Idee kann die Anzahl der Monomvergleiche reduziert werden, indem zunächst Polynome gleicher Länge miteinander addiert werden. Mit Geobuckets, von Yan (\cite{geobuckets}) eingeführt und Monagan und Pearce (\cite{geobucketsmulti}) für die Multiplikation angepasst, werden die Zwischenergebnisse der Polynommultiplikation in geometrisch wachsenden 'Buckets' gespeichert. Hat ein Bucket seine Kapazität erreicht, wird das Polynom zum nächst größeren Bucket hinzuaddiert. Der Unterschied zum Originalalgorithmus besteht darin, dass die Größe der hinzukommenden Polynome bereits bekannt ist und die Bucketkapazität dementsprechend angepasst werden kann. Algorithmus \ref{algo:mult} zeigt die in \verb+hotm+ implementierte Version der Geobucketmultiplikation. Durch den Teile und Herrsche Ansatz, kann die Multiplikation mit Geobuckets in $O(nm \log nm)$ durchgeführt werden.  \par
+Sei $x_0 = 0.5 + 1 \lambda_1 + 1 \lambda_2 + 1 \lambda_3$ und einem Startfehler von $2^{-21}$, also $\lambda_i \in [0 \pm 2^{-20}]\text{ für }i \in \{1,2,3\}$. Berechnet man nun $x_{i+1} = 3.75 \cdot x_i \cdot (1 - x_i)$ zeigen sich deutliche Unterschiede bei den benötigten Monomvergleichen.
 
-%% ==============================
-\section{Abschnitt 2}
-%% ==============================
-\label{ch:Implementierung:sec:Abschnitt2}
 
-\ldots
+Wird wie in \cite{geobuckets} eine Ordnung $\succ$ auf den Monomen definiert, können die Polynome sortiert werden.
+\begin{itemize}
+    \label{def:order}
+    \item $\lambda_1 \succ \lambda_2 \succ...\succ \lambda_k $
+    \item $\lambda_n^i \lambda_m^j \succ \lambda_n^{i'} \lambda_m^{j'} $ für $n > m$, falls
+    \begin{itemize}
+        \item[] $ i > i'$, oder
+        \item[] $ i = i'$ und $ j > j'$
+    \end{itemize}
+\end{itemize}
+Diese Ordnung ist partiell, da gleiche Monome, beziehungsweise Monome mit gleichen Fehlersymbolen nicht vergleichbar sind. Tritt dieser Fall während der Addition zweier Polynome auf, bedeutet das, dass die Koeffizienten beider Monome addiert werden und das so entstandene Monom in das Polynom aufgenommen wird.
+Haben die verglichenen Monome die selbe Anzahl an Variablen, entscheidet die Größe des Exponenten des Fehlersymbols mit dem kleinsten Index.
+
+\begin{figure}[ht]
+    \centering
+    \begin{tikzpicture}
+    \begin{axis}[
+        xlabel={Grad nach Reduktion},
+        ylabel={Monomvergleiche},
+        xmin=5, xmax=8,
+        ymin=100000, ymax=300000000,
+        xtick={5,6,7,8},
+        legend pos=north west,
+        ymajorgrids=true,
+        grid style=dashed,
+    ]
+    \addplot[
+        color=blue,
+        mark=square
+        ]
+        coordinates {
+        (5, 13000000)(6, 40000000 )(7, 100000000)(8, 220000000)
+        };
+        \addlegendentry{Naive Multiplikation}
+        
+    \addplot[
+        color=red,
+        mark=*
+        ]
+        coordinates {
+        (5, 300000)(6, 1000000 )(7, 1800000)(8, 3300000)
+        };
+        \addlegendentry{Multiplikation mit Geobuckets}
+    
+    \end{axis}
+    \end{tikzpicture}
+    \caption{Naive Multiplikation gegen Multiplikation mit Geobuckets}
+    \label{fig:my_label}
+\end{figure}
+
+
+
+
+
+\begin{algorithm}
+\SetAlgoLined
+\SetKwInOut{Input}{input}
+\Input{Polynome $p_1, p_2$}
+// Initialize \\
+$n \gets \#p_1, m\gets \#p_2$ \;
+$p \gets [\ ]$ \;
+Allocate $buckets$ with space for polynomials: $\{2m, 4m, ..., 2^{\lceil log_2(n)\rceil -1 }m\}$\;
+$i\gets 0 $\;
+// Main Loop \\
+\While{$i < n$}{
+    $p \gets p_1[i] \cdot p_2$\;
+    \uIf{$i < (n-1)$}{
+        $p \gets p + p_1[i+1] \cdot p_2$\;
+    }
+    $i\gets i+2$\;
+   $j\gets 0 $\; 
+    \While{$buckets[j].not\_empty()$}{
+        $p \gets p + buckets[j]$ \;
+        $buckets[j] \gets [\ ]$\;
+        $j\gets j+1 $\; 
+    }
+    \uIf{$i < n$}{
+        $buckets[j] \gets p$\;
+        $p \gets [\ ]$ \;
+    }
+    
+}
+// Merge each bucket into the final polynomial\\
+\ForEach{$bucket \in buckets$}{
+    $p \gets p + bucket$\;
+}
+
+
+\Return $p$
+
+ \caption{Polynommultipliaktion mit Geobuckets}
+ \label{algo:mult}
+\end{algorithm}
 
 %%% Local Variables: 
 %%% mode: latex
