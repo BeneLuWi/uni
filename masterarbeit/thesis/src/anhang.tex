@@ -1,0 +1,64 @@
+\chapter{Anhang}
+
+
+
+
+\begin{algorithm}
+\SetAlgoLined
+\SetKwInOut{Input}{input}
+\Input{Polynome $p_1, p_2$}
+// Initialize \\
+$n \gets \#p_1, m\gets \#p_2$ \;
+$p \gets [\ ]$ \;
+Allocate $buckets$ with space for polynomials: $\{2m, 4m, ..., 2^{\lceil log_2(n)\rceil -1 }m\}$\;
+$i\gets 0 $\;
+// Main Loop \\
+\While{$i < n$}{
+    $p \gets p_1[i] \cdot p_2$\;
+    \uIf{$i < (n-1)$}{
+        $p \gets p + p_1[i+1] \cdot p_2$\;
+    }
+    $i\gets i+2$\;
+   $j\gets 0 $\; 
+    \While{$buckets[j].not\_empty()$}{
+        $p \gets p + buckets[j]$ \;
+        $buckets[j] \gets [\ ]$\;
+        $j\gets j+1 $\; 
+    }
+    \uIf{$i < n$}{
+        $buckets[j] \gets p$\;
+        $p \gets [\ ]$ \;
+    }
+    
+}
+// Merge each bucket into the final polynomial\\
+\ForEach{$bucket \in buckets$}{
+    $p \gets p + bucket$\;
+}
+
+
+\Return $p$
+
+ \caption{Polynommultipliaktion mit Geobuckets}
+ \label{algo:mult}
+\end{algorithm}
+
+
+
+\begin{algorithm}[H]
+\label{algo:maxes}
+\SetAlgoLined
+\SetKwInOut{Input}{input}
+\Input{Zwei Listen von Fehlersymbolen $ess_1, ess_2$}
+$size \gets max\{length(ess_1), length(ess_2)\}$\; 
+$i \gets 0 $ \;
+\While{i < size}{
+  \uIf{$i \geq length(ess_1)\ \textbf{or}\ ess_1[i] \succ ess_2[i]$}{
+        \Return right
+  }\uElseIf{$i \geq length(ess_2)\ \textbf{or}\ ess_1[i] \prec ess_2[i]$}{
+        \Return left
+  }
+}
+\Return equal
+ \caption{Vergleich Variablen zweier Monome}
+\end{algorithm}

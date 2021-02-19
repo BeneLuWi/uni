@@ -79,11 +79,15 @@ und deren Abbildungen durch $f(x,y) = (y + 1- 1.4 x^2,0.3x)$ mit einer Farbkodie
 \Abbildungps{tbh}{.7}{img/lin_vs_nonlin_1.pdf}{fig:lin_vs_nonlin_1}{Linear und nichtlineare Taylormodelle: Vergleich}{Darstellung nichtlinearer und linearer Taylormodelle, die ein Rechteck beschreiben und deren Abbildung durch die Funktion $f(x,y) = (y + 1- 1.4 x^2,0.3x)$. Die Farbkodierung indiziert den Ursprung der abgebilteden Flächen.}
 
 Sowohl die linearen, als auch die nichlinearen Taylormodelle umschließen den korrekten Bereich der Funktionswerte, allerdings ist die abgebildete Fläche der Nichtlinearen näher an der Fläche, die sich ergäbe, betrachtete man das Rechteck als Menge Punkten und bildete sie einzeln ab. Es ergibt sich eine geringere Überschätzung, aber auch ein komplexeres Polynom.
-\subsection{Arithmetik auf Taylormodellen}
+
+
+    \subsection{Arithmetische Operationen auf Taylormodellen}
+
+Arithmetische Operationen auf Taylormodellen mit Intervallkoeffizienten bedeuten das Verrechnen von Polynomen, die wiederum Polynome ergeben. Für die Addition, Subtraktion und Multiplikation werden lediglich die entsprechenden Operationen auf die Polynome angewandt. Die Division erfordert
 
 
 
-\subsection{Spezielle Operationen auf Taylormodellen}
+    \subsection{Spezielle Operationen auf Taylormodellen}
 Um den durch Berechnungen wachsenden Grad des Polynomes und die Breite der Intervallkoeffizienten zu kontrollieren, wird in \cite{DBLP:conf/macis/BrausseKM15} \textit{Sweeping} und \textit{Splitting}, also Fegen und Teilen, vorgestellt. 
 
 Sweeping reduziert den Grad eines Monoms $c_n \lambda_i^k$ mit $\lambda_i \in s_i$, indem eines Fehlersymbole durch das entsprechende Intervall aus $S$ ersetzt wird: 
@@ -92,7 +96,7 @@ Sweeping reduziert den Grad eines Monoms $c_n \lambda_i^k$ mit $\lambda_i \in s_
 \end{align*}
 Dies hat natürlich zur Folge, dass die Breite der Koeffizienten wächst und damit die Überschätzung der tatsächlichen Werte. Durch Splitting wird ein Monom in zwei Monome mit Punktintervallen zerteilt und ein neues Fehlersymbol eingeführt, das der Breite des Koeffizienten entspricht:
 \begin{align*}
- [\tilde{c}_n \pm \varepsilon_n]\ \rightarrow [\tilde{c}_n \pm 0] + [1 \pm 0]\cdot  \lambda_n \hspace{0.5cm}, \lambda_n \in [0 \pm \varepsilon_n]
+ [\tilde{c}_n \pm \varepsilon_n]\ \rightarrow [\tilde{c}_n \pm 0] + [\varepsilon_n \pm 0]\cdot  \lambda_n \hspace{0.5cm}, \lambda_n \in [0 \pm 1]
 \end{align*}
 Es ergibt sich der gegenteilige Effekt des Sweepings, da die Intervalle kleiner werden, der Grad des Polynoms jedoch erhöht wird.
 

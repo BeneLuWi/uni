@@ -47,7 +47,7 @@ Arithmetik auf Taylormodellen zu betreiben bedeutet auf der untersten Ebene, mit
     \item[] $[x_1, x_2] \cdot [y_1, y_2] = [min(x_1 y_1, x_1 y_2, x_2 y_1, x_2 y_2), max(x_1 y_1, x_1 y_2, x_2 y_1, x_2 y_2)]$
     \item[] $[x_1, x_2] / [y_1, y_2] = [min(x_1 / y_1, x_1 / y_2, x_2 / y_1, x_2 / y_2),$\\ $max(x_1 /y_1, x_1 /y_2, x_2 /y_1, x_2 /y_2)]$
 \end{itemize}
-\paragraph{Potenzfunktion}
+\paragraph{Potenzfunktion}\label{par:potenzfunktion}
 Die Potenzfunktion unterscheidet zwischen geradem und ungeradem Exponenten.
 $$[x_1, x_2]^n =
  \begin{cases}
@@ -66,9 +66,6 @@ Wenn $x_1 \leq 0\leq x_2$, bedeutet das, dass für ein $x\in [x_1, x_2]$, $\frac
 
 Die im Basisprogramm \verb+tangentspace+ vorhandene Implementierung wurde erweitert, um Punktintervalle gesondert zu behandeln und die nun auf reellen Zahlen basierenden Intervalldefinitionen zu verwenden. Dies hat zur Folge, dass die Mehrwertigkeit der Vorzeichenfunktion berücksichtigt werden muss. Tritt der Fall der Unsicherheit ein, so muss mit einer Überschätzung gerechnet werden, die in jedem Fall korrekt ist.
 
-%% ==============================
-\section{Darstellung der Taylormodelle}
-
 
 
 
@@ -83,7 +80,6 @@ So ergibt sich für die naive Multiplikation eine quadratische Laufzeit in $O$-N
 \par
 Für effizientere Polynommultiplikation existieren verschiedene Algorithmen. Viele der schnellen bekannten Algorithmen basieren  auf der Schnellen-Fourier-Transformation, wobei die Polynome in Stützvektoren und wieder zurück umgewandelt werden. Da es sich bei den Koeffizienten den Monome um Intervalle mit möglicherweise unendlichen Schranken handelt, ist das Rückführen eines Stützvektors nicht immer ohne Weiteres möglich. \par
 Ein weiterer Ansatz besteht darin, die Anzahl der benötigten Monomvergleiche zu reduzieren, wenn die Monome einsortiert werden müssen. Betrachtet man die Summe dreier Polynome $p_1 + p_2 + p_3$ mit $\#p_1 >> \#p_2 = \#p_3 = 1$, benötigt das Aufsummieren von links nach rechts $2\#p_1 + 1$ Vergleiche, da mit dem oben verwendeten Additionsverfahren zweifach in $p_1$ eingefügt wird. Summiert man jedoch von rechts nach links so werden lediglich $\#p_1 + 2$ Vergleiche benötigt. Nach dieser Idee kann die Anzahl der Monomvergleiche reduziert werden, indem zunächst Polynome gleicher Länge miteinander addiert werden. Mit Geobuckets, von Yan (\cite{geobuckets}) eingeführt und Monagan und Pearce (\cite{geobucketsmulti}) für die Multiplikation angepasst, werden die Zwischenergebnisse der Polynommultiplikation in geometrisch wachsenden 'Buckets' gespeichert. Hat ein Bucket seine Kapazität erreicht, wird das Polynom zum nächst größeren Bucket hinzuaddiert. Der Unterschied zum Originalalgorithmus besteht darin, dass die Größe der hinzukommenden Polynome bereits bekannt ist und die Bucketkapazität dementsprechend angepasst werden kann. Algorithmus \ref{algo:mult} zeigt die in \verb+hotm+ implementierte Version der Geobucketmultiplikation. Durch den Teile und Herrsche Ansatz, kann die Multiplikation mit Geobuckets in $O(nm \log nm)$ durchgeführt werden.  \par
-Sei $x_0 = 0.5 + 1 \lambda_1 + 1 \lambda_2 + 1 \lambda_3$ und einem Startfehler von $2^{-21}$, also $\lambda_i \in [0 \pm 2^{-20}]\text{ für }i \in \{1,2,3\}$. Berechnet man nun $x_{i+1} = 3.75 \cdot x_i \cdot (1 - x_i)$ zeigen sich deutliche Unterschiede bei den benötigten Monomvergleichen.
 
 
 Wird wie in \cite{geobuckets} eine Ordnung $\succ$ auf den Monomen definiert, können die Polynome sortiert werden.
@@ -97,7 +93,7 @@ Wird wie in \cite{geobuckets} eine Ordnung $\succ$ auf den Monomen definiert, k�
     \end{itemize}
 \end{itemize}
 Diese Ordnung ist partiell, da gleiche Monome, beziehungsweise Monome mit gleichen Fehlersymbolen nicht vergleichbar sind. Tritt dieser Fall während der Addition zweier Polynome auf, bedeutet das, dass die Koeffizienten beider Monome addiert werden und das so entstandene Monom in das Polynom aufgenommen wird.
-Haben die verglichenen Monome die selbe Anzahl an Variablen, entscheidet die Größe des Exponenten des Fehlersymbols mit dem kleinsten Index.
+Haben die verglichenen Monome die selbe Anzahl an Variablen, entscheidet die Größe des Exponenten des Fehlersymbols mit dem kleinsten Index. Algorithmus \ref{algo:maxes} implementiert den Vergleich zweier Monome, beziehungsweise derer Variablen.
 
 \begin{figure}[ht]
     \centering
@@ -138,47 +134,63 @@ Haben die verglichenen Monome die selbe Anzahl an Variablen, entscheidet die Gr�
 
 
 
+\newpage
+%% ==============================
+\section{Taylormodelle}
+Taylormodelle bestehen in \verb+hotm+ aus einer List von nach der Ordnunng $\succ$ (siehe \ref{def:order}) sortierten Monomen. Für die Supportintervalle der Fehlersymbole wird eine statische Liste (\verb+static std::list+), für die Grenzwerte der Housekeeping-Methoden und den Index neuer Fehlersymbole jeweils statische Variablen angelegt.
+\subsection{Housekeeping-Methoden}
+Die Housekeeping-Methoden Splitting und Sweeping werden in \cite{DBLP:conf/macis/BrausseKM15} beschrieben und dienen der Kontrolle der Intervallkoeffizieten und deren Wachstum. Wann die Methoden angewandt werden, wird durch die manuell justierbaren Parameter \verb+MACRO_THRESHOLD+ für Splitting und \verb+MICRO_THRESHOLD+ für Cleaning festgelegt. Da für diese beiden Methoden Vergleiche reeller Zahlen nötig sind, um das Überschreiten eines Grenzwertes zu bestimmnen, werden die Zahlen mit Funktionen der \verb+iRRAM+ in rationale Approximationen zerlegt.
 
-
-\begin{algorithm}
-\SetAlgoLined
-\SetKwInOut{Input}{input}
-\Input{Polynome $p_1, p_2$}
-// Initialize \\
-$n \gets \#p_1, m\gets \#p_2$ \;
-$p \gets [\ ]$ \;
-Allocate $buckets$ with space for polynomials: $\{2m, 4m, ..., 2^{\lceil log_2(n)\rceil -1 }m\}$\;
-$i\gets 0 $\;
-// Main Loop \\
-\While{$i < n$}{
-    $p \gets p_1[i] \cdot p_2$\;
-    \uIf{$i < (n-1)$}{
-        $p \gets p + p_1[i+1] \cdot p_2$\;
-    }
-    $i\gets i+2$\;
-   $j\gets 0 $\; 
-    \While{$buckets[j].not\_empty()$}{
-        $p \gets p + buckets[j]$ \;
-        $buckets[j] \gets [\ ]$\;
-        $j\gets j+1 $\; 
-    }
-    \uIf{$i < n$}{
-        $buckets[j] \gets p$\;
-        $p \gets [\ ]$ \;
-    }
+\paragraph{Cleaning}
+Wie oben beschrieben, ergibt die Verwendung der \verb+iRRAM-REAL+s als Intervallgrenzen zweistufige Intervalle mit der Zahlen- und Intervallebene (siehe Abbildung \ref{fig:levels}). Mit fortlaufenden Rechnungen wächst die Breite der Intervalle auf Zahlenebene kontinuierlich und kann ohne weitere Methoden nur durch ein Erhöhen der verwendeten Präzision wieder verringer werden, beziehungsweise durch eine Iteration der \verb+iRRAM+. \textit{Cleaning} verlagert den Rechenfehler der Zahlenebene auf die Intervallebene und macht ihn damit auch für andere Housekeeping-Methoden sichtbar. Das Intervall $I=[m \pm r]$ mit $m=[c_m \pm \varepsilon_m]$ und $r = [c_r \pm \varepsilon_r]$ wird um $\varepsilon_m$ und $\varepsilon_r$ vergrößert, sodass das $I$ zwar wächst, jedoch dessen Endpunkte exakt sind:
+\begin{align*}[[c_m \pm \varepsilon_m] \pm [c_r \pm \varepsilon_r]] &\rightsquigarrow [[c_m \pm 0] \pm [c_r + \varepsilon_m +\varepsilon_r  \pm 0]] \\
+&= [\underbrace{c_m'}_{c_m + \varepsilon_m +\varepsilon_r} \pm c_r ]\end{align*}
     
-}
-// Merge each bucket into the final polynomial\\
-\ForEach{$bucket \in buckets$}{
-    $p \gets p + bucket$\;
-}
+    
+
+\paragraph{Splitting}
+Durch Cleaning, Sweeping oder eine Initialisierung der Taylormodelle mit einer gewissen Breite wachsen die Radii der Koeffizienten im Laufe einer Berechnung auch auf Intervallebene. Um die Überschätzung, die durch Intervallarithmetik entsteht zu kontrollieren, kann durch \textit{Splitting} ein Monom in zwei Monome mit Punktintervallen als Koeffizienten und einem neuen Fehlersymbol aufgeteilt werden:
+\begin{align*}
+[\tilde{c}_n \pm \varepsilon_n]\ \rightarrow [\tilde{c}_n \pm 0] + [\varepsilon_n \pm 0]\cdot  \lambda_n \hspace{0.5cm}, \lambda_n \in [0 \pm 1]
+\end{align*}
+Dadurch erhöht sich der Grad des Polynoms, jedoch verringert sich die Überschätzung durch Intervallarithmetik. Eine Alternative das Splitting zu realisieren ist, den Fehler statt wie in \cite{DBLP:conf/macis/BrausseKM15} im Koeffizienten des neuen Monoms, im neuen Fehlersymbol zu kodieren:
+\begin{align*}
+ [\tilde{c}_n \pm \varepsilon_n]\ \rightsquigarrow [\tilde{c}_n \pm 0] + [1 \pm 0]\cdot  \lambda_n \hspace{0.5cm}, \lambda_n \in [0 \pm \varepsilon_n]
+\end{align*}
+Dies hat den Vorteil, dass die Größe der Fehlersymbole beim Sweeping berücksichtigt werden kann.
+
+\paragraph{Sweeping}
+Cleaning und Splitting sorgen dafür, dass die Intervallbreite der Koeffizienten klein bleibt, jedoch erhöht sich der Grad der Polynome, was zum Beispiel bei der Multiplikation von Taylormodellen zu Ineffizienz durch die exponentiell wachsende Anzahl an Monomen führt. Um diesem Effekt entgegenzuwirken, kann mit \textit{Sweeping} ein Fehlersymbol durch sein Supportintervall ersetzt werden:
+\begin{align*}
+ c_n \lambda_i^k \rightsquigarrow c_n s_i \lambda_i^{k-1}
+\end{align*}
+Hierbei ist zu beachten, dass das $n$-fache Sweepen eines Fehlersymbols, welches die 0 enthält, mit $n$ gerade eine geringere Breite in den Koeffizienten einführt, als $n$ ungerade (siehe oben \ref{par:potenzfunktion}). Daraus ergeben sich zwei Sweeping-\textit{Strategien}.
+
+\subparagraph{square\_only}
+Die Sweeping-Strategie \verb+square_only+ beschränkt das Sweeping auf gerade Potenzen. So wird die angestrebte Reduktion des Grades eines Monoms nur erreicht, wenn alle Variablen einen geraden Exponenten haben.
 
 
-\Return $p$
+\subparagraph{square\_first}
+Mit \verb+square_first+ wird der angestrebte Grad erreicht, indem zunächst möglichst viele Fehlersymbole gerade gesweept werden. Falls dadurch jedoch nicht die gesamte Reduktion möglich ist, wird der Rest ungerade gesweept.
 
- \caption{Polynommultipliaktion mit Geobuckets}
- \label{algo:mult}
-\end{algorithm}
+Der Aufruf der Methode erhält in \verb+hotm+ drei Parameter; das zu reduziere Taylormodell, den Grad, auf das Taylormodell durch Sweeping reduziert werden soll und die Strategie:
+
+ \begin{lstlisting}[language=C++]
+tmsimple x;
+x = sweep_to(x, 2, SQUARE_ONLY);
+\end{lstlisting}
+
+
+
+
+
+
+
+
+
+
+
+
 
 %%% Local Variables: 
 %%% mode: latex
