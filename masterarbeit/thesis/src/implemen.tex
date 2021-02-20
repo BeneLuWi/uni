@@ -36,6 +36,18 @@ Diese Housekeeping-Funktionen werden durch Parameter gesteuert, die bestimmen, a
 \end{figure}
 
 
+\subsection{Präzision}
+Werden zwei \verb+iRRAM-REAL+s $x$ und $y$ mit einer jeweiligen Präzision $p_x$ und $p_y$ verrechnet $z = x \circ y$, so entscheidet die Präzisions-Strategie \verb+prec_policy+, ob für für diese Operation absolute oder relative Genauigkeit verwendet wird. Zudem existiert eine globale, an die Iteration der \verb+iRRAM+ gebundene Genauigkeit \verb+actual_precision+ $p_g$ , die sich mit jeder Iteration verringert, beginnend mit dem Wert $p_{g0} = -50$. Diese Werte sind negativ und repräsentieren, die Anzahl an Bits, für die eine Zahl genau bekannt ist. Bei $z = x\circ y$ ist die Genauigkeit $p_z$ durch
+$$p_z = \begin{cases}
+         max(p_x, p_y, p_g) & \text{falls absolute Genauigkeit}\\
+         max(p_x, p_y, max(p_x, p_y) - 50 + p_g) & \text{falls relative Genauigkeit}
+        \end{cases}
+$$
+gegeben.
+Für die Anwendung in \verb+hotm+ eignet sich die Verwendung von relativer Genauigkeit am besten, da die Manipulation der Fehlerbreite durch Cleaning große Unterschiede in der Genauigkeit zwischen Zahlen ergibt und die Skalierung zu auffwändig ist.
+
+
+
 \section{Intervallarithmetik}
 
 Arithmetik auf Taylormodellen zu betreiben bedeutet auf der untersten Ebene, mit Intervallen zu rechnen. Um diese wiederum als Zahlentyp zu verwenden, müssen die Operationen angepasst werden \cite{moore1979}.
@@ -175,7 +187,7 @@ Mit \verb+square_first+ wird der angestrebte Grad erreicht, indem zunächst mög
 
 Der Aufruf der Methode erhält in \verb+hotm+ drei Parameter; das zu reduziere Taylormodell, den Grad, auf das Taylormodell durch Sweeping reduziert werden soll und die Strategie:
 
- \begin{lstlisting}[language=C++]
+ \begin{lstlisting}[language=C++, caption=Beispielaufruf der Sweeping-Routine,captionpos=b,xleftmargin=15pt]
 tmsimple x;
 x = sweep_to(x, 2, SQUARE_ONLY);
 \end{lstlisting}
