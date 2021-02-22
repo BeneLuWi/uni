@@ -1,4 +1,4 @@
-\begin{thebibliography}{BrKM15}
+\begin{thebibliography}{WiKm20}
 
 \bibitem[BrKM15]{DBLP:conf/macis/BrausseKM15}
 F.~Brau{\ss}e, M.~V. Korovina und N.~T. M{\"u}ller.
@@ -35,6 +35,11 @@ M.~B. Monagan und R.~Pearce.
 N.~M{\"u}ller.
 \newblock Enhancing imperative exact real arithmetic with functions and logic.
 \newblock 2009.
+
+\bibitem[WiKm20]{gnuplot}
+T.~Williams, C.~Kelley und {many others}.
+\newblock Gnuplot 5.4: an interactive plotting program.
+\newblock \url{http://gnuplot.sourceforge.net/}, 2020.
 
 \bibitem[Yan98]{geobuckets}
 T.~Yan.
