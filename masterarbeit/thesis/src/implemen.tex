@@ -194,6 +194,16 @@ x = sweep_to(x, 2, SQUARE_ONLY);
 
 
 
+\subsection{Darstellung der Taylormodelle}
+Die grafischen Darstellungen der Taylormodelle in dieser Arbeit wurden mit \verb+gnuplot+ \cite{gnuplot} erstellt und zeigen je eine Übermenge des tatsächlichen Taylormodells. Eine Darstellung eines Taylormodells entsteht, indem für jedes der $k$ Fehlersymbol aus $\lambda=(\lambda_1, \dots, \lambda_k)$ ein Wert festgelegt und dann das Taylormodell evaluiert wird. Um eine Übermenge zu zeichnen muss der gesamte Wertebereich eines jeden Fehlersymbols abgedeckt werden. In \verb+hotm+ geschieht das, indem für eine gegebene \textit{Auflösung} $a \in \mathbb{N}$ die Supportintervalle $S=(s_1, \cdots s_k)$ in jeweils $a$ Intervalle geteilt und für jede Kombination mit eingesetzten Werten ein von den anderen unabhängiges Rechteck gezeichnet wird. So ergeben sich für Taylormodelle mit $k$ Variablen $a^k$ Rechtecke. Eine solche Darstellung wird in \cite{DBLP:conf/macis/BrausseKM15} als $image(T) \subseteq \mathbb{R}^d$ definiert. Die hier verwendete Darstellung wird um die verwendete Auflösung erweitert: $image_{acc}(T,a)$.
+
+\Abbildungps{tbh}{.9}{img/accuracy.pdf}{fig:acc}{H\e non-Abbildung: Abbildung mit verschiedenen Auflösungen}{Jede Zeile zeigt eine einfache Abbildung der Rechtecke durch die H\e non-Abbildung mit $a=1.4$ und $b=0.3$ mit verschiedenen Auflösungen für die Darstellung. (a): 4 Rechtecke; (b): 100 Rechtecke, (c): 10000 Rechtecke. Das Tetragon stellt die Fangzone für die verwendeten Parameter dar. }
+
+Seien $T_1$ und $T_2$ Taylormodelle mit $k=2$ Variablen, die eine zweidimensionale Fläche aufspannen, bei denen die initialen Fehlersymbole erhalten bleiben und keine neuen Fehlersymbole eigeführt werden, so kann durch die Abhängigkeitsinformation der Fehlersymbole Ursprung und Abbild der einzelnen Regionen dieser Fläche farblich induziert werden. Abbildung \ref{fig:acc} zeigt eine Iteration der H\e non-Abbildung eines Rechtecks mit verschiedenen Auflösungen. Es ist gut zu erkennen, dass die gröbere Auflösungen, die feinere überdeckt und $image_{acc}(T_1,100)\times image_{acc}(T_2,100) \subseteq image_{acc}(T_1,10)\times image_{acc}(T_2,10) \subseteq image_{acc}(T_1,2)\times image_{acc}(T_2,2) $ gilt. Durch die Einfärbung der Rechtecke können verschiedene Effekte beobachtet werden:
+\begin{enumerate}
+ \item Die Rechtecke überlagern sich im Abbild, obwohl sie sich im Ursprung nicht überschneiden und die H\e non-Abbildung an sich eindeutig invertierbar ist. Grund hierfür ist die entstehende Überschätzung durch Intervallarithmetik, die besonders bei Multiplikation, beziehungsweise Quadrierung der Intervalle zum Tragen kommt.
+ \item Das in den Grafiken eingezeichnete Tetragon stellt die Fangzone $R$ für die hier verwendeten Parameter $a=1.4$ und $b=0.3$ dar. Mit Hilfe der Einfärbung ist erkennbar, wie Regionen außerhalb von $R$ wiederum außerhalb abgebildet werden, während innerhalb liegende diese nach der Abbildung nicht verlassen.
+\end{enumerate}
 
 
 
