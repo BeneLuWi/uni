@@ -5,6 +5,22 @@
 \label{ch:Evaluierung}
 %% ==============================
 
+\section{Konfiguration}
+Die Implementierung nichtlinearer Taylormodelle ergibt eine Vielzahl von Konfigurationsmöglichkeiten und damit einen kaum abzudeckenden Suchraum nach der optimalen Einstellung:
+\begin{enumerate}
+ \item Grenzwert für Cleaning, Splitting
+ \item Grad der Reduktion durch Sweeping
+ \item Anzahl der zu erhaltenden Fehlersymbole
+ \item Strategie beim Sweeping
+ \item Heuristik für die Reihenfolge, in der Fehlersymbole gesweept werden
+ \item Vorgehen beim Splitting
+ \item Definition des initialen Taylormodells
+\end{enumerate}
+Diese Konfigurationen werden in \verb+hotm+ als JSON-Datei mit Hilfe einer JSON-Bibliothek\footnote{\url{https://github.com/nlohmann/json} Stand (Dezember 2020)} eingelesen und verarbeitet, um wiederholte Durchläufe mit leicht veränderten Parametern oder Batch-Runs zu vereinfachen. Listing \ref{list:config} zeigt ein Beispiel einer Konfigurationsdatei, mit der versuchsweise 1000 Iterationen der H\e non-Abbildung berechnet werden sollen. 
+
+
+
+
 
 %%% Local Variables: 
 %%% mode: latex

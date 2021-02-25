@@ -65,3 +65,75 @@ $i \gets 0 $ \;
 
 
 \Abbildungps{tbh}{.9}{img/7iter_w_sweep.pdf}{fig:7iter}{H\e non-Abbildung: Mehrere Iterationen mit Farbkodierung}{Mehrere Iterationen mit Farbkodierung}
+
+
+\newpage
+\begin{lstlisting}[language=JSON, caption=Bespielkonfiguration,captionpos=b, label=list:config]
+ [
+  {
+    "comment": "Error 100",
+    "rel": 1,
+    "linear": 0,
+    "keep": 2,
+    "error_in_lambda": true,
+    "strategy": "SQUARE_ONLY",
+    "iter": 1000,
+    "prec": 50,
+    "error": 1000,
+    "decimals": 20,
+    "sweep_to": 2,
+    "micro_thresh": 1,
+    "macro_thresh": 1,
+    "a": 1.4,
+    "b": 0.3,
+    "support_space": [
+      {
+        "point": false,
+        "mid": "0",
+        "rad": "e"
+      },
+      {
+        "point": false,
+        "mid": "0",
+        "rad": "e"
+      }
+    ],
+    "x": {
+      "kernel": {
+        "point": true,
+        "mid": "1",
+        "rad": "0"
+      },
+      "monomials": [
+        {
+          "point": true,
+          "mid": "1",
+          "rad": "0",
+          "lambdas": [{
+            "exp": 1,
+            "index": 0
+          }]
+        }
+      ]
+    },
+    "y": {
+      "kernel": {
+        "point": true,
+        "mid": "0.1",
+        "rad": "0"
+      },
+      "monomials": [
+        {
+          "point": true,
+          "mid": "1",
+          "rad": "0",
+          "lambdas": [{
+            "exp": 1,
+            "index": 1
+          }]
+        }
+      ]
+    }
+  }
+]
+\end{lstlisting}
