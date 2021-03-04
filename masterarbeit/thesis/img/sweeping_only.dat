@@ -1,0 +1,9 @@
+# Sweep_to with Square Only
+# Iterations keep0 keep1 keep2 keep3 keep4
+0 1222 1437 1412 1465 1451
+1 1222 1437 1233 1435 1233
+2 1222 1423 1234 1234 1234
+3 1222 1374 1231 1235 1234
+4 1222 1356 1233 1231 1234
+
+#set term wxt font "Monospace,12 size 800,800"; set xlabel "Gradreduktion"; set ylabel "Iterationen"; set yrange [1200:1500] ;set xtics(0,1,2,3,4); plot "sweeping_only.dat" using 1:2 with lines lt rgb "#E6F598" lw 3 title "n = 0",    "sweeping_only.dat" using 1:3 with lines lt rgb "#D53E4F" lw 3 title "n = 1",      "sweeping_only.dat" using 1:4 with lines lt rgb "#F46D43" lw 3 title "n = 2",         "sweeping_only.dat" using 1:5 with lines lt rgb "#66C2A5" lw 3 title "n = 3",         "sweeping_only.dat" using 1:6 with lines lt rgb "#3288BD" lw 3 title "n = 4"

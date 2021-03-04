@@ -1,0 +1,19 @@
+# housesteps
+0 155
+100 273
+200 414
+300 548
+400 669
+500 794
+600 922
+700 1049
+800 1182
+900 1306
+1000 1423
+1100 1423
+1200 1423
+1200 1423
+
+#plot "housesteps.dat" using 1:2 with lines lt rgb "green" lw 3 title "Anzahl an Iterationen"
+
+#set format x "2^{-%.f}"
