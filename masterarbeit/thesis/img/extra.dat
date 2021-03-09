@@ -1,0 +1,13 @@
+# Sweep_to 0 with Square only vs Linearm, 10k Prec, 
+# nonl lin 12336 14506 14432 15296 15266 15526
+0 12336 12336
+1 14506 13713
+2 14432 14388
+3 15266 14751
+4 15526 15039
+5 1459 15212
+6 1437 15335
+7 123  15411
+
+
+#set term wxt font "Monospace,12" size 600,400; set xlabel "Erhaltene Fehlersymbole"; set ylabel "Iterationen"; set yrange [12000:16000] ;set xtics(0,1,2,3,4,5,6,7); plot "extra.dat" using 1:2 with lines lt rgb "#3288BD" lw 3 title "nichtlinear",    "extra.dat" using 1:3 with lines lt rgb "#D53E4F" lw 3 title "linear"

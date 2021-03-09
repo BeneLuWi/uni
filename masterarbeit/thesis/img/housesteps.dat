@@ -14,6 +14,6 @@
 1200 1423
 1200 1423
 
-#plot "housesteps.dat" using 1:2 with lines lt rgb "green" lw 3 title "Anzahl an Iterationen"
+# set term wxt font "Monospace,12" size 600,400; set xlabel "Grenzwert für Cleaning und Splitting"; set ylabel "Iterationen"; set format x "2^{-%.f}"; plot "housesteps.dat" using 1:2 with lines lt rgb "black" lw 3 title "Anzahl an Iterationen"
 
 #set format x "2^{-%.f}"
