@@ -1,0 +1,15 @@
+# Splitting with error in lambda
+# FALSE TRUE
+1000 1222 1437
+2000 2451 2904
+3000 3674 4338
+4000 4905 5749
+5000 6116 7171
+6000 7340 8659
+7000 8588 10139
+8000 9830  11611
+9000 11088 13071
+10000 12338 14506
+
+
+#set term wxt font "Monospace,12" size 600,400; set xlabel "Intervallradius für x und y";set format x "2^{-%.f}"; set ylabel "Iterationen"; set yrange [1000:15000] ; plot "split.dat" using 1:2 with lines lt rgb "#3288BD" lw 3 title "Einheitsintervall",    "split.dat" using 1:3 with lines lt rgb "#D53E4F" lw 3 title "Nicht-Einheitsintervall"
