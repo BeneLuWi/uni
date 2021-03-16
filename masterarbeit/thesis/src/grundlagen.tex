@@ -113,7 +113,7 @@ Beziehungsweise entwickelt sich die Entfernung zwischen den zwei Punkten $\varep
 \begin{align}
  \varepsilon \cdot e^{n\cdot LE(x_0)} = |f^n(x_0 + \varepsilon) - f^n(x_0)|
 \end{align}
-Für $LE(x_0)<0$ kontrahiert, für $LE(x_0)>0$ wächst der Abstand zwischen den Punkten über den Verlauf der Schritte. In der Praxis muss mit Rundungsfehlern bei der Berechnung der Werte umgegangen werden, da ein Computer nur mit endlicher Genauigkeit rechnen kann. Dadurch kann $|f^n(x_0 + \varepsilon) - f^n(x_0)|$ nur von oben angenähert werden. Der Lyapunov Exponent bildet somit eine untere Schranke für die Ausdehnung eines Intervalls 
+Für $LE(x_0)<0$ kontrahiert, für $LE(x_0)>0$ wächst der Abstand zwischen den Punkten über den Verlauf der Schritte. In der Praxis muss mit Rundungsfehlern bei der Berechnung der Werte umgegangen werden, da ein Computer nur mit endlicher Genauigkeit rechnen kann. Dadurch kann $|f^n(x_0 + \varepsilon) - f^n(x_0)|$ nur von oben angenähert werden. Der Lyapunov Exponent bildet somit eine untere Schranke für die Ausdehnung eines Intervalls $x_0$, welches durch Intervallarithmetik überschätzt wird.
 
 
 
@@ -140,7 +140,7 @@ Mit $m_{min}$ kann nun die Verlustrate der Aussagekraft der errechneten Werte pr
 \end{align}
 angegeben werden. 
 
-Die in dieser Arbeit verwendeten Taylormodelle bestehen aus Polynomen mit Intervallkoeffizienten und reellen Endpunkten. Für die praktische Umsetzung wurde die Software-Bibliothek \verb+iRRAM+ \cite{Mller2009EnhancingIE} verwendet, welche reelle Zahlen, wie oben beschrieben darstellen und annähern. Stellen diese Taylormodelle nun ein Intervall dar, so ist das Ziel, für die Darstellung der reellen Zahlen einen möglichst kleinen Wert für $m$ zu finden, sodass sich die Intervallgrenzen für eine Iterationszahl $n$ so nah wie möglich am Lyapunov Exponenten für die H\e non-Abbildung entwickeln.
+Die in dieser Arbeit verwendeten Taylormodelle bestehen aus Polynomen mit Intervallkoeffizienten und reellen Endpunkten. Für die praktische Umsetzung wurde die Software-Bibliothek \verb+iRRAM+ \cite{Mller2009EnhancingIE} verwendet, welche reelle Zahlen, wie oben beschrieben darstellen und annähern. Stellen diese Taylormodelle nun ein Intervall dar, so ist das Ziel, für die Darstellung der reellen Zahlen einen möglichst kleinen Wert für $m$ zu finden, sodass die Verlustrate der Aussagekraft der Intervallgrenzen erlaubt, dass sich das Intervall für eine Iterationszahl $n$ so nah wie möglich am Lyapunov Exponenten für die H\e non-Abbildung entwickeln.  
 
 
  
