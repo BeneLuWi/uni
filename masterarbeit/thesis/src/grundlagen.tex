@@ -104,7 +104,46 @@ Es ergibt sich der gegenteilige Effekt des Sweepings, da die Intervalle kleiner 
 
 
 
+\section{Lyapunov Exponent}
+Mit dem Lyapunov Exponenten kann für ein dynamisches System $(D,f)$ mit Phasenraum $D$ und einer Funktion $f: D \rightarrow D$ angegeben werden, mit welcher Rate sich zwei beliebig nahe Punkte $x_0 \in D$ und $x_0 + \varepsilon$ mit $\varepsilon > 0$ voneinander entfernen, beziehungsweise annähen. Für eine iterierende Funktion $x_{n+1} = f(x_n)$ mit diskreten Zeitschritten wird der Lyapunov Exponent wie folgt definiert \cite{Plaschko1989}:
+\begin{align}
+ LE(x_o) = \lim_{n \rightarrow \infty} \frac{1}{n} \sum_{n=0}^{n-1} \ln |f'(x_i)|
+\end{align}
+Beziehungsweise entwickelt sich die Entfernung zwischen den zwei Punkten $\varepsilon$ zum Zeitpunkt $n$ mit:
+\begin{align}
+ \varepsilon \cdot e^{n\cdot LE(x_0)} = |f^n(x_0 + \varepsilon) - f^n(x_0)|
+\end{align}
+Für $LE(x_0)<0$ kontrahiert, für $LE(x_0)>0$ wächst der Abstand zwischen den Punkten über den Verlauf der Schritte. In der Praxis muss mit Rundungsfehlern bei der Berechnung der Werte umgegangen werden, da ein Computer nur mit endlicher Genauigkeit rechnen kann. Dadurch kann $|f^n(x_0 + \varepsilon) - f^n(x_0)|$ nur von oben angenähert werden. Der Lyapunov Exponent bildet somit eine untere Schranke für die Ausdehnung eines Intervalls 
 
+
+
+
+\paragraph{TODO Lyapunov für Henon berechnen!}
+
+
+In \cite{DBLP:spandl} wird der Lyapunov Exponent in den Kontext der Berechenbaren Analysis gerückt und in Verbindung mit der Entwicklung von Rundungsfehlern in reeller Arithmetik gebracht. Der Wert von $x_n$ wird zu einem beliebigen Zeitpunkt $n$ durch ein Intervall $[x_n^l,x_n^u]$ umschlossen, sodass $x_n \in [x_n^l,x_n^u]$ gilt. Die Schranken $x_n^l$ und $x_n^u$ sind jeweils Fließkommazahlen der Länge $m_n$. $\hat{x}_n$ stellt eine Approximation von $x_n$ dar, indem der Mittelpunkt des Intervalls bestimmt und dann auf $m_n$ Stellen gerundet wird:
+\begin{align}
+ \hat{x}_n = rd(\frac{x^l_n + x^u_n}{2}, m_n)
+\end{align}
+Für die Diskrepanz zwischen $\hat{x}_n$ und $x_n$ $e_n$ soll bei einer Genauigkeit $p \in \mathbb{Z}$ gelten, dass
+\begin{align}
+\label{error}
+ e_n = |\hat{x}_n - x_n| \leq 10^{-p}
+\end{align}
+gilt. Die Wachstumsrate für $m_{min}(x,n,p)$ gibt an, wie groß $m$ sein muss, damit \ref{error} für den Startwert $x$ nach $n$ Iterationen bis zu einer Genauigkeit $p$ erfüllt ist. Diese Rate wird definiert als
+\begin{align}
+ \sigma(x,p) = \lim_{n \rightarrow \infty} \frac{m_{min}(x,n,p)}{n}
+\end{align}
+Mit $m_{min}$ kann nun die Verlustrate der Aussagekraft der errechneten Werte pro Zeitschritt durch
+\begin{align}
+ \sigma(x) = \lim_{p \rightarrow \infty} \sigma(x,p)
+\end{align}
+angegeben werden. 
+
+Die in dieser Arbeit verwendeten Taylormodelle bestehen aus Polynomen mit Intervallkoeffizienten und reellen Endpunkten. Für die praktische Umsetzung wurde die Software-Bibliothek \verb+iRRAM+ \cite{Mller2009EnhancingIE} verwendet, welche reelle Zahlen, wie oben beschrieben darstellen und annähern. Stellen diese Taylormodelle nun ein Intervall dar, so ist das Ziel, für die Darstellung der reellen Zahlen einen möglichst kleinen Wert für $m$ zu finden, sodass sich die Intervallgrenzen für eine Iterationszahl $n$ so nah wie möglich am Lyapunov Exponenten für die H\e non-Abbildung entwickeln.
+
+
+ 
 
 
 
