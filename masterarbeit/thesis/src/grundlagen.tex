@@ -83,7 +83,8 @@ Sowohl die linearen, als auch die nichlinearen Taylormodelle umschließen den ko
 
 \subsection{Arithmetische Operationen auf Taylormodellen}
 
-Arithmetische Operationen auf Taylormodellen mit Intervallkoeffizienten bedeuten das Verrechnen von Polynomen, die wiederum Polynome ergeben. Für die Addition, Subtraktion und Multiplikation werden lediglich die entsprechenden Operationen auf die Polynome angewandt. Die Division erfordert
+Arithmetische Operationen auf Taylormodellen mit Intervallkoeffizienten bedeuten das Verrechnen von Polynomen, die wiederum Polynome ergeben. Für die Addition, Subtraktion und Multiplikation werden lediglich die entsprechenden Operationen auf die Polynome angewandt. Eine Divsion ist nur möglich, wenn der Divisor nicht die 0 enthält (siehe Kapitel \ref{sec:numint}).
+
 
 
 
@@ -113,12 +114,7 @@ Beziehungsweise entwickelt sich die Entfernung zwischen den zwei Punkten $\varep
 \begin{align}
  \varepsilon \cdot e^{n\cdot LE(x_0)} = |f^n(x_0 + \varepsilon) - f^n(x_0)|
 \end{align}
-Für $LE(x_0)<0$ kontrahiert, für $LE(x_0)>0$ wächst der Abstand zwischen den Punkten über den Verlauf der Schritte. In der Praxis muss mit Rundungsfehlern bei der Berechnung der Werte umgegangen werden, da ein Computer nur mit endlicher Genauigkeit rechnen kann. Dadurch kann $|f^n(x_0 + \varepsilon) - f^n(x_0)|$ nur von oben angenähert werden. Der Lyapunov Exponent bildet somit eine untere Schranke für die Ausdehnung eines Intervalls $x_0$, welches durch Intervallarithmetik überschätzt wird.
-
-
-
-
-\paragraph{TODO Lyapunov für Henon berechnen!}
+Für $LE(x_0)<0$ kontrahiert, für $LE(x_0)>0$ wächst der Abstand zwischen den Punkten über den Verlauf der Schritte. In der Praxis muss mit Rundungsfehlern bei der Berechnung der Werte umgegangen werden, da ein Computer nur mit endlicher Genauigkeit rechnen kann. Dadurch kann $|f^n(x_0 + \varepsilon) - f^n(x_0)|$ nur von oben angenähert werden. Der Lyapunov Exponent bildet somit eine untere Schranke für die Ausdehnung eines Intervalls $x_0$, welches durch Intervallarithmetik überschätzt wird, auch \textit{Wrapping Effect} \cite{DBLP:conf/macis/BrausseKM15}.
 
 
 In \cite{DBLP:spandl} wird der Lyapunov Exponent in den Kontext der Berechenbaren Analysis gerückt und in Verbindung mit der Entwicklung von Rundungsfehlern in reeller Arithmetik gebracht. Der Wert von $x_n$ wird zu einem beliebigen Zeitpunkt $n$ durch ein Intervall $[x_n^l,x_n^u]$ umschlossen, sodass $x_n \in [x_n^l,x_n^u]$ gilt. Die Schranken $x_n^l$ und $x_n^u$ sind jeweils Fließkommazahlen der Länge $m_n$. $\hat{x}_n$ stellt eine Approximation von $x_n$ dar, indem der Mittelpunkt des Intervalls bestimmt und dann auf $m_n$ Stellen gerundet wird:
@@ -140,7 +136,9 @@ Mit $m_{min}$ kann nun die Verlustrate der Aussagekraft der errechneten Werte pr
 \end{align}
 angegeben werden. 
 
-Die in dieser Arbeit verwendeten Taylormodelle bestehen aus Polynomen mit Intervallkoeffizienten und reellen Endpunkten. Für die praktische Umsetzung wurde die Software-Bibliothek \verb+iRRAM+ \cite{Mller2009EnhancingIE} verwendet, welche reelle Zahlen, wie oben beschrieben darstellen und annähern. Stellen diese Taylormodelle nun ein Intervall dar, so ist das Ziel, für die Darstellung der reellen Zahlen einen möglichst kleinen Wert für $m$ zu finden, sodass die Verlustrate der Aussagekraft der Intervallgrenzen erlaubt, dass sich das Intervall für eine Iterationszahl $n$ so nah wie möglich am Lyapunov Exponenten für die H\e non-Abbildung entwickeln.  
+Die in dieser Arbeit verwendeten Taylormodelle bestehen aus Polynomen mit Intervallkoeffizienten und reellen Endpunkten. Für die praktische Umsetzung wurde die Software-Bibliothek \verb+iRRAM+ \cite{Mller2009EnhancingIE} verwendet, welche reelle Zahlen, ähnlich wie oben beschrieben, darstellt und annähert. Stellen diese Taylormodelle nun ein Intervall dar, so ist das Ziel, für die Darstellung der reellen Zahlen einen möglichst kleinen Wert für $m$ zu finden, sodass die Verlustrate der Aussagekraft der reellen Intervallgrenzen erlaubt, dass sich das Intervall für eine Iterationszahl $n$ so nah wie möglich am Lyapunov Exponenten entwickelt. 
+
+Da sich die H\e non-Abbildung nun im $\mathbb{R}^2$ bewegt, bedeutet eine Definition der Taylormodelle als Intervall, dass diese ein Rechteck aufspannen. Eine Berechnung von H\e non-Iterationen auf einem größeren Rechteck hat zu Folge, dass eine kritische Itervallbreite, bei der die Ausdehnung nicht mehr dem Lyapunov-Exponenten gleicht, sondern exponentiell schnell wächst, schneller erreicht wird. Um diesem Effekt entgegenzuwirken, kann das Rechteck und damit die Taylormodelle partitioniert werden und die Berechnung auf den kleineren Flächen fortgeführt werden. Mit der Entwicklung der Breite kann nun abgeschätzt werden, wie fein die Partitionierung sein muss, um eine gewisse Anzahl an Iterationen berechnen zu können.
 
 
  
