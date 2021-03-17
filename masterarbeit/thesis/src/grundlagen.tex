@@ -112,11 +112,22 @@ Mit dem Lyapunov Exponenten kann für ein dynamisches System $(D,f)$ mit Phasenr
 \end{align}
 Beziehungsweise entwickelt sich die Entfernung zwischen den zwei Punkten $\varepsilon$ zum Zeitpunkt $n$ mit:
 \begin{align}
+\label{distance}
  \varepsilon \cdot e^{n\cdot LE(x_0)} = |f^n(x_0 + \varepsilon) - f^n(x_0)|
 \end{align}
-Für $LE(x_0)<0$ kontrahiert, für $LE(x_0)>0$ wächst der Abstand zwischen den Punkten über den Verlauf der Schritte. In der Praxis muss mit Rundungsfehlern bei der Berechnung der Werte umgegangen werden, da ein Computer nur mit endlicher Genauigkeit rechnen kann. Dadurch kann $|f^n(x_0 + \varepsilon) - f^n(x_0)|$ nur von oben angenähert werden. Der Lyapunov Exponent bildet somit eine untere Schranke für die Ausdehnung eines Intervalls $x_0$, welches durch Intervallarithmetik überschätzt wird, auch \textit{Wrapping Effect} \cite{DBLP:conf/macis/BrausseKM15}.
+Für $LE(x_0)<0$ kontrahiert, für $LE(x_0)>0$ wächst der Abstand zwischen den Punkten über den Verlauf der Schritte. In der Praxis muss mit Rundungsfehlern bei der Berechnung der Werte umgegangen werden, da ein Computer nur mit endlicher Genauigkeit rechnen kann. Dadurch kann $|f^n(x_0 + \varepsilon) - f^n(x_0)|$ nur von oben angenähert werden. Der Lyapunov Exponent bildet somit eine untere Schranke für die Ausdehnung eines Intervalls $x_0$, welches durch Intervallarithmetik überschätzt wird, auch \textit{Wrapping Effect} \cite{DBLP:conf/macis/BrausseKM15}.  
 
+\Abbildungps{tbh}{.8}{img/lyapu.png}{fig:lyapu}{Lokale Annäherung an den Lyapunov Exponenten}{Mehrere Iterationen mit Farbkodierung}  
+ 
+ Abbildung \ref{fig:lyapu} zeigt eine lokale Annäherung an die Entfernung zwischen $x_n$ und $(x+\varepsilon)_n$, wie in \ref{distance} bei $n$ Iterationen und verschiedenen Größen für $\varepsilon$. Die Graphen stellen jeweils die Entwicklung des Abstandes $|(x+\varepsilon)_n - x_n|$ für $f^n(x,y)$, beziehungsweise $f^n(x+\varepsilon,y+\varepsilon)$ dar. Abhängig vom initialen Abstand $\varepsilon$ bleiben die Punkte eine längere Zeit dicht beieinander, bevor der Abstand umd den Wert 1 osziliert. Ist dieser Zustand erreicht, bewegen sich die Punkte scheinbar unabhängig voneinander auf dem Attraktor, bleiben also in der Fangzone und entfernen sich daher nicht weiter. 
 
+ \Abbildungps{tbh}{.8}{img/lyapu_int.png}{fig:lyapuint}{Lokale Annäherung an den Lyapunov Exponenten}{Mehrere Iterationen mit Farbkodierung}  
+ 
+ 
+ In Abbildung \ref{fig:lyapuint} ist zu sehen, wie sich die Ausbreitung entwickelt, wenn statt zwei Punkten, Intervalle für $x_0$ und $y_0$ mit der Breite $\varepsilon$ verwendet werden; jeweils in Schwarz eingezeichnet.
+ 
+ \subsection{Verlustrate der Aussagekraft}
+ 
 In \cite{DBLP:spandl} wird der Lyapunov Exponent in den Kontext der Berechenbaren Analysis gerückt und in Verbindung mit der Entwicklung von Rundungsfehlern in reeller Arithmetik gebracht. Der Wert von $x_n$ wird zu einem beliebigen Zeitpunkt $n$ durch ein Intervall $[x_n^l,x_n^u]$ umschlossen, sodass $x_n \in [x_n^l,x_n^u]$ gilt. Die Schranken $x_n^l$ und $x_n^u$ sind jeweils Fließkommazahlen der Länge $m_n$. $\hat{x}_n$ stellt eine Approximation von $x_n$ dar, indem der Mittelpunkt des Intervalls bestimmt und dann auf $m_n$ Stellen gerundet wird:
 \begin{align}
  \hat{x}_n = rd(\frac{x^l_n + x^u_n}{2}, m_n)
@@ -141,7 +152,6 @@ Die in dieser Arbeit verwendeten Taylormodelle bestehen aus Polynomen mit Interv
 Da sich die H\e non-Abbildung nun im $\mathbb{R}^2$ bewegt, bedeutet eine Definition der Taylormodelle als Intervall, dass diese ein Rechteck aufspannen. Eine Berechnung von H\e non-Iterationen auf einem größeren Rechteck hat zu Folge, dass eine kritische Itervallbreite, bei der die Ausdehnung nicht mehr dem Lyapunov-Exponenten gleicht, sondern exponentiell schnell wächst, schneller erreicht wird. Um diesem Effekt entgegenzuwirken, kann das Rechteck und damit die Taylormodelle partitioniert werden und die Berechnung auf den kleineren Flächen fortgeführt werden. Mit der Entwicklung der Breite kann nun abgeschätzt werden, wie fein die Partitionierung sein muss, um eine gewisse Anzahl an Iterationen berechnen zu können.
 
 
- 
 
 
 

@@ -36,6 +36,21 @@ N.~M{\"u}ller.
 \newblock Enhancing imperative exact real arithmetic with functions and logic.
 \newblock 2009.
 
+\bibitem[PlBr89]{Plaschko1989}
+P.~Plaschko und K.~Brod.
+\newblock {\em Deterministisches Chaos --- Eine Einf{\"u}hrung}, S.~359--424.
+\newblock Springer Berlin Heidelberg, Berlin, Heidelberg.
+\newblock 1989.
+
+\bibitem[Span10]{DBLP:spandl}
+C.~Spandl.
+\newblock Computational Complexity of Iterated Maps on the Interval (Extended
+  Abstract).
+\newblock In X.~Zheng und N.~Zhong (Hrsg.), {\em Proceedings Seventh
+  International Conference on Computability and Complexity in Analysis, {CCA}
+  2010, Zhenjiang, China, 21-25th June 2010}, Band~24 der {\em {EPTCS}}, 2010,
+  S.~139--150.
+
 \bibitem[WiKm20]{gnuplot}
 T.~Williams, C.~Kelley und {many others}.
 \newblock Gnuplot 5.4: an interactive plotting program.
