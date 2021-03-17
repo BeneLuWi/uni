@@ -117,16 +117,16 @@ Beziehungsweise entwickelt sich die Entfernung zwischen den zwei Punkten $\varep
 \end{align}
 Für $LE(x_0)<0$ kontrahiert, für $LE(x_0)>0$ wächst der Abstand zwischen den Punkten über den Verlauf der Schritte. In der Praxis muss mit Rundungsfehlern bei der Berechnung der Werte umgegangen werden, da ein Computer nur mit endlicher Genauigkeit rechnen kann. Dadurch kann $|f^n(x_0 + \varepsilon) - f^n(x_0)|$ nur von oben angenähert werden. Der Lyapunov Exponent bildet somit eine untere Schranke für die Ausdehnung eines Intervalls $x_0$, welches durch Intervallarithmetik überschätzt wird, auch \textit{Wrapping Effect} \cite{DBLP:conf/macis/BrausseKM15}.  
 
-\Abbildungps{tbh}{.8}{img/lyapu.png}{fig:lyapu}{Lokale Annäherung an den Lyapunov Exponenten}{Mehrere Iterationen mit Farbkodierung}  
+\Abbildungps{tbh}{.8}{img/lyapu.png}{fig:lyapu}{Lokale Annäherung an den Lyapunov Exponenten mit Punkten}{Lokale Annäherung an den Lyapunov Exponenten der H\e non-Iteration mit Punkten $x_0$ und $x_0+\varepsilon$, und den Parametern $a=1.4,b=0.3$}  
  
  Abbildung \ref{fig:lyapu} zeigt eine lokale Annäherung an die Entfernung zwischen $x_n$ und $(x+\varepsilon)_n$, wie in \ref{distance} bei $n$ Iterationen und verschiedenen Größen für $\varepsilon$. Die Graphen stellen jeweils die Entwicklung des Abstandes $|(x+\varepsilon)_n - x_n|$ für $f^n(x,y)$, beziehungsweise $f^n(x+\varepsilon,y+\varepsilon)$ dar. Abhängig vom initialen Abstand $\varepsilon$ bleiben die Punkte eine längere Zeit dicht beieinander, bevor der Abstand umd den Wert 1 osziliert. Ist dieser Zustand erreicht, bewegen sich die Punkte scheinbar unabhängig voneinander auf dem Attraktor, bleiben also in der Fangzone und entfernen sich daher nicht weiter. 
 
- \Abbildungps{tbh}{.8}{img/lyapu_int.png}{fig:lyapuint}{Lokale Annäherung an den Lyapunov Exponenten}{Mehrere Iterationen mit Farbkodierung}  
+ \Abbildungps{tbh}{.8}{img/lyapu_int.png}{fig:lyapuint}{Lokale Annäherung an den Lyapunov Exponenten mit Intervallen}{Lokale Annäherung an den Lyapunov Exponenten der H\e non-Iteration mit Intervallen der Breite $|x_0|=\varepsilon$, und den Parametern $a=1.4,b=0.3$ im Vergleich zur Entwicklung des Abstandes zweier Punkte mit Abstand $\varepsilon$}
  
  
- In Abbildung \ref{fig:lyapuint} ist zu sehen, wie sich die Ausbreitung entwickelt, wenn statt zwei Punkten, Intervalle für $x_0$ und $y_0$ mit der Breite $\varepsilon$ verwendet werden; jeweils in Schwarz eingezeichnet.
+ In Abbildung \ref{fig:lyapuint} ist zu sehen, wie sich die Ausbreitung entwickelt, wenn statt zwei Punkten, Intervalle für $x_0$ und $y_0$ mit der Breite $\varepsilon$ verwendet werden; jeweils in Schwarz eingezeichnet. Hier zeigt sich, dass sich die Breite des Intervalls $x_n$ deutlich schneller vergrößert\footnote{Das Intervall $y_n$ verhält sich vergleichbar, wird jedoch von $x_{n-1}$ dominiert}, als es der Abstand zwischen unabhängigen Punkten mit $x_n$ und $(x+\varepsilon)_n$. Das entstehende Wrapping wächst umso schneller, je mehr die Intervallbreite $|x_n|$ dem Wert 1 nähert. Dort, wo die einzelnen Punkte um die 1 oszilieren, laufen die Intervallgrenzen innerhalb weniger Iterationen gegen $\infty$.
  
- \subsection{Verlustrate der Aussagekraft}
+ \subsection{Verlustrate der Aussagekraft}  
  
 In \cite{DBLP:spandl} wird der Lyapunov Exponent in den Kontext der Berechenbaren Analysis gerückt und in Verbindung mit der Entwicklung von Rundungsfehlern in reeller Arithmetik gebracht. Der Wert von $x_n$ wird zu einem beliebigen Zeitpunkt $n$ durch ein Intervall $[x_n^l,x_n^u]$ umschlossen, sodass $x_n \in [x_n^l,x_n^u]$ gilt. Die Schranken $x_n^l$ und $x_n^u$ sind jeweils Fließkommazahlen der Länge $m_n$. $\hat{x}_n$ stellt eine Approximation von $x_n$ dar, indem der Mittelpunkt des Intervalls bestimmt und dann auf $m_n$ Stellen gerundet wird:
 \begin{align}
@@ -141,7 +141,7 @@ gilt. Die Wachstumsrate für $m_{min}(x,n,p)$ gibt an, wie groß $m$ sein muss, 
 \begin{align}
  \sigma(x,p) = \lim_{n \rightarrow \infty} \frac{m_{min}(x,n,p)}{n}
 \end{align}
-Mit $m_{min}$ kann nun die Verlustrate der Aussagekraft der errechneten Werte pro Zeitschritt durch
+Mit $m_{min}$ kann nun die Verlustrate der Aussagekraft der errechneten Werte pro Zeitschritt durch  
 \begin{align}
  \sigma(x) = \lim_{p \rightarrow \infty} \sigma(x,p)
 \end{align}
@@ -150,6 +150,17 @@ angegeben werden.
 Die in dieser Arbeit verwendeten Taylormodelle bestehen aus Polynomen mit Intervallkoeffizienten und reellen Endpunkten. Für die praktische Umsetzung wurde die Software-Bibliothek \verb+iRRAM+ \cite{Mller2009EnhancingIE} verwendet, welche reelle Zahlen, ähnlich wie oben beschrieben, darstellt und annähert. Stellen diese Taylormodelle nun ein Intervall dar, so ist das Ziel, für die Darstellung der reellen Zahlen einen möglichst kleinen Wert für $m$ zu finden, sodass die Verlustrate der Aussagekraft der reellen Intervallgrenzen erlaubt, dass sich das Intervall für eine Iterationszahl $n$ so nah wie möglich am Lyapunov Exponenten entwickelt. 
 
 Da sich die H\e non-Abbildung nun im $\mathbb{R}^2$ bewegt, bedeutet eine Definition der Taylormodelle als Intervall, dass diese ein Rechteck aufspannen. Eine Berechnung von H\e non-Iterationen auf einem größeren Rechteck hat zu Folge, dass eine kritische Itervallbreite, bei der die Ausdehnung nicht mehr dem Lyapunov-Exponenten gleicht, sondern exponentiell schnell wächst, schneller erreicht wird. Um diesem Effekt entgegenzuwirken, kann das Rechteck und damit die Taylormodelle partitioniert werden und die Berechnung auf den kleineren Flächen fortgeführt werden. Mit der Entwicklung der Breite kann nun abgeschätzt werden, wie fein die Partitionierung sein muss, um eine gewisse Anzahl an Iterationen berechnen zu können.
+
+
+
+
+
+
+
+
+
+
+
 
 
 
