@@ -186,40 +186,58 @@ TM \ref{tm4}  & 1437 & 0.35 &14505 & 0.18  \\
  
 Bis auf Taylormodell-Definition \ref{tm2} erreichen (beinahe) alle Berechnung dieselbe Iterationszahl, variieren jedoch in der Größe des Rechtecks, welches von $x$ und $y$ aufgespannt wird. Mit der Definition \ref{tm1} als intiales Taylormodell wird für 10000 Bit Genauigkeit eine minimal höhere Iterationszahl und bei 1000 Bit Genauigkeit ein kleineres Rechteck, als in den anderen Varianten erreicht.
  
-  \Abbildungps{tbh}{.8}{img/lyapu_int_tm.png}{fig:lyapuint}{Lokale Annäherung an den Lyapunov Exponenten mit Intervallen}{Lokale Annäherung an den Lyapunov Exponenten der H\e non-Iteration mit Intervallen der Breite $|x_0|=\varepsilon$, und den Parametern $a=1.4,b=0.3$ im Vergleich zur Entwicklung des Abstandes zweier Punkte mit Abstand $\varepsilon$}
+  \Abbildungps{tbh}{1}{img/lyapu_int_tm.png}{fig:lyapuint}{Lokale Annäherung an den Lyapunov Exponenten mit Intervallen}{Lokale Annäherung an den Lyapunov Exponenten der H\e non-Iteration mit Intervallen der Breite $|x_0|=\varepsilon$, und den Parametern $a=1.4,b=0.3$ im Vergleich zur Entwicklung des Abstandes zweier Punkte mit Abstand $\varepsilon$}
  
 \newpage 
- \section{Umsetzung}
-  \begin{lstlisting}[language=C++, caption=Implementierung der H\e non-Abbildung,captionpos=b,xleftmargin=15pt, numbers=left,stepnumber=1]
+ \section{Umsetzung}  
+ 
+ \begin{minipage}{.5\textwidth}
+    \begin{lstlisting}[language=C++, caption={[Implementierung mit Intervallen] \\Implementierung mit Punktintervallen },captionpos=b,xleftmargin=15pt, numbers=left,stepnumber=1,basicstyle=\footnotesize]
 #include "iRRAM.h"
-#include "src/hoTM.h"
-
+#include "hoTM.h"
 using namespace iRRAM;
-
 void compute(){
-    int n;
-    cin >> n;
-
-    HOTM::init();
-
-    HOTM x(0);
-    HOTM y(0);
-    
-    HOTM x_new, y_new;
-    num a(1.4), b(0.3);
-    for (int i = 0; i < n; i++) {
-        x_new = num(1) + y - a * (x * x);
-        y_new = b * x;
-        x = x_new;
-        y = y_new;
-    }
-    cout << "x: " << numint(x) << "\n";
-    cout << "y: " << numint(y) << "\n";
+ int n;
+ cin >> n;
+ HOTM::init();
+ HOTM x(0), y(0);
+ HOTM x_new, y_new;
+ num a(1.4), b(0.3);
+ for (int i = 0; i < n; i++) {
+   x_new = num(1)+y-a*(x*x);
+   y_new = b * x;
+   x = x_new;
+   y = y_new;
+ }
+ cout<<"x:"<< numint(x)<<"\n";
+ cout<<"y:"<< numint(y)<<"\n";
 }
 \end{lstlisting}
- 
- 
- 
+ \end{minipage}
+ \begin{minipage}{.5\textwidth}
+    \begin{lstlisting}[language=C++, caption={[Implementierung mit Intervallen] \\Implementierung mit Intervallen },captionpos=b,xleftmargin=15pt, numbers=left,stepnumber=1,basicstyle=\footnotesize]  
+#include "iRRAM.h"
+#include "hoTM.h"
+using namespace iRRAM;
+void compute(){
+  int n;
+  cin >> n;
+  HOTM::init();
+  HOTM x(0, 0.001), y(0, 0.001);
+  HOTM x_new, y_new;
+  num a(1.4), b(0.3);
+  for (int i = 0; i < n; i++) {
+      x_new = num(1)+y-a*(x*x);
+      y_new = b * x;
+      x = x_new;
+      y = y_new;
+  }
+  cout<< "x:"<< numint(x)<<"\n";
+  cout<< "y:"<< numint(y)<<"\n";
+}
+\end{lstlisting}
+ \end{minipage}
+
  
  
 
