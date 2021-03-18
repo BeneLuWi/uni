@@ -190,9 +190,24 @@ Bis auf Taylormodell-Definition \ref{tm2} erreichen (beinahe) alle Berechnung di
  
 \newpage 
  \section{Umsetzung}  
+ Zwei Implementierungen der H\e non-Abbildung für die Parameter $a=1.4$ und $b=0.3$ sind in den Listings \ref{list:point} und \ref{list:int} zu sehen. Es werden drei verschiedenene Zahlentypen verwendet, die jedoch alle auf den \verb+iRRAM-REAL+s aufbauen: \textit{High Order Taylor Modell} \verb+HOTM+, \textit{Real Number} \verb+num+ und \textit{Real Number Interval} \verb+numint+. Die jeweils definierte Funktion \verb+compare()+ in Zeile 4 stellt den in der \verb+iRRAM+ verwendeten Rahmen für Iterationen, beziehungsweise Erhöhungen der Genauigkeit der \verb+REAL+s dar. Mit dem Funktionsaufruf \verb+HOTM::init()+ in Zeile 7 werden die zuvor in diesem Kapitel beschriebenen Grenzwerte und Parameter für die Housekeeping-Methoden mit Werten initialisiert, die experimentell die beste Performanz lieferten. Die beiden Listings unterscheiden zunächst im verwendeten Konstruktor für die Taylormodelle in Zeile 8. In der linken Implementierung \ref{list:point} werden $x$ und $y$ als Punktintervalle, also als Taylormodelle mit lediglich einem Kernel definiert:
+  \begin{center}
+  \verb+HOTM::x(0)+ $\rightsquigarrow x\coloneqq [0]$\\
+  \verb+HOTM::y(0)+ $\rightsquigarrow y\coloneqq [0]$
+ \end{center}
+
+ 
+ Unter Verwendung des Konstruktors auf der rechten Seite wird aus der Eingabe eines Intervalls mit Mittelpunkt $c$ und Radius $\varepsilon$ je ein Taylormodell mit einem Fehlersymbol, welches $\varepsilon$ enthält und dem Kernel als Punktintervall $c$: 
+ \begin{center}
+  \verb+HOTM::x(0,0.001)+ $\rightsquigarrow x\coloneqq [0] + [1] \cdot \lambda_0,\ \lambda_0 \in [0 \pm 0.001]$\\
+  \verb+HOTM::y(0,0.001)+ $\rightsquigarrow y\coloneqq[0] + [1] \cdot \lambda_1,\ \lambda_1 \in [0 \pm 0.001]$
+ \end{center}
+
+Die Parameter $a$ und $b$ werden in Zeile 10 als \verb+num+, wodurch \verb+iRRAM::REAL+s instanziiert.
+ 
  
  \begin{minipage}{.5\textwidth}
-    \begin{lstlisting}[language=C++, caption={[Implementierung mit Intervallen] \\Implementierung mit Punktintervallen },captionpos=b,xleftmargin=15pt, numbers=left,stepnumber=1,basicstyle=\footnotesize]
+    \begin{lstlisting}[language=C++, caption={[Implementierung der H\e non-Iteration in HOTM mit Intervallen] \\Implementierung mit Punktintervallen },captionpos=b,xleftmargin=15pt, numbers=left,stepnumber=1,basicstyle=\footnotesize, label=list:int]
 #include "iRRAM.h"
 #include "hoTM.h"
 using namespace iRRAM;
@@ -209,31 +224,31 @@ void compute(){
    x = x_new;
    y = y_new;
  }
- cout<<"x:"<< numint(x)<<"\n";
- cout<<"y:"<< numint(y)<<"\n";
+ cout<<"x:"<< numint(x) <<"\n";
+ cout<<"y:"<< numint(y) <<"\n";
 }
 \end{lstlisting}
  \end{minipage}
  \begin{minipage}{.5\textwidth}
-    \begin{lstlisting}[language=C++, caption={[Implementierung mit Intervallen] \\Implementierung mit Intervallen },captionpos=b,xleftmargin=15pt, numbers=left,stepnumber=1,basicstyle=\footnotesize]  
+    \begin{lstlisting}[language=C++, caption={[Implementierung der H\e non-Iteration in HOTM mit Intervallen] \\Implementierung mit Intervallen },captionpos=b,xleftmargin=15pt, numbers=left,stepnumber=1,basicstyle=\footnotesize,label=list:point]  
 #include "iRRAM.h"
 #include "hoTM.h"
 using namespace iRRAM;
 void compute(){
-  int n;
-  cin >> n;
-  HOTM::init();
-  HOTM x(0, 0.001), y(0, 0.001);
-  HOTM x_new, y_new;
-  num a(1.4), b(0.3);
-  for (int i = 0; i < n; i++) {
-      x_new = num(1)+y-a*(x*x);
-      y_new = b * x;
-      x = x_new;
-      y = y_new;
-  }
-  cout<< "x:"<< numint(x)<<"\n";
-  cout<< "y:"<< numint(y)<<"\n";
+ int n;
+ cin >> n;
+ HOTM::init();
+ HOTM x(0, 0.001), y(0, 0.001);
+ HOTM x_new, y_new;
+ num a(1.4), b(0.3);
+ for (int i = 0; i < n; i++) {
+   x_new = num(1)+y-a*(x*x);
+   y_new = b * x;
+   x = x_new;
+   y = y_new;
+ }
+ cout<<"x:"<< x <<"\n";
+ cout<<"y:"<< y <<\n";
 }
 \end{lstlisting}
  \end{minipage}
