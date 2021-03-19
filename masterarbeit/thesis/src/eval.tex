@@ -203,11 +203,11 @@ Bis auf Taylormodell-Definition \ref{tm2} erreichen (beinahe) alle Berechnung di
   \verb+HOTM::y(0,0.001)+ $\rightsquigarrow y\coloneqq[0] + [1] \cdot \lambda_1,\ \lambda_1 \in [0 \pm 0.001]$
  \end{center}
 
-Die Parameter $a$ und $b$ werden in Zeile 10 als \verb+num+, wodurch \verb+iRRAM::REAL+s instanziiert.
- 
+Die Parameter $a$ und $b$ werden in Zeile 10 als \verb+num+ (\verb+iRRAM::REAL+) instanziiert. Die Durchführung der Housekeeping-Methoden ist ein Überschreiben des Zuweisungsoperators \anf{=} für die \verb+HOTM+-Taylormodelle realisiert. Während der Berechnung in den Zeilen 12 und 13 können sich die Taylormodelle aufblähen und werden dann bei der Zuweisung reduziert. In den Zeilen 14 und 15 findet kein Housekeeping mehr statt, gesteuert durch einen Parameter, der den Zustand des Taylormodells beschreibt \footnote{Operationen auf dem Taylormodell markieren es als \anf{not cleaned}. Dieser Wert wird dann durch die Anwendung von Housekeeping zurückgesetzt.}.
+
  
  \begin{minipage}{.5\textwidth}
-    \begin{lstlisting}[language=C++, caption={[Implementierung der H\e non-Iteration in HOTM mit Intervallen] \\Implementierung mit Punktintervallen },captionpos=b,xleftmargin=15pt, numbers=left,stepnumber=1,basicstyle=\footnotesize, label=list:int]
+    \begin{lstlisting}[language=C++, caption={[Implementierung der H\e non-Iteration in HOTM mit Intervallen,] \\Implementierung mit Punktintervallen },captionpos=b,xleftmargin=15pt, numbers=left,stepnumber=1,basicstyle=\footnotesize, label=list:int]
 #include "iRRAM.h"
 #include "hoTM.h"
 using namespace iRRAM;
