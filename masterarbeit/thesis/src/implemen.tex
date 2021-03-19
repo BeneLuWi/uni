@@ -171,6 +171,33 @@ Dadurch erhöht sich der Grad des Polynoms, jedoch verringert sich die Übersch�
 \end{align*}
 Dies hat den Vorteil, dass die Größe der Fehlersymbole beim Sweeping berücksichtigt werden kann.
 
+\begin{algorithm}[H]
+\label{algo:split}
+\SetAlgoLined
+\SetKwInOut{Input}{Eingabe}
+\SetKwInOut{Output}{Ausgabe}
+\Input{Taylormodell $T$: Liste von Monomen $m_i = c_i\cdot \lambda^i$ mit Koeffizienten $c_i = [\hat{c}_i \pm \varepsilon_i]$ und der Liste der Fehlersymbole $\lambda^i$, Grenzwert für Splitting $\delta_s $}
+\Output{Taylormodell $T'$: Liste von Monomen mit Punktintervallkoeffizienten}
+\DontPrintSemicolon
+\ForAll{$i \in \{1,\dots, n\}$}{
+    \uIf(\Comment*[f]{Die Intervallbreite überscheitet den Grenzwert}){$\varepsilon_i > \delta_s$ }{ 
+        $s_{new} \gets [0 \pm \varepsilon_i]$ \Comment*{Führe neues Fehlersymbol ein} 
+        $S \gets S \cup s_{new}$  \Comment*{\textit{Erweitere die Liste der Supportintervalle}} 
+        $m_i' \gets [\hat{c_i}] \cdot \lambda^i$ \Comment*{Entferne den Radius von $m_i$}
+        $m_i'' \gets [1] \cdot \lambda^i\lambda_{new}$ \Comment*{Erstelle ein neues Monom mit neuem Fehlersymbol}
+        $T'\gets T' + m_i' + m_i''$
+    } \Else{
+        $T'\gets T' + m_i$
+    }
+}
+
+\Return $T'$ \Comment*{Das neue Polynom hat maximal $2n+1$ Monome }
+ \caption{Algorithmus für Splitting}
+\end{algorithm}
+
+
+
+
 \paragraph{Sweeping}
 Cleaning und Splitting sorgen dafür, dass die Intervallbreite der Koeffizienten klein bleibt, jedoch erhöht sich der Grad der Polynome, was zum Beispiel bei der Multiplikation von Taylormodellen zu Ineffizienz durch die exponentiell wachsende Anzahl an Monomen führt. Um diesem Effekt entgegenzuwirken, kann mit \textit{Sweeping} ein Fehlersymbol durch sein Supportintervall ersetzt werden:
 \begin{align*}
@@ -180,6 +207,41 @@ Hierbei ist zu beachten, dass das $n$-fache Sweepen eines Fehlersymbols, welches
 
 \subparagraph{square\_only}
 Die Sweeping-Strategie \verb+square_only+ beschränkt das Sweeping auf gerade Potenzen. So wird die angestrebte Reduktion des Grades eines Monoms nur erreicht, wenn alle Variablen einen geraden Exponenten haben.
+
+
+\begin{algorithm}[H]
+\label{algo:split}
+\SetAlgoLined
+\SetKwInOut{Input}{Eingabe}
+\SetKwInOut{Output}{Ausgabe}
+\Input{Taylormodell $T$: Liste von Monomen $m_i = c_i\cdot \lambda^i$ mit Koeffizienten $c_i = [\hat{c}_i \pm \varepsilon_i]$ und der Liste der Fehlersymbole $\lambda^i$, Zielgrad $\gamma$}
+\Output{Taylormodell $T'$: Liste von Monomen mit Punktintervallkoeffizienten}
+\DontPrintSemicolon
+\ForAll{$i \in \{0,\dots, n\}$}{
+    $o \gets grad(m_i)$\\
+    \uIf{$o \leq \gamma$}{
+        $T' \gets T' + m_i$
+    }\Else{
+        $c_i' \gets c_i$ \\
+        $\lambda^{i'}\gets \{\lambda^l_j | \lambda_j^l \in \lambda^i \land |s_j| < |s_{j+1}| \} $\\
+        $r\gets o - \gamma$\\
+        \ForAll{$\lambda^l_j \in \lambda^{i'}$}{
+            $p \gets min(l, r)$\\
+            \lIf{$p > 1$ \textbf{and} $2 \nmid p$}{$p \gets p-1$}
+            $r \gets r - p$ \\
+            $c_i' \gets c_i' \cdot \lambda_j^p$\\
+            $l \gets l-p$\\
+            \lIf{$r < 2$}{\textbf{break}}
+        }
+        $\lambda^{i'}\gets \{\lambda^l_j | \lambda_j^l \in \lambda^{i'} \land \lambda_j \succ \lambda_{j+1} \} $\\
+        $T' \gets T' + c_i' \cdot \lambda^{i'}$
+    }
+}
+
+\Return $T'$ 
+ \caption{Algorithmus für Sweeping mit square\_only}
+\end{algorithm}
+
 
 
 \subparagraph{square\_first}

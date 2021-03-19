@@ -38,7 +38,14 @@
 \usepackage{wrapfig}
 \usepackage{mathtools}
 \usepackage{subcaption}
+
 %% ---------------- end of usepackages -------------
+
+\newcommand\mycommfont[1]{\footnotesize{\textit{#1}}}
+\SetCommentSty{mycommfont}
+\SetKwComment{Comment}{(}{)}
+
+
 
 \colorlet{punct}{red!60!black}
 \definecolor{background}{HTML}{EEEEEE}
@@ -46,7 +53,7 @@
 \colorlet{numb}{magenta!60!black}
 
 \lstdefinelanguage{json}{
-    basicstyle=\scriptsize\ttfamily,
+    basicstyle=\scriptsize\ttfamily,  
     numbers=left,
     numberstyle=\scriptsize,
     stepnumber=1,
@@ -66,7 +73,7 @@
       {7}{{{\color{numb}7}}}{1}
       {8}{{{\color{numb}8}}}{1}
       {9}{{{\color{numb}9}}}{1}
-      {:}{{{\color{punct}{:}}}}{1}
+      {:}{{{\color{punct}{:}}}}{1}  
       {,}{{{\color{punct}{,}}}}{1}
       {\{}{{{\color{delim}{\{}}}}{1}
       {\}}{{{\color{delim}{\}}}}}{1}
