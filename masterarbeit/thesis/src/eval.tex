@@ -124,11 +124,21 @@ $$ c \cdot \lambda_1^3 \lambda_2^2 \lambda_3^1 \lambda_4^3  \underset{square\_on
 \label{fig:sweeping}
 \end{figure}
 
-Im Vergleich mit rein linearen Taylormodellen zeigt sich eine leichte Verbesserung (siehe Abbildung \ref{fig:extra}). Der Unterschied besteht darin, dass die nichtlinearen Taylormodelle während der Berechnung und besonders während der Multiplikation Punktintervalle erhalten können und sich stattdessen der Grad des Polynoms erhöht. Nach jeder Iteration werden diese dann zunächst im Grad reduziert, um diesen dann durch Splitting auf den Monomen um maximal 1 zu erhöhen. Für lineare Taylormodelle steht lediglich das Splitting für den Kernel zur Verfügung, da sonst nichtlineare Polynome entstünden. Des Weiteren wird hier bereits während der Multiplikation gesweept und Punktintervalle werden zu regulären Intervallen. Die Performanz des Sweepings \textbf{square\_only} zum Grade 0 verbessert sich im Schnitt mit einer wachsenden Zahl der zu erhaltenen Fehlersymbole, wie in Abbildung \ref{fig:extra} zu sehen ist. Jedes Fehlersymbol erhöht die Menge an erhaltener Abhängigkeitsinformation und sorgt dafür, dass ein Taylormodell dessen Ränder besser beschreiben kann. Allerdings stellt die Pratkikabilität dieser Herangehensweise ein Problem dar, da so sehr große Polynome entstehen, die während einer Iteration der H\e non-Abbildung exponentiell in ihrer Länge wachsen.
+Im Vergleich mit rein linearen Taylormodellen zeigt sich eine leichte Verbesserung (siehe Abbildung \ref{fig:extra}). Der Unterschied besteht darin, dass die nichtlinearen Taylormodelle während der Berechnung und besonders während der Multiplikation Punktintervalle erhalten können und sich stattdessen der Grad des Polynoms erhöht. Nach jeder Iteration werden diese dann zunächst im Grad reduziert, um diesen dann durch Splitting auf den Monomen um maximal 1 zu erhöhen. Für lineare Taylormodelle steht lediglich das Splitting für den Kernel zur Verfügung, da sonst nichtlineare Polynome entstünden. Des Weiteren wird hier bereits während der Multiplikation gesweept und Punktintervalle werden zu regulären Intervallen. Die Performanz des Sweepings \textbf{square\_only} zum Grade 0 verbessert sich im Schnitt mit einer wachsenden Zahl der zu erhaltenen Fehlersymbole, wie in Abbildung \ref{fig:extra} zu sehen ist. Jedes Fehlersymbol erhöht die Menge an erhaltener Abhängigkeitsinformation und sorgt dafür, dass ein Taylormodell dessen Ränder besser beschreiben kann. Allerdings stellt die Praktikabilität dieser Herangehensweise ein Problem dar, da so sehr große Polynome entstehen, die während einer Iteration der H\e non-Abbildung exponentiell in ihrer Länge wachsen.
  
 
- \Abbildungps{tbh}{.6}{img/extra.png}{fig:extra}{Experimentelle Ergebnisse zu erhaltenen Fehlersymbolen}{Iterationszahl der H\e non-Abbildung mit fester Genauigkeit von 1000 Bits.}
+ \Abbildungps{tbh}{.7}{img/extra.png}{fig:extra}{Experimentelle Ergebnisse zu erhaltenen Fehlersymbolen}{Iterationszahl der H\e non-Abbildung mit fester Genauigkeit von 1000 Bits.}
 
+ \section{Cleaning}
+ Durch die mehrstufige Intervallstruktur in den Koeffizienten der Polynome ist es mit Cleaning möglich, den Rechenfehler, beziehungsweise die Intervallbreite der Intervallgrenzen auf einer höheren Abstraktionsebene zu verwalten. Wie in Paragraph \ref{par:cleaning} beschrieben, wird das Intervall um die Intervallbreite des Mittelpunktes und des Radius' erweitert und schließt es somit komplett ein. Dies hat darüber hinaus den Effekt, dass sämtlicher entstandene Rechenfehler durch Splitting reduziert werden kann. 
+ 
+   \Abbildungps{tbh}{.7}{img/clean.png}{fig:clean}{Experimentelle Ergebnisse zum Effekt des Cleaning}{Iterationszahl der H\e non-Abbildung mit festem Radius der intialen Taylormodelle $x_0 = y_0 = [0 \pm 2^{-1000}]$ mit wachsender Präzision, um den Effekt des Cleanings beschreiben.}
+ 
+ Abbildung \ref{fig:clean} zeigt die Auswirkung der Anwendung von Cleaning bei initialen Taylormodellen $x_0, y_0$ der Breite $2^{-1000}$ mit wachsender Genauigkeit. Cleaning sorgt für ein langsameres Wachstum des Rechtecks $|x_n|\cdot|y_n|$ nach $n$ Iterationen im Vergleich zur Berechnung ohne Cleaning. Bei einer höheren Anzahl der erhaltenen Fehlersymbole pro Iteration wird der Effekt noch deutlicher, da nun mit deutlich längeren Polynomen gerechnet und dementsprechend mehr arithmetische Operationen auf den Koeffizienten angewandt werden. So bleibt zwar mehr Information über Form der Taylormodelle erhalten, jedoch dominiert die Überschätzung auf der Zahlenebene das Ergebnis beim Verzicht auf Cleaning, während sich die Performanz im anderen Fall leicht verbessert.
+ 
+
+ 
+ 
  \section{Splitting}
  Durch Splitting wird ein Monom mit Intervallkoeffizienten in zwei Monome mit einem neuen, noch nicht verwendeten Fehlersymbol und Punktintervallkoeffizienten aufgeteilt. Für diese Housekeeping-Methode wurden zwei Möglichkeiten betrachtet. Zum Einen die in \cite{DBLP:conf/macis/BrausseKM15} verwendete Definition des neuen Fehlersymbols als Einheitsintervall:
  
@@ -146,7 +156,7 @@ Zum Anderen die Umlagerung des Radius $\varepsilon$ in das neue Fehlersymbol:
  
 Beim Sweeping hat sich gezeigt, dass die Überschätzung des Taylormodells bei einer Priorisierung kleinerer Fehlersymbole, beziehungsweise beim Erhalt von Fehlersymbolen mit größerem Support-Space, langsamer wächst. In einer linearen Implementierung der Taylormodelle mit Variante \ref{int:unit} wird eine solche Ordnung durch einen Vergleich der Koeffizienten hergestellt, da jedes Monom maximal nur ein Fehlersymbol enthalten kann. Ein nichtlineares Monom kann jedoch von mehreren Fehlersymbolen abhängen, wodurch die Information über die Größe des Fehlersymobls nicht im Koeffizienten kodiert werden kann und zudem innerhalb eines Monoms sortiert werden muss. Daher eignet sich Herangehensweise \ref{int:nunit} für die Implementierung nichtlinearer Taylormodelle besser, als die Verwendung von Einheitsintervallen, wie in Abbildung \ref{fig:split} an einem Bespiel gezeigt wird. Hier werden beide Varianten auf die Entwicklung der Überschätzung von zwei Taylormodellen untersucht, wobei mit der Definition des Fehlersymbols als reguläres Intervall \ref{int:nunit} mehr Iterationen der H\e non-Abbildung berechnet werden können, bis die Fläche des Rechtecks einen Schwellenwert überschreitet.
  
- \Abbildungps{tbh}{.6}{img/split.png}{fig:split}{Experimentelle Ergebnisse zum Vorgehen beim Splitting}{Iterationszahl der H\e non-Abbildung mit 10000 Bits fester Genauigkeit.}
+ \Abbildungps{tbh}{.7}{img/split.png}{fig:split}{Experimentelle Ergebnisse zum Vorgehen beim Splitting}{Iterationszahl der H\e non-Abbildung mit 10000 Bits fester Genauigkeit.}
  
  \section{Initiales Taylormodell}
  
@@ -186,10 +196,13 @@ TM \ref{tm4}  & 1437 & 0.35 &14505 & 0.18  \\
  
 Bis auf Taylormodell-Definition \ref{tm2} erreichen (beinahe) alle Berechnung dieselbe Iterationszahl, variieren jedoch in der Größe des Rechtecks, welches von $x$ und $y$ aufgespannt wird. Mit der Definition \ref{tm1} als intiales Taylormodell wird für 10000 Bit Genauigkeit eine minimal höhere Iterationszahl und bei 1000 Bit Genauigkeit ein kleineres Rechteck, als in den anderen Varianten erreicht.
  
-  \Abbildungps{tbh}{1}{img/lyapu_int_tm.png}{fig:lyapuint}{Lokale Annäherung an den Lyapunov Exponenten mit Intervallen}{Lokale Annäherung an den Lyapunov Exponenten der H\e non-Iteration mit Intervallen der Breite $|x_0|=\varepsilon$, und den Parametern $a=1.4,b=0.3$ im Vergleich zur Entwicklung des Abstandes zweier Punkte mit Abstand $\varepsilon$}
+ \section{Anwendung der Parameter}
  
-\newpage 
- \section{Umsetzung}  
+ 
+ 
+  \Abbildungps{tbh}{1}{img/lyapu_int_tm.png}{fig:lyapu_int_tm}{Lokale Annäherung an den Lyapunov Exponenten mit Intervallen}{Lokale Annäherung an den Lyapunov Exponenten der H\e non-Iteration mit Intervallen der Breite $|x_0|=\varepsilon$, und den Parametern $a=1.4,b=0.3$ im Vergleich zur Entwicklung des Abstandes zweier Punkte mit Abstand $\varepsilon$}
+ 
+ \chapter{Umsetzung}  
  Zwei Implementierungen der H\e non-Abbildung für die Parameter $a=1.4$ und $b=0.3$ sind in den Listings \ref{list:point} und \ref{list:int} zu sehen. Es werden drei verschiedenene Zahlentypen verwendet, die jedoch alle auf den \verb+iRRAM-REAL+s aufbauen: \textit{High Order Taylor Modell} \verb+HOTM+, \textit{Real Number} \verb+num+ und \textit{Real Number Interval} \verb+numint+. Die jeweils definierte Funktion \verb+compare()+ in Zeile 4 stellt den in der \verb+iRRAM+ verwendeten Rahmen für Iterationen, beziehungsweise Erhöhungen der Genauigkeit der \verb+REAL+s dar. Mit dem Funktionsaufruf \verb+HOTM::init()+ in Zeile 7 werden die zuvor in diesem Kapitel beschriebenen Grenzwerte und Parameter für die Housekeeping-Methoden mit Werten initialisiert, die experimentell die beste Performanz lieferten. Die beiden Listings unterscheiden zunächst im verwendeten Konstruktor für die Taylormodelle in Zeile 8. In der linken Implementierung \ref{list:point} werden $x$ und $y$ als Punktintervalle, also als Taylormodelle mit lediglich einem Kernel definiert:
   \begin{center}
   \verb+HOTM::x(0)+ $\rightsquigarrow x\coloneqq [0]$\\

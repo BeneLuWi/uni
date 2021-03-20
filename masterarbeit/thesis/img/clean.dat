@@ -1,0 +1,15 @@
+# Sweep_to 0 with Square only vs Linearm, 10k Prec, 
+#    wC1    woC1    wC3     woC3
+100  138    122     143     122
+200  284    246     286     246
+300  433    372     433     372
+400  576    495     576     468
+500  712    619     709     543
+600  857    735     853     609
+700  996    858     998     674
+800  1138   980     1148    742
+900  1285   1100    1296    821
+1000 1437   1290    1452    897
+
+
+# set term wxt font "Monospace,12" size 600,400; set xlabel "Präzision [Bits]"; set ylabel "Iterationen"; set yrange [0:1500] ; plot "clean.dat" using 1:2 with lines lt rgb "#3288BD" lw 3 title "Mit Cleaning",    "clean.dat" using 1:3 with lines lt rgb "#D53E4F" lw 3 title "Ohne Cleaning"

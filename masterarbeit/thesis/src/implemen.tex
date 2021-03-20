@@ -154,6 +154,7 @@ Taylormodelle bestehen in \verb+hotm+ aus einer List von nach der Ordnunng $\suc
 Die Housekeeping-Methoden Splitting und Sweeping werden in \cite{DBLP:conf/macis/BrausseKM15} beschrieben und dienen der Kontrolle der Intervallkoeffizieten und deren Wachstum. Wann die Methoden angewandt werden, wird durch die manuell justierbaren Parameter \verb+MACRO_THRESHOLD+ für Splitting und \verb+MICRO_THRESHOLD+ für Cleaning festgelegt. Da für diese beiden Methoden Vergleiche reeller Zahlen nötig sind, um das Überschreiten eines Grenzwertes zu bestimmnen, werden die Zahlen mit Funktionen der \verb+iRRAM+ in rationale Approximationen zerlegt.
 
 \paragraph{Cleaning}
+\label{par:cleaning}
 Wie oben beschrieben, ergibt die Verwendung der \verb+iRRAM-REAL+s als Intervallgrenzen zweistufige Intervalle mit der Zahlen- und Intervallebene (siehe Abbildung \ref{fig:levels}). Mit fortlaufenden Rechnungen wächst die Breite der Intervalle auf Zahlenebene kontinuierlich und kann ohne weitere Methoden nur durch ein Erhöhen der verwendeten Präzision wieder verringer werden, beziehungsweise durch eine Iteration der \verb+iRRAM+. \textit{Cleaning} verlagert den Rechenfehler der Zahlenebene auf die Intervallebene und macht ihn damit auch für andere Housekeeping-Methoden sichtbar. Das Intervall $I=[m \pm r]$ mit $m=[c_m \pm \varepsilon_m]$ und $r = [c_r \pm \varepsilon_r]$ wird um $\varepsilon_m$ und $\varepsilon_r$ vergrößert, sodass das $I$ zwar wächst, jedoch dessen Endpunkte exakt sind:
 \begin{align*}[[c_m \pm \varepsilon_m] \pm [c_r \pm \varepsilon_r]] &\rightsquigarrow [[c_m \pm 0] \pm [c_r + \varepsilon_m +\varepsilon_r  \pm 0]] \\
 &= [\underbrace{c_m'}_{c_m + \varepsilon_m +\varepsilon_r} \pm c_r ]\end{align*}
@@ -176,7 +177,7 @@ Dies hat den Vorteil, dass die Größe der Fehlersymbole beim Sweeping berücksi
 \SetAlgoLined
 \SetKwInOut{Input}{Eingabe}
 \SetKwInOut{Output}{Ausgabe}
-\Input{Taylormodell $T$: Liste von Monomen $m_i = c_i\cdot \lambda^i$ mit Koeffizienten $c_i = [\hat{c}_i \pm \varepsilon_i]$ und der Liste der Fehlersymbole $\lambda^i$, Grenzwert für Splitting $\delta_s $}
+\Input{Taylormodell $T$: Liste von $n$ Monomen $m_i = c_i\cdot \lambda^i$ mit Koeffizienten $c_i = [\hat{c}_i \pm \varepsilon_i]$ und der Liste der Fehlersymbole $\lambda^i$, Grenzwert für Splitting $\delta_s $}
 \Output{Taylormodell $T'$: Liste von Monomen mit Punktintervallkoeffizienten}
 \DontPrintSemicolon
 \ForAll{$i \in \{1,\dots, n\}$}{
@@ -214,32 +215,32 @@ Die Sweeping-Strategie \verb+square_only+ beschränkt das Sweeping auf gerade Po
 \SetAlgoLined
 \SetKwInOut{Input}{Eingabe}
 \SetKwInOut{Output}{Ausgabe}
-\Input{Taylormodell $T$: Liste von Monomen $m_i = c_i\cdot \lambda^i$ mit Koeffizienten $c_i = [\hat{c}_i \pm \varepsilon_i]$ und der Liste der Fehlersymbole $\lambda^i$, Zielgrad $\gamma$}
+\Input{Taylormodell $T$: Liste von $n$ Monomen $m_i = c_i\cdot \lambda^i$ mit Koeffizienten $c_i = [\hat{c}_i \pm \varepsilon_i]$ und der Liste der Fehlersymbole $\lambda^i$, Zielgrad $\gamma$}
 \Output{Taylormodell $T'$: Liste von Monomen mit Punktintervallkoeffizienten}
 \DontPrintSemicolon
-\ForAll{$i \in \{0,\dots, n\}$}{
-    $o \gets grad(m_i)$\\
+\ForAll{$i \in \{1,\dots, n\}$}{
+    $o \gets \sum_{\lambda_j^l \in \lambda^{i}} l$ \Comment*{Bestimme den Grad des Monoms}
     \uIf{$o \leq \gamma$}{
-        $T' \gets T' + m_i$
+        $T' \gets T' + m_i$\Comment*{Überspringe dieses Monom, wenn der Zielgrad bereits korrekt ist}
     }\Else{
+        $r\gets o - \gamma$ \Comment*{Bestimme die nötige Gradreduktion, um das Ziel zu erreichen}
         $c_i' \gets c_i$ \\
-        $\lambda^{i'}\gets \{\lambda^l_j | \lambda_j^l \in \lambda^i \land |s_j| < |s_{j+1}| \} $\\
-        $r\gets o - \gamma$\\
-        \ForAll{$\lambda^l_j \in \lambda^{i'}$}{
-            $p \gets min(l, r)$\\
-            \lIf{$p > 1$ \textbf{and} $2 \nmid p$}{$p \gets p-1$}
-            $r \gets r - p$ \\
-            $c_i' \gets c_i' \cdot \lambda_j^p$\\
-            $l \gets l-p$\\
-            \lIf{$r < 2$}{\textbf{break}}
+        $\lambda^{i'}\gets \{\lambda^l_j | \lambda_j^l \in \lambda^i \land |s_j| < |s_{j+1}| \} $\Comment*{Sortiere die $\lambda$ aufsteigend nach ihrer Größe}
+        \ForAll(\Comment*[f]{Iteriere über die geordnete Liste von $\lambda$}){$\lambda^l_j \in \lambda^{i'}$}{
+            $p \gets min(l, r)$ \Comment*{Bestimme die größtmögliche Reduktion für dieses $\lambda$}
+            \lIf(\Comment*[f]{Wähle geraden Exponenten}){$p > 2$ \textbf{and} $2 \nmid p$}{$p \gets p-1$}
+            $c_i' \gets c_i' \cdot \lambda_j^p$ \Comment*{Sweepe den einen Teil des Fehlersymbols in den Koeffizienten}
+            $l \gets l-p$ \Comment*{Verringere den Exponenten des reduzierten $\lambda$}
+            $r \gets r - p$ \Comment*{Aktualisiere den Wert der noch nötigen Gradreduktion}
+            \lIf(\Comment*[f]{Keine quadratische Reduktion mehr möglich}){$r < 2$}{\textbf{break}}
         }
-        $\lambda^{i'}\gets \{\lambda^l_j | \lambda_j^l \in \lambda^{i'} \land \lambda_j \succ \lambda_{j+1} \} $\\
+        $\lambda^{i'}\gets \{\lambda^l_j | \lambda_j^l \in \lambda^{i'} \land \lambda_j \succ \lambda_{j+1} \} $\Comment*{Stelle die Ordnung $\succ$ wieder her}
         $T' \gets T' + c_i' \cdot \lambda^{i'}$
     }
 }
 
 \Return $T'$ 
- \caption{Algorithmus für Sweeping mit square\_only}
+ \caption{Algorithmus für Sweeping mit der Beschränkung auf quadratisches Sweeping (square\_only)}
 \end{algorithm}
 
 
