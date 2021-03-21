@@ -157,8 +157,33 @@ Die Housekeeping-Methoden Splitting und Sweeping werden in \cite{DBLP:conf/macis
 \label{par:cleaning}
 Wie oben beschrieben, ergibt die Verwendung der \verb+iRRAM-REAL+s als Intervallgrenzen zweistufige Intervalle mit der Zahlen- und Intervallebene (siehe Abbildung \ref{fig:levels}). Mit fortlaufenden Rechnungen wächst die Breite der Intervalle auf Zahlenebene kontinuierlich und kann ohne weitere Methoden nur durch ein Erhöhen der verwendeten Präzision wieder verringer werden, beziehungsweise durch eine Iteration der \verb+iRRAM+. \textit{Cleaning} verlagert den Rechenfehler der Zahlenebene auf die Intervallebene und macht ihn damit auch für andere Housekeeping-Methoden sichtbar. Das Intervall $I=[m \pm r]$ mit $m=[c_m \pm \varepsilon_m]$ und $r = [c_r \pm \varepsilon_r]$ wird um $\varepsilon_m$ und $\varepsilon_r$ vergrößert, sodass das $I$ zwar wächst, jedoch dessen Endpunkte exakt sind:
 \begin{align*}[[c_m \pm \varepsilon_m] \pm [c_r \pm \varepsilon_r]] &\rightsquigarrow [[c_m \pm 0] \pm [c_r + \varepsilon_m +\varepsilon_r  \pm 0]] \\
-&= [\underbrace{c_m'}_{c_m + \varepsilon_m +\varepsilon_r} \pm c_r ]\end{align*}
-    
+&= [c_m' \pm \underbrace{c_r'}_{c_m + \varepsilon_m +\varepsilon_r}  ]\end{align*}
+
+
+\begin{algorithm}[H]
+\label{algo:split}
+\SetAlgoLined
+\SetKwInOut{Input}{Eingabe}
+\SetKwInOut{Output}{Ausgabe}
+\Input{Taylormodell $T$: Liste von $n$ Koeffizienten $c_i = [m_i \pm r_i]$ und $m_i = [\hat{c}_{m_i}\pm \varepsilon_{m_i}],\ r_i = [\hat{c}_{r_i}\pm \varepsilon_{r_i}]$ , Grenzwert $\delta_c$}
+\Output{Taylormodell $T'$: Liste von Monomen mit Punktintervallkoeffizienten}
+\DontPrintSemicolon
+$T' \gets T$ \Comment*{Kopiere das alte Taylormodell}
+\ForAll{$i \in \{1,\dots, n\}$}{
+    \If(\Comment*[f]{Überschreitet Fehler des Mittelpunktes den Grenzwert}){$\varepsilon_{m_i} > \delta_c$}{
+        $r'_i \gets r_i + \varepsilon_{m_i}$\Comment*{Erweitere das Intervall um den Fehler}
+        $m'_i \gets [c_{m_i}]$ \Comment*{Setze die Intervallbreite des Mittelpunktes auf 0}
+    }
+    \If(\Comment*[f]{Überschreitet Fehler des Radius' den Grenzwert}){$\varepsilon_{r_i} > \delta_c$}{
+        $r'_i \gets r_i + \varepsilon_{r_i}$\Comment*{Erweitere das Intervall um den Fehler}
+        $r'_i \gets [c_{r_i}]$\Comment*{Setze die Intervallbreite des Radius' auf 0}
+    }
+}
+
+\Return $T'$ \Comment*{$T'$ hat Punktintervalle oder sehr kleine Intervalle auf Zahleneben}
+ \caption{Algorithmus für Cleaning eines Taylormodell}
+\end{algorithm}
+
     
 
 \paragraph{Splitting}
@@ -229,7 +254,7 @@ Die Sweeping-Strategie \verb+square_only+ beschränkt das Sweeping auf gerade Po
         \ForAll(\Comment*[f]{Iteriere über die geordnete Liste von $\lambda$}){$\lambda^l_j \in \lambda^{i'}$}{
             $p \gets min(l, r)$ \Comment*{Bestimme die größtmögliche Reduktion für dieses $\lambda$}
             \lIf(\Comment*[f]{Wähle geraden Exponenten}){$p > 2$ \textbf{and} $2 \nmid p$}{$p \gets p-1$}
-            $c_i' \gets c_i' \cdot \lambda_j^p$ \Comment*{Sweepe den einen Teil des Fehlersymbols in den Koeffizienten}
+            $c_i' \gets c_i' \cdot s_j^p$ \Comment*{Sweepe den einen Teil des Fehlersymbols in den Koeffizienten}
             $l \gets l-p$ \Comment*{Verringere den Exponenten des reduzierten $\lambda$}
             $r \gets r - p$ \Comment*{Aktualisiere den Wert der noch nötigen Gradreduktion}
             \lIf(\Comment*[f]{Keine quadratische Reduktion mehr möglich}){$r < 2$}{\textbf{break}}
