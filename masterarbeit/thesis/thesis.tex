@@ -38,7 +38,6 @@
 \usepackage{wrapfig}
 \usepackage{mathtools}
 \usepackage{subcaption}
-
 %% ---------------- end of usepackages -------------
 
 \newcommand\mycommfont[1]{\footnotesize{\textit{#1}}}
@@ -81,6 +80,14 @@
       {]}{{{\color{delim}{]}}}}{1},
 }
 
+\lstdefinestyle{cpp}{
+basicstyle=\ttfamily\footnotesize,
+morekeywords={HOTM,num,numint},
+captionpos=b,
+xleftmargin=15pt,
+numbers=left,
+stepnumber=1
+}
 
 %\svnversion{$Id: thesis.tex 65 2012-05-10 10:32:11Z bless $} % In case that you want to include version information in the footer
 
@@ -122,7 +129,7 @@
 \ifnotdraft{\makeindex}
 
 \begin{document}
-
+\renewcommand{\ttdefault}{pcr}
 \frontmatter
 \pagenumbering{roman}
 \ifnotdraft{

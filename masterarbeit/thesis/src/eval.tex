@@ -197,7 +197,14 @@ TM \ref{tm4}  & 1437 & 0.35 &14505 & 0.18  \\
 Bis auf Taylormodell-Definition \ref{tm2} erreichen (beinahe) alle Berechnung dieselbe Iterationszahl, variieren jedoch in der Größe des Rechtecks, welches von $x$ und $y$ aufgespannt wird. Mit der Definition \ref{tm1} als intiales Taylormodell wird für 10000 Bit Genauigkeit eine minimal höhere Iterationszahl und bei 1000 Bit Genauigkeit ein kleineres Rechteck, als in den anderen Varianten erreicht.
  
  \section{Anwendung der Parameter}
- 
+ In diesem Kapitel wurden mit verschiedenen Belegungen für die zu Verfügung stehenden Parameter in $\verb+HOTM+$ versucht, eine möglichst optimale Konfiguration im Hinblick auf die Eindämmung des Wrapping-Effektes zu finden. Die besten Ergebnisse werden hierbei erzielt für: 
+ \begin{itemize}
+  \item \textbf{Sweeping} mit ausschließlich quadratischem Sweeping zum Grade 0,
+  \item \textbf{Cleaning} und \textbf{Splitting} mit einem Grenzwerten orientiert an der Genauigkeit,
+  \item \textbf{Initialen Taylormodellen} für ein Intervall $[c \pm \varepsilon]$ der Form $[c] + [1] \cdot \lambda,\  \lambda \in [0 \pm \varepsilon]$,
+  \item Erhalt von 3 \textbf{Fehlersymbolen}.
+ \end{itemize}
+Abbildung \ref{fig:lyapu_int_tm} zeigt die Entwicklung bei Berechnungen der H\e non-Abbildung. Jeweils zu sehen sind der Abstand der $x$-Koordinate zweier Punkte $a=(0,0)$ und $b=(2^{-p},2^{-p})$ in Farbe, die Breite des Intervalls $|x_n|$ für $(x_0, y_0)=([0\pm 2^{-(p-1)}],[0\pm 2^{-(p-1)}])$ in grau und die Breite des ausgewerteten Taylormodells $|x_n|$ für zwei Taylormodelle $x_0 = [0] + [1]\cdot \lambda_0, \lambda_0\in [0\pm 2^{-(p-1)}]$ und $y_0 = [0] + [1]\cdot \lambda_1, \lambda_1\in [0\pm 2^{-(p-1)}]$ in schwarz. 
  
  
   \Abbildungps{tbh}{1}{img/lyapu_int_tm.png}{fig:lyapu_int_tm}{Lokale Annäherung an den Lyapunov Exponenten mit Intervallen}{Lokale Annäherung an den Lyapunov Exponenten der H\e non-Iteration mit Intervallen der Breite $|x_0|=\varepsilon$, und den Parametern $a=1.4,b=0.3$ im Vergleich zur Entwicklung des Abstandes zweier Punkte mit Abstand $\varepsilon$}
@@ -220,7 +227,7 @@ Die Parameter $a$ und $b$ werden in Zeile 10 als \verb+num+ (\verb+iRRAM::REAL+)
 
  
  \begin{minipage}{.5\textwidth}
-    \begin{lstlisting}[language=C++, caption={[Implementierung der H\e non-Iteration in HOTM mit Intervallen,] \\Implementierung mit Punktintervallen },captionpos=b,xleftmargin=15pt, numbers=left,stepnumber=1,basicstyle=\footnotesize, label=list:int]
+    \begin{lstlisting}[language=C++, style=cpp, caption={[Implementierung der H\e non-Iteration in HOTM mit Intervallen,] \\Implementierung mit Punktintervallen },label=list:int]
 #include "iRRAM.h"
 #include "hoTM.h"
 using namespace iRRAM;
@@ -243,7 +250,7 @@ void compute(){
 \end{lstlisting}
  \end{minipage}
  \begin{minipage}{.5\textwidth}
-    \begin{lstlisting}[language=C++, caption={[Implementierung der H\e non-Iteration in HOTM mit Intervallen] \\Implementierung mit Intervallen },captionpos=b,xleftmargin=15pt, numbers=left,stepnumber=1,basicstyle=\footnotesize,label=list:point]  
+    \begin{lstlisting}[language=C++,  style=cpp, caption={[Implementierung der H\e non-Iteration in HOTM mit Intervallen] \\Implementierung mit Intervallen }, label=list:point]  
 #include "iRRAM.h"
 #include "hoTM.h"
 using namespace iRRAM;
