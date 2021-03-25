@@ -5,6 +5,28 @@
 \label{ch:Evaluierung}
 %% ==============================
 
+Werden die Initialwerte für Iterationen der H\e non-Abbildung $(x_0, y_0)$ als Taylormodelle mit Itervallen definiert, kann eine Fläche beschrieben werden, die durch die Abbildung gespiegelt, gedehnt und verzerrt wird. Liegt diese für $a=1.4$ und $b=0.3$ komplett innerhalb der Fangzone $R$, so wird jeder Punkt in der Fläche wiederum nach $R$ abgebildet. 
+
+\Abbildungps{tbh}{.7}{img/6iter.pdf}{fig:escape}{H\e non-Abbildung: Mehrere Iterationen mit großen Initialwerten}{Iterationen der H\e non-Abbildung ausgehend von einem größeren Rechteck}
+
+Eine Abbildung der Fläche im Ganzen führt jedoch zu einer Überschätzung, die in jeder Iteration zunimmt, da nun mit Intervallen statt mit Punkten gerechnet wird. Abbildung \ref{fig:escape} zeigt pro Graph eine Iteration mit 
+\begin{align*}
+x_0 = 0 + 1 \cdot \lambda_1 & \hspace{0.5cm} (\lambda_1 \in [0 \pm 0.4]) \\
+ y_0 = 0 + 1 \cdot \lambda_2 & \hspace{0.5cm} (\lambda_2 \in [0 \pm 0.1])
+\end{align*}
+und der Fangzone als schwarzes Tetragon. Es ist erkennbar, dass das Rechteck nach wenigen Iterationen die Fangzone verlässt und einige Itervalle ein starkes Rauschen verursachen. Abbildung \ref{fig:7iter} zeigt  Iterationen mit kleineren initialen Intervallen, wodurch die Überschätzung erst zu einem späteren Zeitpunkt zu groß wird. Um dem Wachstum der Intervalle entgegenzuwirken und die Berechnung der H\e non-Abbildung auch für solche Flächem mit höheren Iterationszahlen zu ermöglichen, können die Taylormodelle in Partitionen aufgeteilt werden.  Die kleinste Partitionierung wäre die Aufteilung der Fläche in unendlich viele Punkte, was nicht praktikabel wäre, allerdings hohe Iterationszahlen ermögliche, wie in Abbildung \ref{fig:strangeattractor} zu sehen ist. Das andere Extrem stellen große Itervalle, beziehungsweise keine Partitionierung dar, was im Vergleich nur einen Bruchteil des Rechenaufwandes bedeutet, jedoch schnell zu starker Überschätzung führt.
+
+Um die Fragestellung, wie die H\e non-Abbildung mit Taylormodellen am besten berechnet werden kann zu erörtern, wird das Problem in drei Sektionen unterteilt:
+
+\begin{enumerate}
+ \item Wie klein müssen die Taylormodelle sein, damit längere Berechnungen möglich sind?
+ \item Wie verhalten sich die verschiedenen Partitionsgrößen bei unterschiedlichen Konfigurationen der Taylormodelle?
+ \item Welche Partition ist für eine gegebene Anzahl an Iterationen nötig?
+\end{enumerate}
+
+
+
+
 Die Implementierung nichtlinearer Taylormodelle ergibt eine Vielzahl von Konfigurationsmöglichkeiten und damit einen großen Suchraum nach der optimalen Einstellung:
 \begin{itemize}
  \item Grenzwert für Cleaning $\delta_c$, Splitting $\delta_s$

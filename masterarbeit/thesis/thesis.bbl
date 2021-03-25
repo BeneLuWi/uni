@@ -1,4 +1,4 @@
-\begin{thebibliography}{WiKm20}
+\begin{thebibliography}{MdOCC20}
 
 \bibitem[BrHW08]{Brattka2008}
 V.~Brattka, P.~Hertling und K.~Weihrauch.
@@ -26,6 +26,12 @@ K.~Makino und M.~Berz.
   taylor models.
 \newblock {\em Nonlinear Analysis: Theory, Mehtods and Applications} 47(5),
   2001, S.~3514--3503.
+
+\bibitem[MdOCC20]{MartinsdeOliveira2020}
+V.~Martins~de Oliveira, D.~Ciro und I.~L. Caldas.
+\newblock Dynamical trapping in the area-preserving H{\'e}non map.
+\newblock {\em The European Physical Journal Special Topics} 229(8), May 2020,
+  S.~1507--1516.
 
 \bibitem[Moor79]{moore1979}
 R.~E. Moore.
