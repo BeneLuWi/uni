@@ -124,11 +124,12 @@ $$ c \cdot \lambda_1^3 \lambda_2^2 \lambda_3^1 \lambda_4^3  \underset{square\_on
 \label{fig:sweeping}
 \end{figure}
 
-Im Vergleich mit rein linearen Taylormodellen zeigt sich eine leichte Verbesserung (siehe Abbildung \ref{fig:extra}). Der Unterschied besteht darin, dass die nichtlinearen Taylormodelle während der Berechnung und besonders während der Multiplikation Punktintervalle erhalten können und sich stattdessen der Grad des Polynoms erhöht. Nach jeder Iteration werden diese dann zunächst im Grad reduziert, um diesen dann durch Splitting auf den Monomen um maximal 1 zu erhöhen. Für lineare Taylormodelle steht lediglich das Splitting für den Kernel zur Verfügung, da sonst nichtlineare Polynome entstünden. Des Weiteren wird hier bereits während der Multiplikation gesweept und Punktintervalle werden zu regulären Intervallen. Die Performanz des Sweepings \textbf{square\_only} zum Grade 0 verbessert sich im Schnitt mit einer wachsenden Zahl der zu erhaltenen Fehlersymbole, wie in Abbildung \ref{fig:extra} zu sehen ist. Jedes Fehlersymbol erhöht die Menge an erhaltener Abhängigkeitsinformation und sorgt dafür, dass ein Taylormodell dessen Ränder besser beschreiben kann. Allerdings stellt die Praktikabilität dieser Herangehensweise ein Problem dar, da so sehr große Polynome entstehen, die während einer Iteration der H\e non-Abbildung exponentiell in ihrer Länge wachsen.
+Im Vergleich mit rein linearen Taylormodellen zeigt sich eine Verbesserung (siehe Abbildung \ref{fig:extra}). Der Unterschied besteht darin, dass die nichtlinearen Taylormodelle während der Berechnung und besonders während der Multiplikation Punktintervalle erhalten können und sich stattdessen der Grad des Polynoms erhöht. Nach jeder Iteration werden diese dann zunächst im Grad reduziert, um diesen dann durch Splitting auf den Monomen um maximal 1 zu erhöhen. Für lineare Taylormodelle steht lediglich das Splitting für den Kernel zur Verfügung, da sonst nichtlineare Polynome entstünden. Des Weiteren wird hier bereits während der Multiplikation gesweept und Punktintervalle werden zu regulären Intervallen. Die Performanz des Sweepings \textbf{square\_only} zum Grade 0 verbessert sich im Schnitt mit einer wachsenden Zahl der zu erhaltenen Fehlersymbole, wie in Abbildung \ref{fig:extra} zu sehen ist. Jedes Fehlersymbol erhöht die Menge an erhaltener Abhängigkeitsinformation und sorgt dafür, dass ein Taylormodell dessen Ränder besser beschreiben kann. Allerdings stellt die Praktikabilität dieser Herangehensweise ein Problem dar, da so sehr große Polynome entstehen, die während einer Iteration der H\e non-Abbildung exponentiell in ihrer Länge wachsen. 
  
 
- \Abbildungps{tbh}{.7}{img/extra.png}{fig:extra}{Experimentelle Ergebnisse zu erhaltenen Fehlersymbolen}{Iterationszahl der H\e non-Abbildung mit fester Genauigkeit von 1000 Bits.}
+ \Abbildungps{tbh}{.7}{img/extra.png}{fig:extra}{Experimentelle Ergebnisse zu erhaltenen Fehlersymbolen}{Gegenüberstellung von $x_0 = y_0 = [0 \pm 2^{10000}]$ als lineare Taylormodelle und nichtlineare Taylormodelle mit quadratischem Sweeping zum Grade 0. Jeweils bleiben verschiedene Anzahlen von Fehlersymbolen pro Iteration erhalten. Gemessen wird die Iterationszahl der H\e non-Abbildung mit fester Genauigkeit von 10000 Bits, bis $|x_n|\cdot|y_n|$ einen Grenzwert von $2^{-6}$ überschreitet. }
 
+ Dieser Effekt ist in Tabelle \ref{tab:time} zu sehen. Eine Erhöhung der Anzahl der erhaltenen Fehlersymbole hat einen drastischen Einfluss auf die Durchschnittliche Dauer einer Iteration in $ms$, bis das Programm bei größeren Werten quasi nicht mehr lauffähig ist ($>100ms$ pro Iteration). Betrachtet man nun das Verhältnis zwischen der Verbesserung der Performanz (Abbildung \ref{fig:extra}) und der Verschlechterung der Laufzeit (Tabelle \ref{tab:time}), so bildet das Setzen der erhaltenen Fehlersymbole auf 3 mit einem Zielgrade von 0 bei der Beschränkung auf quadratisches Sweeping einen guten Trade-off, weshalb diese Konfiguration als Voreinstellung für Sweeping in der Implementierung (Kapiter \ref{ch:umsetung}) vorgesehen ist.
  
   
  \begin{table}[tbh]
@@ -235,7 +236,13 @@ Abbildung \ref{fig:lyapu_int_tm} zeigt die Entwicklung bei Berechnungen der H\e 
   \Abbildungps{tbh}{1}{img/lyapu_int_tm.png}{fig:lyapu_int_tm}{Lokale Annäherung an den Lyapunov Exponenten mit Intervallen}{Lokale Annäherung an den Lyapunov Exponenten der H\e non-Iteration mit Intervallen der Breite $|x_0|=\varepsilon$, und den Parametern $a=1.4,b=0.3$ im Vergleich zur Entwicklung des Abstandes zweier Punkte mit Abstand $\varepsilon$}
  
  \chapter{Umsetzung}  
- Zwei Implementierungen der H\e non-Abbildung für die Parameter $a=1.4$ und $b=0.3$ sind in den Listings \ref{list:point} und \ref{list:int} zu sehen. Es werden drei verschiedenene Zahlentypen verwendet, die jedoch alle auf den \verb+iRRAM-REAL+s aufbauen: \textit{High Order Taylor Modell} \verb+HOTM+, \textit{Real Number} \verb+num+ und \textit{Real Number Interval} \verb+numint+. Die jeweils definierte Funktion \verb+compare()+ in Zeile 4 stellt den in der \verb+iRRAM+ verwendeten Rahmen für Iterationen, beziehungsweise Erhöhungen der Genauigkeit der \verb+REAL+s dar. Mit dem Funktionsaufruf \verb+HOTM::init()+ in Zeile 7 werden die zuvor in diesem Kapitel beschriebenen Grenzwerte und Parameter für die Housekeeping-Methoden mit Werten initialisiert, die experimentell die beste Performanz lieferten. Die beiden Listings unterscheiden zunächst im verwendeten Konstruktor für die Taylormodelle in Zeile 8. In der linken Implementierung \ref{list:point} werden $x$ und $y$ als Punktintervalle, also als Taylormodelle mit lediglich einem Kernel definiert:
+ \label{ch:umsetung}
+ Zwei Implementierungen der H\e non-Abbildung für die Parameter $a=1.4$ und $b=0.3$ sind in den Listings \ref{list:point} und \ref{list:int} zu sehen. Es werden drei verschiedenene Zahlentypen verwendet, die jedoch alle auf den \verb+iRRAM-REAL+s aufbauen: \textit{High Order Taylor Modell} \verb+HOTM+, \textit{Real Number} \verb+num+ und \textit{Real Number Interval} \verb+numint+. Die jeweils definierte Funktion \verb+compute()+ in Zeile 4 stellt den in der \verb+iRRAM+ verwendeten Rahmen für Iterationen, beziehungsweise Erhöhungen der Genauigkeit der \verb+REAL+s dar. Mit dem Funktionsaufruf \verb+HOTM::init()+ in Zeile 7 werden die zuvor in diesem Kapitel beschriebenen Grenzwerte und Parameter für die Housekeeping-Methoden mit Werten initialisiert, die experimentell die beste Performanz lieferten. Die Parameter $a$ und $b$ werden in Zeile 10 als \verb+num+ (\verb+iRRAM::REAL+) instanziiert. Die Durchführung der Housekeeping-Methoden ist ein Überschreiben des Zuweisungsoperators \anf{=} für die \verb+HOTM+-Taylormodelle realisiert. Während der Berechnung in den Zeilen 12 und 13 können sich die Taylormodelle aufblähen und werden dann bei der Zuweisung reduziert. In den Zeilen 14 und 15 findet kein Housekeeping mehr statt, gesteuert durch einen Parameter, der den Zustand des Taylormodells beschreibt \footnote{Operationen auf dem Taylormodell markieren es als \anf{not cleaned}. Dieser Wert wird dann durch die Anwendung von Housekeeping zurückgesetzt.}.
+ 
+ 
+ Um die Anpassung der Parameter der \verb+HOTM+ zu vereinfachen stehen verschiedene Möglichkeiten zur Verfügung:
+ \paragraph{Initiale Taylormodelle}
+ In der linken Implementierung \ref{list:point} werden $x$ und $y$ als Punktintervalle, also als Taylormodelle mit lediglich einem Kernel definiert:
   \begin{center}
   \verb+HOTM::x(0)+ $\rightsquigarrow x\coloneqq [0]$\\
   \verb+HOTM::y(0)+ $\rightsquigarrow y\coloneqq [0]$
@@ -248,24 +255,34 @@ Abbildung \ref{fig:lyapu_int_tm} zeigt die Entwicklung bei Berechnungen der H\e 
   \verb+HOTM::y(0,0.001)+ $\rightsquigarrow y\coloneqq[0] + [1] \cdot \lambda_1,\ \lambda_1 \in [0 \pm 0.001]$
  \end{center}
 
-Die Parameter $a$ und $b$ werden in Zeile 10 als \verb+num+ (\verb+iRRAM::REAL+) instanziiert. Die Durchführung der Housekeeping-Methoden ist ein Überschreiben des Zuweisungsoperators \anf{=} für die \verb+HOTM+-Taylormodelle realisiert. Während der Berechnung in den Zeilen 12 und 13 können sich die Taylormodelle aufblähen und werden dann bei der Zuweisung reduziert. In den Zeilen 14 und 15 findet kein Housekeeping mehr statt, gesteuert durch einen Parameter, der den Zustand des Taylormodells beschreibt \footnote{Operationen auf dem Taylormodell markieren es als \anf{not cleaned}. Dieser Wert wird dann durch die Anwendung von Housekeeping zurückgesetzt.}.
+\paragraph{Anzahl der zu erhaltenden Fehlersymbole}
+Die Initialisierungsfunktion \verb+init()+ akzeptiert eine \verb+int+ $\geq 0$ als Eingabe. Damit kann die Anzahl der zu erhaltenden Fehlersymbole pro Taylormodellangepasst werden, wie in  Listing \ref{list:int} Zeile 9. Der Standardwert liegt bei 3. Außerdem besteht die Möglichkeit, diesen Wert für jedes Taylormodell individuell zu bestimmen (Listing \ref{list:int} Zeile 11). Ist dieser Wert nicht gesetzt, so wird er aus dem \verb+init()+ Aufruf abgeleitet.
 
+\paragraph{Manuelles Housekeeping}
+ Sollen die Housekeeping-Methoden nur für bestimmte Taylormodelle oder zu einem anderen Zeitpunkt, als bei der Zuweisung durchgeführt werden, so wird die Funktion \verb+HOMT::kousekeep+ aufgerufen. Ein Aufruf, wie in Listing \ref{list:int} Zeile 16, schaltet das Housekeeping während der Zuweisung aus. Zudem beim Entfernen bis auf die $m$-größten Fehlersymbole nun für alle im Aufruf enthaltenen Taylormodelle durchgeführt, statt einzeln. Das bedeutet, dass nach diesem Aufruf in allen Taylormodellen dieselben Fehlersymbole übrig bleiben.
+ 
+ 
  
  \begin{minipage}{.5\textwidth}
-    \begin{lstlisting}[language=C++, style=cpp, caption={[Implementierung der H\e non-Iteration in HOTM mit Intervallen,] \\Implementierung mit Punktintervallen },label=list:int]
+    \begin{lstlisting}[language=C++, style=cpp, caption={[Implementierung der H\e non-Iteration in HOTM mit Intervallen,] \\Implementierung mit Punktintervallen },label=list:point]
 #include "iRRAM.h"
 #include "hoTM.h"
 using namespace iRRAM;
+
 void compute(){
  int n;
  cin >> n;
+ 
  HOTM::init();
- HOTM x(0), y(0);
+ HOTM x(num(0));
+ HOTM y(num(0));
  HOTM x_new, y_new;
+ 
  num a(1.4), b(0.3);
  for (int i = 0; i < n; i++) {
-   x_new = num(1)+y-a*(x*x);
-   y_new = b * x;
+ 
+   x_new = 1+y-a*(x*x);
+   y_new = b*x;
    x = x_new;
    y = y_new;
  }
@@ -275,20 +292,25 @@ void compute(){
 \end{lstlisting}
  \end{minipage}
  \begin{minipage}{.5\textwidth}
-    \begin{lstlisting}[language=C++,  style=cpp, caption={[Implementierung der H\e non-Iteration in HOTM mit Intervallen] \\Implementierung mit Intervallen }, label=list:point]  
+    \begin{lstlisting}[language=C++,  style=cpp, caption={[Implementierung der H\e non-Iteration in HOTM mit Intervallen] \\Implementierung mit Intervallen }, label=list:int]  
 #include "iRRAM.h"
 #include "hoTM.h"
 using namespace iRRAM;
+
 void compute(){
  int n;
  cin >> n;
- HOTM::init();
- HOTM x(0, 0.001), y(0, 0.001);
+ 
+ HOTM::init(2);
+ HOTM x(num(0), num(0.001));
+ HOTM y(num(0), num(0.001), 0);
  HOTM x_new, y_new;
+ 
  num a(1.4), b(0.3);
  for (int i = 0; i < n; i++) {
-   x_new = num(1)+y-a*(x*x);
-   y_new = b * x;
+   HOTM::housekeep(x,y);
+   x_new = 1+y-a*(x*x);
+   y_new = b*x;
    x = x_new;
    y = y_new;
  }

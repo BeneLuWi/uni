@@ -34,7 +34,18 @@ Was ist das Ziel der Arbeit. Wie soll das Problem gelöst werden?
 %% ==============================
 \label{ch:Einleitung:sec:Gliederung}
 
-Was enthalten die weiteren Kapitel? Wie ist die Arbeit aufgebaut? Welche Methodik wird verfolgt?
+Was enthalten die weiteren Kapitel? Wie ist die Arbeit aufgebaut? Welche Methodik wird verfolgt?  
+
+\section{Relevante Literatur}
+Die für diese Arbeit relevante Literatur lässt sich in vier Kategorien aufteilen, vergleichbar mit den später eingeführten Abstraktionsebenen, die sich aus dem Aufbau der \verb+HOTM+ ergeben. Für die grundlegende Zahlendarstellung wir die Implementierung der reellen Zahlen der \verb+iRRAM+ von Müller in \cite{Mller2009EnhancingIE}, beziehungsweise \cite{mueller2001} verwendet. Funktionsweisen und mögliche Anpassungen der Software-Bibilothek können diesen Quellen entnommen werden. Für eine theoretische Grundlage der hier praktisch angewendeten Berechenbaren Analysis wird auf ein Tutorial von Brattka \textit{et al} \cite{Brattka2008} verwiesen. Spandl untersucht in \cite{DBLP:spandl} mit Hilfe der \verb+iRRAM+ den Lyapunov Exponenten für dynamische Systeme und zieht dabei Intervallmethoden heran, was einen zentralen Teil dieser Arbeit darstellt. 
+
+Da die \verb+HOTM+ auf der nächst höheren Ebene aus Polynomen mit Intervallkoeffizienten bestehen, wurde eine allgemeine Intervallarithmetik, wie im Standardwerk von Moore \cite{moore1979} beschrieben implementiert. Yan \textit{et al} führen in \cite{geobuckets} einen Algorithmus ein, der die Addition von Polynomen effizient gestaltet, welcher in \cite{geobucketsmulti} für die Multiplikation formuliert ist. Mit dieser Basis können die Taylormodelle, wie in \cite{makino2001} und \cite{DBLP:conf/macis/BrausseKM15} beschrieben, implementiert werden.
+
+In \cite{DBLP:conf/macis/BrausseKM15} sind zudem weiterführende Operationen auf Taylormodellen zu finden. Diese werden unter anderem im Programm \verb+Tangentspace+, auf dem die \verb+HOTM+s aufbauen, verwendet und ermöglichen geometrische Lösungen für Konfliktgesteuerte Gleichungslöser. Die Funktionsweise der so implementierten Taylormodelle wird an Hand der H\e non-Abblildung untersucht. Hierzu existieren neben dem ursprünglichen Paper von M. H\e non \cite{henon1976}, viele Experimente und Untersuchungen, wie , sich mit verschiedenen Parameterbelegungen beschäftigen oder .
+
+
+
+
 
 
 %%% Local Variables: 
