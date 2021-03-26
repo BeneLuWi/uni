@@ -7,15 +7,19 @@
 %% ==============================
 
 \section{Diskussion}
+Der Schritt von linearen zu nichtlinearen Taylormodellen erhöht in der Praxis zwar leicht deren Potential, Rundungsfehler zu kontrollieren, jedoch erhöht sich die Komplexität der Berechnung und der Strukturen um ein vielfaches, was sich besonders in der Laufzeit, als auch im Aufwand niederschlägt. Dadurch, dass jede Zahl der \verb+HOTM+ von einem Intervall dargestellt wird, beziehungsweise eine \verb+iRRAM-REAL+ ist, sorgt jede arithmetische Operation wegen der Eigenschaften der Intervallarithmetik zu einer Überschätzung. Wachsen nun die Polynome in ihrer Länge, kann zwar das Anhängigkeitsproblem der Variablen angegangen werden, jedoch erhöht sich auch die Anzahl der ausgeführten Operationen, was letztendlich die Ausdehnung der Taylormodelle dominiert, wie in Kapitel \ref{ch:Evaluierung} zu sehen ist. 
+
+Durch den vielschichtigen Aufbau des Zahlentyps \verb+HOTM+, ist es meist schwierig zu sagen, ob eine Konfiguration optimal ist, da sehr viele Faktoren eine Rolle spielen. Um beispielsweise die Ausdehnung eines Rechtecks zu untersuchen, mussten starke Einschränkungen an den unterliegenden \verb+iRRAM+-Iterationen vorgenommen werden. Darunter fällt die Fixierung der Genuaigkeit der \verb+REAL+s, die eigentlich dynamisch zu Laufzeit angepasst wird. Ohne eine solche Fixierung und andere Beschränkungen, was nicht möglich, die experimentellen Ergebnisse klar zu deuten und die Faktoren voneinander zu trennen. Diese Einschränkungen entsanden aus einer längeren Auseinandersetzung mit dem zu Grunde liegenden Problem und dem Wissen darüber, wann ein Rechteck bestimmter Größe, bei einer gewissen Genauigkeit die Fangzone in der H\e non-Abbildung verlässt. Um die \verb+HOTM+ als generischen Zahlentypen für Intervallarithmetik verwenden zu können, sind der Zeit noch solche Informationen und entsprechende Anpassungen nötig, da Berechnungen in einigen Fällen sonst nicht nmöglich sind.
+
 
 \section{Ausblick}
 In dieser Arbeit wurde eine grundlegende Implementierung für das Rechnen mit nichtlinearen Taylormodellen auf den reellen Zahlen beschrieben und angefertigt. An verschiedenen Stellen ist es jedoch möglich und teils notwendig, die Arbeit fortzuführen
 
-\section{Partitionierung}
+\subsection{Partitionierung}
 
-\section{Laufzeitoptimierung}
+\subsection{Laufzeitoptimierung}
 
-\section{Schnittstellen}
+\subsection{Schnittstellen}
 
 
 %%% Local Variables: 
