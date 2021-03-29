@@ -128,7 +128,7 @@ Für $LE(x_0)<0$ kontrahiert, für $LE(x_0)>0$ wächst der Abstand zwischen den 
  In Abbildung \ref{fig:lyapuint} ist zu sehen, wie sich die Ausbreitung entwickelt, wenn statt zwei Punkten, Intervalle für $x_0$ und $y_0$ mit der Breite $\varepsilon$ verwendet werden; jeweils in Schwarz eingezeichnet. Hier zeigt sich, dass sich die Breite des Intervalls $x_n$ deutlich schneller vergrößert\footnote{Das Intervall $y_n$ verhält sich vergleichbar, wird jedoch von $x_{n-1}$ dominiert}, als es der Abstand zwischen unabhängigen Punkten mit $x_n$ und $(x+\varepsilon)_n$. Das entstehende Wrapping wächst umso schneller, je mehr die Intervallbreite $|x_n|$ dem Wert 1 nähert. Dort, wo die einzelnen Punkte um die 1 oszilieren, laufen die Intervallgrenzen innerhalb weniger Iterationen gegen $\infty$.
  
  \subsection{Verlustrate der Aussagekraft}  
- 
+ \label{sec:prec}
 In \cite{DBLP:spandl} wird der Lyapunov Exponent in den Kontext der Berechenbaren Analysis gerückt und in Verbindung mit der Entwicklung von Rundungsfehlern in reeller Arithmetik gebracht. Der Wert von $x_n$ wird zu einem beliebigen Zeitpunkt $n$ von einem Intervall $[x_n^l,x_n^u]$ umschlossen, sodass $x_n \in [x_n^l,x_n^u]$ gilt. Die Schranken $x_n^l$ und $x_n^u$ sind jeweils Fließkommazahlen der Länge $m_n$. $\hat{x}_n$ stellt eine Approximation von $x_n$ dar, indem der Mittelpunkt des Intervalls bestimmt und dann auf $m_n$ Stellen gerundet wird:
 \begin{align}
  \hat{x}_n = rd(\frac{x^l_n + x^u_n}{2}, m_n)

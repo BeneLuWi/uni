@@ -14,16 +14,25 @@ Eine Abbildung der Fläche im Ganzen führt jedoch zu einer Überschätzung, die
 x_0 = 0 + 1 \cdot \lambda_1 & \hspace{0.5cm} (\lambda_1 \in [0 \pm 0.4]) \\
  y_0 = 0 + 1 \cdot \lambda_2 & \hspace{0.5cm} (\lambda_2 \in [0 \pm 0.1])
 \end{align*}
-und der Fangzone als schwarzes Tetragon. Es ist erkennbar, dass das Rechteck nach wenigen Iterationen die Fangzone verlässt und einige Itervalle ein starkes Rauschen verursachen. Abbildung \ref{fig:7iter} zeigt  Iterationen mit kleineren initialen Intervallen, wodurch die Überschätzung erst zu einem späteren Zeitpunkt zu groß wird. Um dem Wachstum der Intervalle entgegenzuwirken und die Berechnung der H\e non-Abbildung auch für solche Flächem mit höheren Iterationszahlen zu ermöglichen, können die Taylormodelle in Partitionen aufgeteilt werden.  Die kleinste Partitionierung wäre die Aufteilung der Fläche in unendlich viele Punkte, was nicht praktikabel wäre, allerdings hohe Iterationszahlen ermögliche, wie in Abbildung \ref{fig:strangeattractor} zu sehen ist. Das andere Extrem stellen große Itervalle, beziehungsweise keine Partitionierung dar, was im Vergleich nur einen Bruchteil des Rechenaufwandes bedeutet, jedoch schnell zu starker Überschätzung führt.
+und der Fangzone als schwarzes Tetragon. Es ist erkennbar, dass das Rechteck nach wenigen Iterationen die Fangzone verlässt und einige Itervalle ein starkes Rauschen verursachen. Abbildung \ref{fig:7iter} zeigt  Iterationen mit kleineren initialen Intervallen, wodurch die Überschätzung erst zu einem späteren Zeitpunkt zu groß wird. Um dem Wachstum der Intervalle entgegenzuwirken und die Berechnung der H\e non-Abbildung auch für solche Flächem mit höheren Iterationszahlen zu ermöglichen, könnten die Taylormodelle in Partitionen aufgeteilt werden.  Die kleinste Partitionierung wäre die Aufteilung der Fläche in unendlich viele Punkte, was nicht praktikabel wäre, allerdings hohe Iterationszahlen ermögliche, wie in Abbildung \ref{fig:strangeattractor} zu sehen ist. Das andere Extrem stellen große Itervalle, beziehungsweise keine Partitionierung dar, was im Vergleich nur einen Bruchteil des Rechenaufwandes bedeutet, jedoch schnell zu starker Überschätzung führt.
 
-Um die Fragestellung, wie die H\e non-Abbildung mit Taylormodellen am besten berechnet werden kann zu erörtern, wird das Problem in drei Sektionen unterteilt:
+In diesem Kapitel wird untersucht, wie sich die \verb+HOTM+ bei verschiedenen Intervallgrößen verhalten und welche Konfiguration der Parameter für die Housekeeping-Methoden und den Taylormodellen selbst zu einer möglichst kleinen Überschätzng führt.
+Der Housekeeping-Vorgang der in jeder Iteration bei den Taylormodellen angwandt wird besteht aus vier Schritten:
+ \begin{enumerate}
+  \item \textbf{(Sweeping)} Reduktion des Taylormodells bis zum angegebenen Grad, je nach Strategie
+  \item \textbf{(Sweeping überschüssiger Fehlersymbole)} Entfernen aller Fehlersymbole bis auf die $n$-größten (abhängig von deren Support-Space)
+  \item \textbf{(Cleaning)} Verlagern der durch die Schritte 1 und 2 entstandenen Rechenfehler auf der Ebene der \verb+iRRAM-REAL+s auf die Radii der Intervalle
+  \item \textbf{(Splitting)} Einführen neuer Fehlersymbole für Monome, deren Koeffizienten durch die Schritte 1-3 zu stark gewachsen sind.
+ \end{enumerate}
 
-\begin{enumerate}
- \item Wie klein müssen die Taylormodelle sein, damit längere Berechnungen möglich sind?
- \item Wie verhalten sich die verschiedenen Partitionsgrößen bei unterschiedlichen Konfigurationen der Taylormodelle?
- \item Welche Partition ist für eine gegebene Anzahl an Iterationen nötig?
-\end{enumerate}
-
+% Um die Fragestellung, wie die H\e non-Abbildung mit Taylormodellen am besten berechnet werden kann zu erörtern, wird das Problem in drei Sektionen unterteilt:
+% 
+% \begin{enumerate}
+%  \item Wie klein müssen die Taylormodelle sein, damit längere Berechnungen möglich sind?
+%  \item Wie verhalten sich die verschiedenen Partitionsgrößen bei unterschiedlichen Konfigurationen der Taylormodelle?
+%  \item Welche Partition ist für eine gegebene Anzahl an Iterationen nötig?
+% \end{enumerate}
+% 
 
 
 
@@ -37,17 +46,17 @@ Die Implementierung nichtlinearer Taylormodelle ergibt eine Vielzahl von Konfigu
  \item Vorgehen beim Splitting
  \item Definition des initialen Taylormodells
 \end{itemize}
-Diese Konfigurationen werden in \verb+hotm+ als JSON-Datei mit Hilfe einer JSON-Bibliothek\footnote{\url{https://github.com/nlohmann/json} (Stand Dezember 2020)} eingelesen und verarbeitet, um wiederholte Durchläufe mit leicht veränderten Parametern oder Batch-Runs zu vereinfachen. Listing \ref{list:config} zeigt ein Beispiel einer Konfigurationsdatei, mit der versuchsweise 1000 Iterationen der H\e non-Abbildung berechnet werden sollen. 
+Diese Konfigurationen können in \verb+HOTM+ als JSON-Datei mit Hilfe einer JSON-Bibliothek\footnote{\url{https://github.com/nlohmann/json} (Stand Dezember 2020)} eingelesen und verarbeitet werden, um wiederholte Durchläufe mit leicht veränderten Parametern oder Batch-Runs zu vereinfachen. Listing \ref{list:config} zeigt ein Beispiel einer Konfigurationsdatei, mit der versuchsweise 1000 Iterationen der H\e non-Abbildung berechnet werden sollen. 
 
 
 
 \section{Housekeeping-Grenzwerte}
-Der Grenzwert einer Housekeeping-Methode gibt an ab welchem Wert die jeweiligen Methoden angewandt werden. Bei einem intervall in \verb+hotm+ $[m \pm r]$ mit $m = [c_m \pm \varepsilon_m]$ und $r = [c_r \pm \varepsilon_r]$ als \verb+iRRAM-REAL+s wird
+Der Grenzwert einer Housekeeping-Methode gibt an ab welchem Wert die jeweilige Methode angewandt wird. Bei einem intervall in \verb+HOTM+ $I=[m \pm r]$ mit $m = [c_m \pm \varepsilon_m]$ und $r = [c_r \pm \varepsilon_r]$ als \verb+iRRAM-REAL+s wird
 \begin{itemize}
  \item Cleaning angewandt, wenn $\varepsilon_m < \delta_c$ oder $\varepsilon_r < \delta_c$ gilt und
  \item Splitting angewandt, wenn $c_m < \delta_s$ oder $c_m < \delta_s$ gilt.
 \end{itemize}
-Um diese Werte zu untersuchen, wurde betrachtet, wie sich die Größe des Rechtecks, welches durch die Intervalle $x$ und $y$ aufgespannt wird, abhängig von den Grenzwerten $\delta_c$ und $\delta_s$ auswirkt, beziehungsweise, wieviele Iterationen der H\e non-Abbildung bei einer festen Genauigkeit der \verb+iRRAM-REAL+s möglich sind, bis das Rechteck eine Fläche\footnote{Ab einer Fläche von zirka $2^-{5}$ ist die Überschätzung der Intervalle zu groß und wächst innerhalb weniger Iterationen ($< 10$) gegen $\infty$.} von $>2^{-5}$ erreicht hat.
+Um diese Werte zu untersuchen, wurde betrachtet, wie sich die Größe des Rechtecks, welches durch die Intervalle $x$ und $y$ aufgespannt wird, abhängig von den Grenzwerten $\delta_c$ und $\delta_s$ entwickelt, beziehungsweise, wieviele Iterationen der H\e non-Abbildung bei einer festen Genauigkeit der \verb+iRRAM-REAL+s möglich sind, bis das Rechteck eine Fläche von $>2^{-5}$ erreicht hat\footnote{Ab einer Fläche von zirka $2^-{5}$ ist die Überschätzung der Intervalle zu groß und wächst innerhalb weniger Iterationen ($< 10$) gegen $\infty$.}.
 
 
 \begin{table}[tbh]
@@ -91,22 +100,14 @@ Um diese Werte zu untersuchen, wurde betrachtet, wie sich die Größe des Rechte
 \label{tab:housekeeping}
 \end{table}
 
-Tabelle \ref{tab:housekeeping} zeigt experimentelle Ergebnisse für $x_0 = 0 + 1 \cdot \lambda_1 $ und $y_0 = 0 + 1 \cdot \lambda_2$ mit $\lambda_1, \lambda_2 \in [0 \pm \varepsilon]$. Sowohl für 1000, als auch für 10000 Bits Genauigkeit reagiert das Ergebnis sehr sensibel auf die Grenzwerte der Housekeeping-Methoden. Falsch gewählte Werte vergrößern sogar die entstandene Überschätzung, im Vergleich zuer Berechnung ohne Cleaning und Splitting, jeweils in Zeile 1 der Tabellen zu sehen. Werden die Grenzwerte durch die \verb+iRRAM+-Präzision bestimmt, so bleibt der Fehler am längsten klein und die höchste Iterationszahl ist möglich.
+Tabelle \ref{tab:housekeeping} zeigt experimentelle Ergebnisse für $x_0 = 0 + 1 \cdot \lambda_1 $ und $y_0 = 0 + 1 \cdot \lambda_2$ mit $\lambda_1, \lambda_2 \in [0 \pm \varepsilon]$. Sowohl für 1000, als auch für 10000 Bits Genauigkeit reagiert das Ergebnis sehr sensibel auf die Grenzwerte der Housekeeping-Methoden. Falsch gewählte Werte vergrößern sogar die entstandene Überschätzung im Vergleich zu einer Berechnung ohne Cleaning und Splitting, jeweils in Zeile 1 der Tabellen zu sehen. Werden die Grenzwerte durch die \verb+iRRAM+-Präzision bestimmt, so bleibt der Fehler am längsten klein und die höchste Iterationszahl ist möglich.
 
 \Abbildungps{tbh}{.6}{img/housesteps.png}{fig:housesteps}{Experimentelle Ergebnisse zu Grenzwerten}{Iterationszahl der H\e non-Abbildung mit fester Genauigkeit von 1000 Bits.}
 
-Wie in Abbildung \ref{fig:housesteps} zu sehen ist, hat eine Definition der Grenzwerte unter die zugrunde liegende Genauigkeit keinen Effekt mehr auf die Performanz der Berechnung, da sich die Iterationszahl nicht weiter erhöht.  
+Wie in Abbildung \ref{fig:housesteps} zu sehen ist, hat eine Definition der Grenzwerte unter die zugrunde liegende Genauigkeit keinen Effekt mehr auf die Performanz der Berechnung und die Iterationszahl erhöht sich nicht weiter. Der Grund hierfür ist, dass die Anwendung von Methoden der \verb+iRRAM+ auf die sehr kleinen Intervalle zu einer Skalierung auf die gegebene Genauigkeit führt.
 
-\newpage
 \section{Sweeping}
- Für eine Sweeping-Konfiguration kommen drei einander beeinflussende Parameter in Betracht: die Sweeping-Strategie, die Gradreduktion und die Anzahl der zu erhaltenen Fehlersymbole. Der Housekeeping-Vorgang für ein Taylormodell inklusive Sweeping besteht wiederum aus vier Schritten:
- \begin{enumerate}
-  \item \textbf{(Sweeping)} Reduktion des Taylormodells bis zum angegebenen Grad, je nach Strategie
-  \item \textbf{(Sweeping überschüssiger Fehlersymbole)} Entfernen aller Fehlersymbole bis auf die $n$-größten (abhängig von deren Support-Space)
-  \item \textbf{(Cleaning)} Verlagern der durch die Schritte 1 und 2 entstandenen Rechenfehler auf der Ebene der \verb+iRRAM-REAL+s auf die Radii der Intervalle
-  \item \textbf{(Splitting)} Einführen neuer Fehlersymbole für Monome, deren Koeffizienten durch die Schritte 1-3 zu stark gewachsen sind.
- \end{enumerate}
-
+ Für eine Sweeping-Konfiguration kommen drei einander beeinflussende Parameter in Betracht: die Sweeping-Strategie, die Gradreduktion und die Anzahl der zu erhaltenen Fehlersymbole. 
  Abbildung \ref{fig:sweeping} zeigt die Performanz der Berechnung der H\e non-Abbildung, gemessen an der erreichten Iterationszahl mit statischer Präzision in verschiedenen Fällen. Wie zuvor ist die Berechnung beendet, sobald die Fläche des Rechtecks einen Schwellenwert überschreitet. Zu sehen ist, bei welcher Kombination von Parametern für Sweeping (Schritt 1) und Sweping überschüssiger Fehlersymbole (Schritt 2) die Überschätzung am langsamsten wächst und somit die meisten Iterationen errechnet werden können. Die Zeiteffizienz ist in diesem Falle kein Faktor. Es ist zu erkennen, dass sich die Graphen innerhalb derselben Sweeping-Strategie kaum unterscheiden. Eine Verzehnfachung des Exponenten in der Breite der Intervalle und der Bits für die Präzision verzehnfacht auch die erreichte Iterationszahl. Die besten Ergebnisse werden beim Beschränken auf \textbf{square\_only} (quadratisches Sweeping) für $n=3$ und Sweeping zum Grade 0; bei \textbf{square\_first} für $n=1$, $n=4$ und Sweeping zum Grade 3 erreicht. Insgesamt wird jedoch mit \textbf{square\_only} zum Grade 0, also einem Sweeping bis zu einem Taylormodell, dessen Monome Variablen mit höchstens Grad 1 haben, die höchste Iterationszahl erzielt:
 
 $$ c \cdot \lambda_1^3 \lambda_2^2 \lambda_3^1 \lambda_4^3  \underset{square\_only}{\overset{sweep\ to\ 0}{\rightsquigarrow}} c' \cdot \lambda_1^1 \lambda_2^0 \lambda_3^1 \lambda_4^1$$
@@ -146,12 +147,12 @@ $$ c \cdot \lambda_1^3 \lambda_2^2 \lambda_3^1 \lambda_4^3  \underset{square\_on
 \label{fig:sweeping}
 \end{figure}
 
-Im Vergleich mit rein linearen Taylormodellen zeigt sich eine Verbesserung (siehe Abbildung \ref{fig:extra}). Der Unterschied besteht darin, dass die nichtlinearen Taylormodelle während der Berechnung und besonders während der Multiplikation Punktintervalle erhalten können und sich stattdessen der Grad des Polynoms erhöht. Nach jeder Iteration werden diese dann zunächst im Grad reduziert, um diesen dann durch Splitting auf den Monomen um maximal 1 zu erhöhen. Für lineare Taylormodelle steht lediglich das Splitting für den Kernel zur Verfügung, da sonst nichtlineare Polynome entstünden. Des Weiteren wird hier bereits während der Multiplikation gesweept und Punktintervalle werden zu regulären Intervallen. Die Performanz des Sweepings \textbf{square\_only} zum Grade 0 verbessert sich im Schnitt mit einer wachsenden Zahl der zu erhaltenen Fehlersymbole, wie in Abbildung \ref{fig:extra} zu sehen ist. Jedes Fehlersymbol erhöht die Menge an erhaltener Abhängigkeitsinformation und sorgt dafür, dass ein Taylormodell dessen Ränder besser beschreiben kann. Allerdings stellt die Praktikabilität dieser Herangehensweise ein Problem dar, da so sehr große Polynome entstehen, die während einer Iteration der H\e non-Abbildung exponentiell in ihrer Länge wachsen. 
+Im Vergleich mit rein linearen Taylormodellen zeigt sich eine Verbesserung (siehe Abbildung \ref{fig:extra}). Der Unterschied besteht darin, dass die nichtlinearen Taylormodelle während der Berechnung und besonders während der Multiplikation Punktintervalle erhalten können und sich stattdessen der Grad und die Länge des Polynoms erhöht. Nach jeder Iteration werden dann verschiedene Monome durch Gradreduktion vereint, wobei die Intervalle breiter werden. Im nächten Schritt wird der Grad dann durch Splitting auf den Monomen um maximal 1 erhöht und es liegen wieder Punktintervalle vor. Für lineare Taylormodelle steht lediglich das Splitting für den Kernel zur Verfügung, da sonst nichtlineare Polynome entstünden. Des Weiteren wird hier bereits während der Multiplikation gesweept und Punktintervalle werden zu regulären Intervallen. Die Performanz des Sweepings \textbf{square\_only} zum Grade 0 verbessert sich im Schnitt mit einer wachsenden Zahl der zu erhaltenen Fehlersymbole, wie in Abbildung \ref{fig:extra} zu sehen ist. Jedes Fehlersymbol erhöht die Menge an erhaltener Abhängigkeitsinformation und sorgt dafür, dass ein Taylormodell dessen Ränder besser beschreiben kann. Allerdings stellt die Praktikabilität dieser Herangehensweise ein Problem dar, da so sehr große Polynome entstehen, die während einer Iteration der H\e non-Abbildung exponentiell in ihrer Länge wachsen.
  
 
  \Abbildungps{tbh}{.7}{img/extra.png}{fig:extra}{Experimentelle Ergebnisse zu erhaltenen Fehlersymbolen}{Gegenüberstellung von $x_0 = y_0 = [0 \pm 2^{10000}]$ als lineare Taylormodelle und nichtlineare Taylormodelle mit quadratischem Sweeping zum Grade 0. Jeweils bleiben verschiedene Anzahlen von Fehlersymbolen pro Iteration erhalten. Gemessen wird die Iterationszahl der H\e non-Abbildung mit fester Genauigkeit von 10000 Bits, bis $|x_n|\cdot|y_n|$ einen Grenzwert von $2^{-6}$ überschreitet. }
 
- Dieser Effekt ist in Tabelle \ref{tab:time} zu sehen. Eine Erhöhung der Anzahl der erhaltenen Fehlersymbole hat einen drastischen Einfluss auf die Durchschnittliche Dauer einer Iteration in $ms$, bis das Programm bei größeren Werten quasi nicht mehr lauffähig ist ($>100ms$ pro Iteration). Betrachtet man nun das Verhältnis zwischen der Verbesserung der Performanz (Abbildung \ref{fig:extra}) und der Verschlechterung der Laufzeit (Tabelle \ref{tab:time}), so bildet das Setzen der erhaltenen Fehlersymbole auf 3 mit einem Zielgrade von 0 bei der Beschränkung auf quadratisches Sweeping einen guten Trade-off, weshalb diese Konfiguration als Voreinstellung für Sweeping in der Implementierung (Kapiter \ref{ch:umsetung}) vorgesehen ist.
+ Dieser Effekt ist in Tabelle \ref{tab:time} verdeutlicht. Eine Erhöhung der Anzahl der erhaltenen Fehlersymbole hat einen drastischen Einfluss auf die durchschnittliche Dauer einer Iteration in $ms$, bis das Programm bei größeren Werten quasi nicht mehr lauffähig ist ($>100ms$ pro Iteration). Betrachtet man nun das Verhältnis zwischen der Verbesserung der Performanz (Abbildung \ref{fig:extra}) und der Verschlechterung der Laufzeit (Tabelle \ref{tab:time}), so bildet das Setzen der erhaltenen Fehlersymbole auf 3 mit einem Zielgrade von 0 bei der Beschränkung auf quadratisches Sweeping einen guten Trade-off, weshalb diese Konfiguration als Voreinstellung für Sweeping in der Implementierung (Kapiter \ref{ch:umsetung}) vorgesehen ist.
  
   
  \begin{table}[tbh]
@@ -178,7 +179,7 @@ Gradreduktion & 0 & 1 &2& 3 & 4\\
  
  
  \section{Cleaning}
- Durch die mehrstufige Intervallstruktur in den Koeffizienten der Polynome ist es mit Cleaning möglich, den Rechenfehler, beziehungsweise die Intervallbreite der Intervallgrenzen auf einer höheren Abstraktionsebene zu verwalten. Wie in Paragraph \ref{par:cleaning} beschrieben, wird das Intervall um die Intervallbreite des Mittelpunktes und des Radius' erweitert und schließt es somit komplett ein. Dies hat darüber hinaus den Effekt, dass sämtlicher entstandene Rechenfehler durch Splitting reduziert werden kann. 
+ Durch die mehrstufige Intervallstruktur in den Koeffizienten der Polynome ist es mit Cleaning möglich, den Rechenfehler, beziehungsweise die Intervallbreite der Intervallgrenzen auf einer höheren Abstraktionsebene zu verwalten. Wie in Paragraph \ref{par:cleaning} beschrieben, wird das Intervall um die Intervallbreite des Mittelpunktes und des Radius' erweitert und schließt es somit komplett ein. Dies hat darüber hinaus den Effekt, dass sämtlicher entstandene Rechenfehler durch Anwendung von Splitting reduziert werden kann. 
  
    \Abbildungps{tbh}{.7}{img/clean.png}{fig:clean}{Experimentelle Ergebnisse zum Effekt des Cleaning}{Iterationszahl der H\e non-Abbildung mit festem Radius der intialen Taylormodelle $x_0 = y_0 = [0 \pm 2^{-1000}]$ mit wachsender Präzision, um den Effekt des Cleanings beschreiben.}
  
@@ -202,7 +203,7 @@ Zum Anderen die Umlagerung des Radius $\varepsilon$ in das neue Fehlersymbol:
  [c \pm \varepsilon]  \underset{split}{\rightsquigarrow} [c] + [1] \cdot \lambda_{new}, \lambda_{new} \in [0 \pm \varepsilon]
 \end{align}
  
-Beim Sweeping hat sich gezeigt, dass die Überschätzung des Taylormodells bei einer Priorisierung kleinerer Fehlersymbole, beziehungsweise beim Erhalt von Fehlersymbolen mit größerem Support-Space, langsamer wächst. In einer linearen Implementierung der Taylormodelle mit Variante \ref{int:unit} wird eine solche Ordnung durch einen Vergleich der Koeffizienten hergestellt, da jedes Monom maximal nur ein Fehlersymbol enthalten kann. Ein nichtlineares Monom kann jedoch von mehreren Fehlersymbolen abhängen, wodurch die Information über die Größe des Fehlersymobls nicht im Koeffizienten kodiert werden kann und zudem innerhalb eines Monoms sortiert werden muss. Daher eignet sich Herangehensweise \ref{int:nunit} für die Implementierung nichtlinearer Taylormodelle besser, als die Verwendung von Einheitsintervallen, wie in Abbildung \ref{fig:split} an einem Bespiel gezeigt wird. Hier werden beide Varianten auf die Entwicklung der Überschätzung von zwei Taylormodellen untersucht, wobei mit der Definition des Fehlersymbols als reguläres Intervall \ref{int:nunit} mehr Iterationen der H\e non-Abbildung berechnet werden können, bis die Fläche des Rechtecks einen Schwellenwert überschreitet.
+Beim Sweeping hat sich gezeigt, dass die Überschätzung des Taylormodells bei einer Priorisierung kleinerer Fehlersymbole, beziehungsweise durch Erhalt von Fehlersymbolen mit größerem Support-Space, langsamer wächst. In einer linearen Implementierung der Taylormodelle mit Variante \ref{int:unit} wird eine solche Ordnung durch einen Vergleich der Koeffizienten hergestellt, da jedes Monom maximal ein Fehlersymbol enthalten kann. Ein nichtlineares Monom kann jedoch von mehreren Fehlersymbolen abhängen, wodurch die Information über die Größe des Fehlersymobls nicht im Koeffizienten kodiert werden kann und zudem innerhalb eines Monoms sortiert werden muss. Daher eignet sich Herangehensweise \ref{int:nunit} für die Implementierung nichtlinearer Taylormodelle besser, als die Verwendung von Einheitsintervallen, wie in Abbildung \ref{fig:split} an einem Bespiel gezeigt wird. Hier werden beide Varianten auf die Entwicklung der Überschätzung von zwei Taylormodellen untersucht, wobei mit der Definition des Fehlersymbols als reguläres Intervall \ref{int:nunit} mehr Iterationen der H\e non-Abbildung berechnet werden können, bis die Fläche des Rechtecks einen Schwellenwert, wie oben überschreitet.
  
  \Abbildungps{tbh}{.7}{img/split.png}{fig:split}{Experimentelle Ergebnisse zum Vorgehen beim Splitting}{Iterationszahl der H\e non-Abbildung mit 10000 Bits fester Genauigkeit.}
  
@@ -245,7 +246,7 @@ TM \ref{tm4}  & 1437 & 0.35 &14505 & 0.18  \\
 Bis auf Taylormodell-Definition \ref{tm2} erreichen (beinahe) alle Berechnung dieselbe Iterationszahl, variieren jedoch in der Größe des Rechtecks, welches von $x$ und $y$ aufgespannt wird. Mit der Definition \ref{tm1} als intiales Taylormodell wird für 10000 Bit Genauigkeit eine minimal höhere Iterationszahl und bei 1000 Bit Genauigkeit ein kleineres Rechteck, als in den anderen Varianten erreicht.
  
  \section{Anwendung der Parameter}
- In diesem Kapitel wurden mit verschiedenen Belegungen für die zu Verfügung stehenden Parameter in $\verb+HOTM+$ versucht, eine möglichst optimale Konfiguration im Hinblick auf die Eindämmung des Wrapping-Effektes zu finden. Die besten Ergebnisse werden hierbei erzielt für: 
+ In diesem Kapitel wurden mit verschiedenen Belegungen für die zu Verfügung stehenden Parameter in $\verb+HOTM+$ versucht, eine möglichst optimale Konfiguration im Hinblick auf die Eindämmung der Überschätzung des Intervalls zu finden. Die besten Ergebnisse werden hierbei erzielt mit: 
  \begin{itemize}
   \item \textbf{Sweeping} mit ausschließlich quadratischem Sweeping zum Grade 0,
   \item \textbf{Cleaning} und \textbf{Splitting} mit einem Grenzwerten orientiert an der Genauigkeit,
@@ -255,7 +256,7 @@ Bis auf Taylormodell-Definition \ref{tm2} erreichen (beinahe) alle Berechnung di
 Abbildung \ref{fig:lyapu_int_tm} zeigt die Entwicklung bei Berechnungen der H\e non-Abbildung. Jeweils zu sehen sind (1) der Abstand der $x$-Koordinate zweier Punkte $a=(0,0)$ und $b=(2^{-p},2^{-p})$ in Farbe, (2) die Breite des Intervalls $|x_n|$ für $(x_0, y_0)=([0\pm 2^{-(p-1)}],[0\pm 2^{-(p-1)}])$ in grau und (3) die Breite des ausgewerteten Taylormodells $|x_n|$ für zwei Taylormodelle $x_0 = [0] + [1]\cdot \lambda_0, \lambda_0\in [0\pm 2^{-(p-1)}]$ und $y_0 = [0] + [1]\cdot \lambda_1, \lambda_1\in [0\pm 2^{-(p-1)}]$ in schwarz. Der Verlauf der unabhängigen Punkte (1) stellt eine lokale Annäherung an den Lyapunov Exponenten dar und damit eine untere Schranke an die Ausbreitung eines Rechtecks pro Iteration der H\e non-Abbildung dar, indem sie dessen Eckpunkte markieren. Es ist deutlich erkennbar, dass sich das Taylormodell (3) langsamer ausbreitet und damit näher an der Schranke bewegt, als die Berechnung mit reiner Intervallartihmetik (2).
  
  
-  \Abbildungps{tbh}{1}{img/lyapu_int_tm.png}{fig:lyapu_int_tm}{Lokale Annäherung an den Lyapunov Exponenten mit Intervallen}{Lokale Annäherung an den Lyapunov Exponenten der H\e non-Iteration mit Intervallen der Breite $|x_0|=\varepsilon$, und den Parametern $a=1.4,b=0.3$ im Vergleich zur Entwicklung des Abstandes zweier Punkte mit Abstand $\varepsilon$}
+  \Abbildungps{tbh}{1}{img/lyapu_int_tm.png}{fig:lyapu_int_tm}{Lokale Annäherung an den Lyapunov Exponenten mit Intervallen}{Lokale Annäherung an den Lyapunov Exponenten der H\e non-Iteration mit den Parametern $a=1.4,b=0.3$. Zu sehen sind Intervalle der Breite $\varepsilon$, und  im Vergleich zur Entwicklung des Abstandes zweier Punkte mit Abstand $\varepsilon$}
  
  \section{Umsetzung}
  \label{ch:umsetung}
@@ -281,7 +282,7 @@ Abbildung \ref{fig:lyapu_int_tm} zeigt die Entwicklung bei Berechnungen der H\e 
 Die Initialisierungsfunktion \verb+init()+ akzeptiert eine \verb+int+ $\geq 0$ als Eingabe. Damit kann die Anzahl der zu erhaltenden Fehlersymbole pro Taylormodellangepasst werden, wie in  Listing \ref{list:int} Zeile 9. Der Standardwert liegt bei 3. Außerdem besteht die Möglichkeit, diesen Wert für jedes Taylormodell individuell zu bestimmen (Listing \ref{list:int} Zeile 11). Ist dieser Wert nicht gesetzt, so wird er aus dem \verb+init()+ Aufruf abgeleitet.
 
 \paragraph{Manuelles Housekeeping}
- Sollen die Housekeeping-Methoden nur für bestimmte Taylormodelle oder zu einem anderen Zeitpunkt, als bei der Zuweisung durchgeführt werden, so wird die Funktion \verb+HOMT::kousekeep+ aufgerufen. Ein Aufruf, wie in Listing \ref{list:int} Zeile 16, schaltet das Housekeeping während der Zuweisung aus. Zudem beim Entfernen bis auf die $m$-größten Fehlersymbole nun für alle im Aufruf enthaltenen Taylormodelle durchgeführt, statt einzeln. Das bedeutet, dass nach diesem Aufruf in allen Taylormodellen dieselben Fehlersymbole übrig bleiben.
+ Sollen die Housekeeping-Methoden nur für bestimmte Taylormodelle oder zu einem anderen Zeitpunkt, als bei der Zuweisung durchgeführt werden, so wird die Funktion \verb+HOTM::kousekeep+ aufgerufen. Ein Aufruf, wie in Listing \ref{list:int} Zeile 16, schaltet das Housekeeping während der Zuweisung aus. Zudem wird das Entfernen bis auf die $m$-größten Fehlersymbole nun für alle im Aufruf enthaltenen Taylormodelle durchgeführt, statt einzeln. Das bedeutet, dass nach diesem Aufruf in allen Taylormodellen dieselben Fehlersymbole übrig bleiben.
  
  
  
