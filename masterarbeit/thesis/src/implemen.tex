@@ -82,19 +82,15 @@ Die im Basisprogramm \verb+tangentspace+ vorhandene Implementierung wurde erweit
 
 
 %% ==============================
-\section{Polynommultiplikation}
+\section{Polynomarithmetik}
 %% ==============================
 \label{ch:Implementierung:sec:Abschnitt1}
 
-In einer linearen Implementierung der Taylormodelle wird bei der Multiplikation immer eines der Fehlersymbole gesweept, sodass die Länge eines Polynoms nicht über die Dimension hinausgeht und somit der Schwerpunkt bei der Intervallarithmetik liegt. Lässt man allerdings höhere Ordnungen zu, werden auch die Polynome länger und ein weiteres Problem tritt auf. Um die oben (\ref{def:order}) definierte Ordnung $\prec$ auf dem Polynom $p = p_1 \cdot p_2$ zu erhalten, müssen die $n\cdot m$ Monome ($n := \#p_1, m := \#p_2$), die bei der Multiplikation entstehen, sortiert werden. Werden diese sequentiell zu $p$ hinzugefügt bedeutet das 2 Vergleiche, dann 3, dann 4, und so weiter, bis hin zu $nm$ Vergleichen:
-$$ 2 + 3 + 4 + 5 + ... + nm = \frac{nm \cdot (nm + 1)}{2} - 1$$
-So ergibt sich für die naive Multiplikation eine quadratische Laufzeit in $O$-Notation von $O(nm + (nm)^2)$
-\par
-Für effizientere Polynommultiplikation existieren verschiedene Algorithmen. Viele der schnellen bekannten Algorithmen basieren  auf der Schnellen-Fourier-Transformation, wobei die Polynome in Stützvektoren und wieder zurück umgewandelt werden. Da es sich bei den Koeffizienten den Monome um Intervalle mit möglicherweise unendlichen Schranken handelt, ist das Rückführen eines Stützvektors nicht immer ohne Weiteres möglich. \par
-Ein weiterer Ansatz besteht darin, die Anzahl der benötigten Monomvergleiche zu reduzieren, wenn die Monome einsortiert werden müssen. Betrachtet man die Summe dreier Polynome $p_1 + p_2 + p_3$ mit $\#p_1 >> \#p_2 = \#p_3 = 1$, benötigt das Aufsummieren von links nach rechts $2\#p_1 + 1$ Vergleiche, da mit dem oben verwendeten Additionsverfahren zweifach in $p_1$ eingefügt wird. Summiert man jedoch von rechts nach links so werden lediglich $\#p_1 + 2$ Vergleiche benötigt. Nach dieser Idee kann die Anzahl der Monomvergleiche reduziert werden, indem zunächst Polynome gleicher Länge miteinander addiert werden. Mit Geobuckets, von Yan (\cite{geobuckets}) eingeführt und Monagan und Pearce (\cite{geobucketsmulti}) für die Multiplikation angepasst, werden die Zwischenergebnisse der Polynommultiplikation in geometrisch wachsenden 'Buckets' gespeichert. Hat ein Bucket seine Kapazität erreicht, wird das Polynom zum nächst größeren Bucket hinzuaddiert. Der Unterschied zum Originalalgorithmus besteht darin, dass die Größe der hinzukommenden Polynome bereits bekannt ist und die Bucketkapazität dementsprechend angepasst werden kann. Algorithmus \ref{algo:mult} zeigt die in \verb+hotm+ implementierte Version der Geobucketmultiplikation. Durch den Teile und Herrsche Ansatz, kann die Multiplikation mit Geobuckets in $O(nm \log nm)$ durchgeführt werden.  \par
+Die Verwendung von Geobuckets ist eine Methode, die Addition \cite{geobuckets} und Mulitplikation \cite{geobucketsmulti} zweier Polynome effizient zu gestalten, indem die Zahl der dafür nötigen Monomvergleiche reduziert wird.
 
+\subsection{Polynomaddition}
+Die Addition zweier Polynome $p_1$ und $p_2$ stellt ein Zusammenfügen zweier Listen von Monomen (\textit{Merge}) dar. Sind diese geordnet, so sind im schlimmsten Falle $\#p_1 +\#p_2$ Vergleiche nötig, während es für ungeordnete Polynome $\#p_1 \cdot \#p_2$ sind, da alle Monome miteinander verglichen werden müssen. Die hierfür verwendete partielle Ordnung $\succ$ sortiert die Monome nach dem Index der Variablen und deren Exponenten:
 
-Wird wie in \cite{geobuckets} eine Ordnung $\succ$ auf den Monomen definiert, können die Polynome sortiert werden.
 \begin{itemize}
     \label{def:order}
     \item $\lambda_1 \succ \lambda_2 \succ...\succ \lambda_k $
@@ -104,47 +100,100 @@ Wird wie in \cite{geobuckets} eine Ordnung $\succ$ auf den Monomen definiert, k�
         \item[] $ i = i'$ und $ j > j'$
     \end{itemize}
 \end{itemize}
-Diese Ordnung ist partiell, da gleiche Monome, beziehungsweise Monome mit gleichen Fehlersymbolen nicht vergleichbar sind. Tritt dieser Fall während der Addition zweier Polynome auf, bedeutet das, dass die Koeffizienten beider Monome addiert werden und das so entstandene Monom in das Polynom aufgenommen wird.
-Haben die verglichenen Monome die selbe Anzahl an Variablen, entscheidet die Größe des Exponenten des Fehlersymbols mit dem kleinsten Index. Algorithmus \ref{algo:maxes} implementiert den Vergleich zweier Monome, beziehungsweise derer Variablen.
-
-\begin{figure}[ht]
-    \centering
-    \begin{tikzpicture}
-    \begin{axis}[
-        xlabel={Grad nach Reduktion},
-        ylabel={Monomvergleiche},
-        xmin=5, xmax=8,
-        ymin=100000, ymax=300000000,
-        xtick={5,6,7,8},
-        legend pos=north west,
-        ymajorgrids=true,
-        grid style=dashed,
-    ]
-    \addplot[
-        color=blue,
-        mark=square
-        ]
-        coordinates {
-        (5, 13000000)(6, 40000000 )(7, 100000000)(8, 220000000)
-        };
-        \addlegendentry{Naive Multiplikation}
-        
-    \addplot[
-        color=red,
-        mark=*
-        ]
-        coordinates {
-        (5, 300000)(6, 1000000 )(7, 1800000)(8, 3300000)
-        };
-        \addlegendentry{Multiplikation mit Geobuckets}
-    
-    \end{axis}
-    \end{tikzpicture}
-    \caption{Naive Multiplikation gegen Multiplikation mit Geobuckets}
-    \label{fig:my_label}
-\end{figure}
 
 
+Algorithmus \ref{algo:add} erzeugt aus zwei nach der oben definierten Ordnung $\succ$ sortierten Polynomen wiederum ein sortiertes Polynom. Endet die While-Schleife in Zeile 2, so ist im Regelfall eines der Polynome noch nicht gänzlich betrachtet, was bedeutet, dass alle übrigen Monome in diesem Polynom (im Hinblick auf $\succ$) kleiner sind, als die des anderen Summanden und daher dem Ergebnispolynom angehangen werden können, ohne sie weiter zu betrachten. 
+
+\subsection{Polynommultiplikation}
+
+
+Betrachtet man die Summe dreier Polynome $p_1 + p_2 + p_3$ mit $\#p_1 >> \#p_2 = \#p_3 = 1$, benötigt das Aufsummieren von links nach rechts bis zu $2\#p_1 + 1$ Vergleiche, da mit dem oben verwendeten Additionsverfahren zweifach in $p_1$ eingefügt wird und potentiell jedes Monom miteinander verglichen werden muss\footnote{$\#p$ liefert die Anzahl an Monomen des Polynoms $p$}. Summiert man jedoch von rechts nach links so werden lediglich $\#p_1 + 2$ Vergleiche benötigt. Nach dieser Idee kann die Anzahl der Monomvergleiche reduziert werden, indem zunächst Polynome gleicher Länge miteinander addiert werden. 
+
+
+Um die oben (\ref{def:order}) definierte Ordnung $\prec$ auf dem Polynom $p = p_1 \cdot p_2$ zu erhalten, müssen die $n\cdot m$ Monome ($n := \#p_1, m := \#p_2$), die bei der Multiplikation entstehen, sortiert werden. Werden diese sequentiell zu $p$ hinzugefügt bedeutet das 2 Vergleiche, dann 3, dann 4, und so weiter, bis hin zu $nm$ Vergleichen:
+$$ 2 + 3 + 4 + 5 + ... + nm = \frac{nm \cdot (nm + 1)}{2} - 1$$
+So ergibt sich für die naive Multiplikation eine quadratische Laufzeit in $O$-Notation von $O(nm + (nm)^2)$
+Mit Geobuckets werden die Zwischenergebnisse der Polynommultiplikation in geometrisch wachsenden 'Buckets' gespeichert. Hat ein Bucket seine Kapazität erreicht, wird das Polynom zum nächst größeren Bucket hinzuaddiert. Der Unterschied zum Originalalgorithmus besteht darin, dass die Größe der hinzukommenden Polynome bereits bekannt ist und die Bucketkapazität dementsprechend angepasst werden kann. Algorithmus \ref{algo:mult} zeigt die in \verb+HOTM+ implementierte Version der Geobucketmultiplikation. Durch den Teile und Herrsche Ansatz, kann die Multiplikation mit Geobuckets so in $O(nm \log nm)$ durchgeführt werden.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% In einer linearen Implementierung der Taylormodelle wird bei der Multiplikation immer eines der Fehlersymbole gesweept, sodass die Länge eines Polynoms nicht über die Dimension hinausgeht und somit der Schwerpunkt bei der Intervallarithmetik liegt. Lässt man allerdings höhere Ordnungen zu, werden auch die Polynome länger und ein weiteres Problem tritt auf. Um die oben (\ref{def:order}) definierte Ordnung $\prec$ auf dem Polynom $p = p_1 \cdot p_2$ zu erhalten, müssen die $n\cdot m$ Monome ($n := \#p_1, m := \#p_2$), die bei der Multiplikation entstehen, sortiert werden. Werden diese sequentiell zu $p$ hinzugefügt bedeutet das 2 Vergleiche, dann 3, dann 4, und so weiter, bis hin zu $nm$ Vergleichen:
+% $$ 2 + 3 + 4 + 5 + ... + nm = \frac{nm \cdot (nm + 1)}{2} - 1$$
+% So ergibt sich für die naive Multiplikation eine quadratische Laufzeit in $O$-Notation von $O(nm + (nm)^2)$
+% \par
+% Für effizientere Polynommultiplikation existieren verschiedene Algorithmen. Viele der schnellen bekannten Algorithmen basieren  auf der Schnellen-Fourier-Transformation, wobei die Polynome in Stützvektoren und wieder zurück umgewandelt werden. Da es sich bei den Koeffizienten den Monome um Intervalle mit möglicherweise unendlichen Schranken handelt, ist das Rückführen eines Stützvektors nicht immer ohne Weiteres möglich. \par
+% Ein weiterer Ansatz besteht darin, die Anzahl der benötigten Monomvergleiche zu reduzieren, wenn die Monome einsortiert werden müssen. Betrachtet man die Summe dreier Polynome $p_1 + p_2 + p_3$ mit $\#p_1 >> \#p_2 = \#p_3 = 1$, benötigt das Aufsummieren von links nach rechts $2\#p_1 + 1$ Vergleiche, da mit dem oben verwendeten Additionsverfahren zweifach in $p_1$ eingefügt wird. Summiert man jedoch von rechts nach links so werden lediglich $\#p_1 + 2$ Vergleiche benötigt. Nach dieser Idee kann die Anzahl der Monomvergleiche reduziert werden, indem zunächst Polynome gleicher Länge miteinander addiert werden. Mit Geobuckets, von Yan (\cite{geobuckets}) eingeführt und Monagan und Pearce (\cite{geobucketsmulti}) für die Multiplikation angepasst, werden die Zwischenergebnisse der Polynommultiplikation in geometrisch wachsenden 'Buckets' gespeichert. Hat ein Bucket seine Kapazität erreicht, wird das Polynom zum nächst größeren Bucket hinzuaddiert. Der Unterschied zum Originalalgorithmus besteht darin, dass die Größe der hinzukommenden Polynome bereits bekannt ist und die Bucketkapazität dementsprechend angepasst werden kann. Algorithmus \ref{algo:mult} zeigt die in \verb+hotm+ implementierte Version der Geobucketmultiplikation. Durch den Teile und Herrsche Ansatz, kann die Multiplikation mit Geobuckets in $O(nm \log nm)$ durchgeführt werden.  \par
+% 
+% 
+% Wird wie in \cite{geobuckets} eine Ordnung $\succ$ auf den Monomen definiert, können die Polynome sortiert werden.
+% \begin{itemize}
+%     \label{def:order}
+%     \item $\lambda_1 \succ \lambda_2 \succ...\succ \lambda_k $
+%     \item $\lambda_n^i \lambda_m^j \succ \lambda_n^{i'} \lambda_m^{j'} $ für $n > m$, falls
+%     \begin{itemize}
+%         \item[] $ i > i'$, oder
+%         \item[] $ i = i'$ und $ j > j'$
+%     \end{itemize}
+% \end{itemize}
+% Diese Ordnung ist partiell, da gleiche Monome, beziehungsweise Monome mit gleichen Fehlersymbolen nicht vergleichbar sind. Tritt dieser Fall während der Addition zweier Polynome auf, bedeutet das, dass die Koeffizienten beider Monome addiert werden und das so entstandene Monom in das Polynom aufgenommen wird.
+% Haben die verglichenen Monome die selbe Anzahl an Variablen, entscheidet die Größe des Exponenten des Fehlersymbols mit dem kleinsten Index. Algorithmus \ref{algo:maxes} implementiert den Vergleich zweier Monome, beziehungsweise derer Variablen.
+% 
+% \begin{figure}[ht]
+%     \centering
+%     \begin{tikzpicture}
+%     \begin{axis}[
+%         xlabel={Grad nach Reduktion},
+%         ylabel={Monomvergleiche},
+%         xmin=5, xmax=8,
+%         ymin=100000, ymax=300000000,
+%         xtick={5,6,7,8},
+%         legend pos=north west,
+%         ymajorgrids=true,
+%         grid style=dashed,
+%     ]
+%     \addplot[
+%         color=blue,
+%         mark=square
+%         ]
+%         coordinates {
+%         (5, 13000000)(6, 40000000 )(7, 100000000)(8, 220000000)
+%         };
+%         \addlegendentry{Naive Multiplikation}
+%         
+%     \addplot[
+%         color=red,
+%         mark=*
+%         ]
+%         coordinates {
+%         (5, 300000)(6, 1000000 )(7, 1800000)(8, 3300000)
+%         };
+%         \addlegendentry{Multiplikation mit Geobuckets}
+%     
+%     \end{axis}
+%     \end{tikzpicture}
+%     \caption{Naive Multiplikation gegen Multiplikation mit Geobuckets}
+%     \label{fig:my_label}
+% \end{figure}
+% 
+% 
 
 \newpage
 %% ==============================

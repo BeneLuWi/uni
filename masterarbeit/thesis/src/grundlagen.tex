@@ -6,11 +6,11 @@
 \label{ch:Grundlagen}
 %% ==============================
 \section{H\e non-Abbildung}
-Die H\e non-Abbildung bietet eine Möglichkeit, das Verhalten eines seltsamen Attraktors (\textit{engl. \anf{strange attractor}}), wie dem des Lorenz Systems, mit einer recht einfachen Abbildung zu untersuchen.
+Die H\e non-Abbildung bietet eine Möglichkeit, das Verhalten eines seltsamen Attraktors (\textit{engl. \anf{strange attractor}}), wie dem des Lorenz Systems, mit einer vergleichbar einfachen Abbildung zu untersuchen \cite{henon1976}.
 
-Konviergieren die Werte einer Funktion in einem bestimmten Wertebereich $R$, der Fangzone (\textit{engl. \anf{trapping zone}}), gegen einen Punkt oder eine Kurve, spricht man von einem Attraktor. Dieser Attraktor kann jedoch auch eine komplexere Struktur haben. Auf einem solchen seltsamen Attraktor springen die Werte hin und her und reagieren hochempfindlich auf Änderungen der Initialbedingungen. Dieses Verhalten lässt mit der Abbildung $x_{i+1}=y_i + 1- a x_i^2, y_{i+1} = bx_i$, beziehungsweise 
+Konvergieren die Werte einer Funktion in einem bestimmten Wertebereich $R$, der Fangzone (\textit{engl. \anf{trapping zone}}), gegen einen Punkt oder eine Kurve, spricht man von einem Attraktor. Dieser Attraktor kann jedoch auch eine komplexere Struktur haben. Auf einem solchen seltsamen Attraktor springen die Werte hin und her und reagieren hochempfindlich auf Änderungen der Initialbedingungen. Dieses Verhalten lässt mit der Abbildung $x_{i+1}=y_i + 1- a x_i^2, y_{i+1} = bx_i$, beziehungsweise 
 $$f(x,y) = (y + 1- a x^2,bx)$$
-beobachten. $f$ erfüllt dieselben Kriterien, wie der durch eine dreidimensionale Differenzialgleichung entstehenden Lorenz-Attraktor, allerdings wurde $f$ so definiert, dass auch höhere Iterationszahlen leichter zu berechnen und zu analysieren sein sollen. Die H\e non-Abbildung bildet den $\mathbb{R}^2$ auf sich selbst ab. Dieser Vorgang besteht aus drei Schritten. Man betrachte eine Fläche entlang der $x$-Achse gelegen:
+beobachten. $f$ erfüllt dieselben Kriterien, wie der Lorenz-Attraktor, der durch eine dreidimensionale Differenzialgleichung entsteht, allerdings wurde $f$ so definiert, dass auch höhere Iterationszahlen leichter zu berechnen und zu analysieren sein sollen. Die H\e non-Abbildung bildet den $\mathbb{R}^2$ auf sich selbst ab. Dieser Vorgang besteht aus drei Schritten. Man betrachte eine Fläche entlang der $x$-Achse gelegen:
 
 \textbf{Dehnen und Falten}
 $$T': x'=x, y'= 1+ y - ax^2$$
@@ -19,19 +19,19 @@ Mit dem Parameter $a$ kann die Stärke der Biegung gesteuert werden.
 
 \textbf{Kontrahieren}
 $$T'': x''= b\cdot x, y''= y'$$
-Ein $|b|<1$ bedeutet, dass sich die Fläche zusammen zieht. Wird $b$ zu groß gewählt, so entsteht eine zu große Kontraktion und der Attraktor ist schwerer erkennbar. Ist $b$ zu klein, ist der Effekt zu gering und das Verhalten der Abbildung ist nicht mehr chaotisch.
+Ein $|b|<1$ bedeutet, dass sich die Fläche zusammen zieht. Wird $b$ zu groß gewählt, so entsteht eine zu starke Kontraktion und der Attraktor ist schwerer erkennbar. Ist $b$ zu klein, ist der Effekt zu gering und das Verhalten der Abbildung ist nicht mehr chaotisch.
 
 
-\textbf{Rotieren}
+\textbf{Spiegeln}
 $$T''': x'''= y'', y'''= x''$$
-Im letzten Schritt werden die Achsen vertauscht und somit dir Fläche um rotiert.
+Im letzten Schritt werden die Achsen vertauscht und somit die Fläche gepiegelt.
 
 
 Die entstehende Abbildung hat unter Anderem folgende Eigenschaften:
 \begin{itemize}
  \item Invertierbar: $(x_{n+1}, y_{n+1})$ kann eindeutig auf $(x_n, y_n)$ zurückgeführt werden.
  \item Kontrahiert Flächen: Mit $|b|<1$ werden Flächen kleiner.
- \item Besitzt eine Fangzone, die einen Attraktor enthält. Allerdings landen nicht immer alle Orbits in der Fangzone, da wegen $x^2$ Terme bestimmter Größe nach $\infty$ laufen können.
+ \item Besitzt eine Fangzone, die einen Attraktor enthält. Allerdings landen nicht immer alle Orbits in der Fangzone, da wegen der Quadrierung durch $T'$ Terme bestimmter Größe nach $\infty$ laufen können.
 \end{itemize}
 
 
@@ -42,7 +42,7 @@ Das Rechteck wird gedehnt und gefaltet, dann kontrahiert und zuletzt rotiert, be
 
 \Abbildungps{tbh}{.7}{img/henon_evo.pdf}{fig:henonevo}{H\e non-Abbildung: Einfache Evolution}{Einfache Evolution der H\e non Abbildung, aufgeteilt in das initiale Rechteck und die drei Zwischenschritte.}
 
-Für die Parameter $a=1.4$ und $b=0.3$ ergibt sich eine Fangzone in der sich die Funktionswerte auf einem seltsamen Attraktor bewegen, während die außerhalb gelegenen Punkte gegen unendlich laufen. Das bedeutet, dass ein Punkt, in der Fangzone, beziehungsweise auf dem Attraktor liegt, wiederum auf diesen abgebildet wird. Der Attraktor ist in Abbildung \ref{fig:strangeattractor} zu sehen. Hier wurden, ausgehend vom Punkt $(0,0)$, 10000 Iterationen der H\e non-Abbildung berechnet und jeweils das Ergebnis eingezeichnet. Es ist deutlich erkennbar, dass sich der Attraktor teils nahe am Rande der Fangzone bewegt. Bereits bei einer leichten Überschätzung des Ergebnisses kann dies dazu führen, dass die Funktionswerte die Fangzone verlassen, auch wenn der tatsächliche Wert eigentlich in dieselbe abgebildet würde. Dies kommt zum Tragen, wenn Intervalle, als Zahlendarstellung gewählt werden, wie es bei \verb+hotm+ der Fall ist, da dieser immer auch einen Bereich um den Wert herum abdecken. Liegt dieser nun außerhalb der Fangzone, wächst der Bereich durch die Quadrierung in jeder Iteration exponentiell und lässt somit keine aussagekräftigen Informationen ermitteln.
+Für die Parameter $a=1.4$ und $b=0.3$ ergibt sich eine Fangzone in der sich die Funktionswerte auf einem seltsamen Attraktor bewegen, während die außerhalb gelegenen Punkte gegen unendlich laufen. Das bedeutet, dass ein Punkt, der in der Fangzone, beziehungsweise auf dem Attraktor liegt, wiederum auf diesen abgebildet wird. Der Attraktor ist in Abbildung \ref{fig:strangeattractor} zu sehen. Hier wurden, ausgehend vom Punkt $(0,0)$, 10000 Iterationen der H\e non-Abbildung berechnet und jeweils das Ergebnis eingezeichnet. Es ist deutlich erkennbar, dass sich der Attraktor teils nahe am Rande der Fangzone bewegt. Bereits bei einer leichten Überschätzung des Ergebnisses kann dies dazu führen, dass die Funktionswerte die Fangzone verlassen, auch wenn der tatsächliche Wert eigentlich in dieselbe abgebildet würde. Dies kommt zum Tragen, wenn Intervalle, als Zahlendarstellung gewählt werden, wie es bei \verb+HOTM+ der Fall ist, da diese immer auch einen Bereich um den Wert herum abdecken. Liegt dieser nun außerhalb der Fangzone, wächst der Bereich durch die Quadrierung in jeder Iteration exponentiell und lässt somit keine aussagekräftigen Informationen ermitteln.
 
 
 \Abbildungps{tbh}{.7}{img/attractor.pdf}{fig:strangeattractor}{H\e non-Abbildung: Attraktor}{Seltsamer Attraktor der H\e non-Abbildung für $a=1,4$ und $b=0.3$ mit 10000 Punkten.}
@@ -54,10 +54,11 @@ Für die Parameter $a=1.4$ und $b=0.3$ ergibt sich eine Fangzone in der sich die
 
 % \Abbildungps{tbh}{.9}{img/7iter_w_sweep.pdf}{fig:7iter}{H\e non-Abbildung: Mehrere Iterationen mit Farbkodierung}{Mehrere Iterationen mit Farbkodierung}
 
-\section{Taylormodell}
-Ein Taylormodell im Sinne der Erweiterung von \cite{DBLP:conf/macis/BrausseKM15} des Grundmodells von \cite{makino2001} besteht aus einem Polynom $p$ mit $k\in \mathbb{N}$ Variablen, geschlossenen Intervallen als Koeffizienten. Darin enthalten ist immer einem Monom $c_0$ des Grades 0, der das Kernintervall (\textit{Kernel}) des Taylormodells darstellt. Eine Variable oder ein Fehlersymbol $\lambda_i$ aus dem Vektor $\lambda = (\lambda_1, \dots, \lambda_k)$ steht für einen Wert aus dem dazugehörigen Supportintervall aus $S=(s_1, \dots, s_k)$ mit $\lambda_i \in s_i$ und wird dazu verwendet, unbekannte Werte, Rechenungenauigkeiten und funktionale Abhängigkeiten innerhalb eines oder zwischen mehreren Taylormodellen abzubilden. Die verwendeten Intervalle $c_n = [\tilde{c}_n \pm \varepsilon_n] \subseteq \mathbb{R}$ haben in \verb+hotm+ reelle Endpunkte und stellen mit $c'_n = [\tilde{c}_n \pm 0]$ auch Punktintervalle dar. Mit einem so definierten Taylormodell $T=\Sigma_n c_n \lambda^n$ kann exakte reelle Arithmetik betrieben werden, indem Rundungsfehler und Ungenauigkeiten, die beim Rechnen mit endlicher Genauigkeit entstehen können als Intervalle in den Fehlersymbolen berücksichtigt werden. Dies ist zwar auch mit einfacher Intervallarithmetik möglich, jedoch leidet die Präzision des Ergebnisses einer solchen Berechnung stark unter der schnell wachsenden Überschätzung, die sich aus der Tendenz von Intervallen ergibt, bei jeder Rechenoperation zu wachsen.
+\section{Taylormodelle}
+Ein Taylormodell im Sinne der Erweiterung von Brauße et al. in \cite{DBLP:conf/macis/BrausseKM15} des Grundmodells von Makino et al. in \cite{makino2001} besteht aus einem Polynom $p$ mit $k\in \mathbb{N}$ Variablen und geschlossenen Intervallen als Koeffizienten. Das Monom $c_0$ des Grades 0, der das Kernintervall (\textit{Kernel}) des Taylormodells darstellt, dient als Restintervall, das den Rechenfehler, über den keine Abhängigkeitsinformationen mehr verfügbar ist, enthält. Eine Variable oder ein Fehlersymbol $\lambda_i$ aus dem Vektor $\lambda = (\lambda_1, \dots, \lambda_k)$ steht für einen Wert aus dem dazugehörigen Supportintervall aus $S=(s_1, \dots, s_k)$ mit $\lambda_i \in s_i$ und wird dazu verwendet, unbekannte Werte, Rechenungenauigkeiten und funktionale Abhängigkeiten innerhalb eines oder zwischen mehreren Taylormodellen abzubilden. Für die Variablen eines Monoms wird in dieser Arbeit wie in \cite{DBLP:conf/macis/BrausseKM15} eine Multiindexnotation verwendet. Für einen Index $n=(n_1,\dots,n_k)$ ist das dazugehörige Produkt von Variablen definiert als $\lambda^n=\lambda_1^{n_1} \cdot \ldots \cdot \lambda_k^{n_k} $.  
 
-Des Weiteren können mit Taylormodellen im in dieser Arbeit behandelten zweidimensionalen Fall auch komplexere Flächen als achsenparallele Rechtecke mit Hilfe von Intervallen beschrieben werden.
+
+Die verwendeten Intervalle $c_n = [\tilde{c}_n \pm \varepsilon_n] \subseteq \mathbb{R}$ haben in \verb+HOTM+ reelle Endpunkte und stellen mit $c'_n = [\tilde{c}_n \pm 0]$ Punktintervalle dar. Mit einem so definierten Taylormodell $T=\Sigma_n c_n \lambda^n$ kann Exakte Reelle Arithmetik betrieben werden, indem Rundungsfehler und Ungenauigkeiten, die beim Rechnen mit endlicher Genauigkeit entstehen können als Intervalle in den Fehlersymbolen berücksichtigt werden. Dies ist zwar auch mit einfacher Intervallarithmetik möglich, jedoch leidet die Präzision des Ergebnisses einer solchen Berechnung stark unter der schnell wachsenden Überschätzung, die sich aus der Tendenz von Intervallen ergibt, bei jeder Rechenoperation zu wachsen.
 
 
 In \cite{DBLP:conf/macis/BrausseKM15} werden drei Unterfamilien von Taylormodellen identifiziert, die sich in der Definition des Polynoms und dessen Koeffizienten unterschieden:
@@ -67,9 +68,9 @@ In \cite{DBLP:conf/macis/BrausseKM15} werden drei Unterfamilien von Taylormodell
  \item Klassische Taylormodelle: Polynome beliebigen Grades mit Punktintervallen, außer beim Kernel. \label{tm3}
 \end{enumerate}
 
-Das in dieser Arbeit verwendete Taylormodell ist eine Kombination aus \ref{tm2} und \ref{tm3}, und besteht aus Polynomen beliebiger Ordnung mit beliebigen Intervallen als Koeffizienten. Dadurch kann mit zwei solchen \textit{nichtlinearen Taylormodellen} im Zweidimensionalen komplexere Strukturen, wie Kurven höherer Ordnung beschrieben werden.
+Das in dieser Arbeit verwendete Taylormodell ist eine Kombination aus 2. und 3., und besteht aus Polynomen beliebiger Ordnung mit beliebigen Intervallen als Koeffizienten. Dadurch können mit zwei solchen \textit{nichtlinearen Taylormodellen} im Zweidimensionalen komplexere Strukturen, wie Kurven höherer Ordnung beschrieben werden.
 
-Abbildung \ref{fig:lin_vs_nonlin_1} zeigt lineare und eine nichtlineare Taylormodelle für
+Abbildung \ref{fig:lin_vs_nonlin_1} zeigt die Darstellung linearer und nichtlinearer Taylormodelle für
 \begin{align*}
 x = 0 + 1 \cdot \lambda_1 & \hspace{0.5cm} (\lambda_1 \in [0 \pm 0.4]) \\
  y = 0 + 1 \cdot \lambda_2 & \hspace{0.5cm} (\lambda_2 \in [0 \pm 0.1])
@@ -91,13 +92,13 @@ Arithmetische Operationen auf Taylormodellen mit Intervallkoeffizienten bedeuten
     \subsection{Spezielle Operationen auf Taylormodellen}
 Um den durch Berechnungen wachsenden Grad des Polynomes und die Breite der Intervallkoeffizienten zu kontrollieren, wird in \cite{DBLP:conf/macis/BrausseKM15} \textit{Sweeping} und \textit{Splitting}, also Fegen und Teilen, vorgestellt. 
 
-Sweeping reduziert den Grad eines Monoms $c_n \lambda_i^k$ mit $\lambda_i \in s_i$, indem eines Fehlersymbole durch das entsprechende Intervall aus $S$ ersetzt wird: 
+Sweeping reduziert den Grad eines Monoms $c_n \lambda_i^k$ mit $\lambda_i \in s_i$, indem eines der Fehlersymbole durch das entsprechende Intervall aus $S$ ersetzt wird: 
 \begin{align*}
- c_n \lambda_i^k \rightarrow c_n s_i \lambda_i^{k-1}
+ c_n \lambda_i^k \rightsquigarrow c_n s_i \lambda_i^{k-1}
 \end{align*}
-Dies hat natürlich zur Folge, dass die Breite der Koeffizienten wächst und damit die Überschätzung der tatsächlichen Werte. Durch Splitting wird ein Monom in zwei Monome mit Punktintervallen zerteilt und ein neues Fehlersymbol eingeführt, das der Breite des Koeffizienten entspricht:
+Dies hat natürlich zur Folge, dass die Breite der Koeffizienten wächst und damit die Überschätzung der tatsächlichen Werte. Durch Splitting wird ein Monom in zwei Monome mit Punktintervallen zerteilt und ein neues Fehlersymbol eingeführt, das mit dem neuen Koeffizienten der Breite des Intervalls entspricht:
 \begin{align*}
- [\tilde{c}_n \pm \varepsilon_n]\ \rightarrow [\tilde{c}_n \pm 0] + [\varepsilon_n \pm 0]\cdot  \lambda_n \hspace{0.5cm}, \lambda_n \in [0 \pm 1]
+ [\tilde{c}_n \pm \varepsilon_n]\ \rightsquigarrow [\tilde{c}_n \pm 0] + [\varepsilon_n \pm 0]\cdot  \lambda_n \hspace{0.5cm}, \lambda_n \in [0 \pm 1]
 \end{align*}
 Es ergibt sich der gegenteilige Effekt des Sweepings, da die Intervalle kleiner werden, der Grad des Polynoms jedoch erhöht wird.
 
@@ -115,7 +116,7 @@ Beziehungsweise entwickelt sich die Entfernung zwischen den zwei Punkten $\varep
 \label{distance}
  \varepsilon \cdot e^{n\cdot LE(x_0)} = |f^n(x_0 + \varepsilon) - f^n(x_0)|
 \end{align}
-Für $LE(x_0)<0$ kontrahiert, für $LE(x_0)>0$ wächst der Abstand zwischen den Punkten über den Verlauf der Schritte. In der Praxis muss mit Rundungsfehlern bei der Berechnung der Werte umgegangen werden, da ein Computer nur mit endlicher Genauigkeit rechnen kann. Dadurch kann $|f^n(x_0 + \varepsilon) - f^n(x_0)|$ nur von oben angenähert werden. Der Lyapunov Exponent bildet somit eine untere Schranke für die Ausdehnung eines Intervalls $x_0$, welches durch Intervallarithmetik überschätzt wird, auch \textit{Wrapping Effect} \cite{DBLP:conf/macis/BrausseKM15}.  
+Für $LE(x_0)<0$ kontrahiert, für $LE(x_0)>0$ wächst der Abstand zwischen den Punkten über den Verlauf der Schritte. $|f^n(x_0 + \varepsilon) - f^n(x_0)|$ ist eine lokale Annäherung an den Lyapunov Exponenten zum Zeitpunkt $n$. Betrachtet man diese Punkte als Randpunkte eines Intervalls $I$ so bildet der Lyapunov Exponent eine untere Schranke für dessen Ausdehnung, da $I$ durch die Anwendung von Rechenoperation den Wertebereich überschätzt.
 
 \Abbildungps{tbh}{.8}{img/lyapu.png}{fig:lyapu}{Lokale Annäherung an den Lyapunov Exponenten mit Punkten}{Lokale Annäherung an den Lyapunov Exponenten der H\e non-Iteration mit Punkten $x_0$ und $x_0+\varepsilon$, und den Parametern $a=1.4,b=0.3$}  
  
@@ -128,7 +129,7 @@ Für $LE(x_0)<0$ kontrahiert, für $LE(x_0)>0$ wächst der Abstand zwischen den 
  
  \subsection{Verlustrate der Aussagekraft}  
  
-In \cite{DBLP:spandl} wird der Lyapunov Exponent in den Kontext der Berechenbaren Analysis gerückt und in Verbindung mit der Entwicklung von Rundungsfehlern in reeller Arithmetik gebracht. Der Wert von $x_n$ wird zu einem beliebigen Zeitpunkt $n$ durch ein Intervall $[x_n^l,x_n^u]$ umschlossen, sodass $x_n \in [x_n^l,x_n^u]$ gilt. Die Schranken $x_n^l$ und $x_n^u$ sind jeweils Fließkommazahlen der Länge $m_n$. $\hat{x}_n$ stellt eine Approximation von $x_n$ dar, indem der Mittelpunkt des Intervalls bestimmt und dann auf $m_n$ Stellen gerundet wird:
+In \cite{DBLP:spandl} wird der Lyapunov Exponent in den Kontext der Berechenbaren Analysis gerückt und in Verbindung mit der Entwicklung von Rundungsfehlern in reeller Arithmetik gebracht. Der Wert von $x_n$ wird zu einem beliebigen Zeitpunkt $n$ von einem Intervall $[x_n^l,x_n^u]$ umschlossen, sodass $x_n \in [x_n^l,x_n^u]$ gilt. Die Schranken $x_n^l$ und $x_n^u$ sind jeweils Fließkommazahlen der Länge $m_n$. $\hat{x}_n$ stellt eine Approximation von $x_n$ dar, indem der Mittelpunkt des Intervalls bestimmt und dann auf $m_n$ Stellen gerundet wird:
 \begin{align}
  \hat{x}_n = rd(\frac{x^l_n + x^u_n}{2}, m_n)
 \end{align}
@@ -149,7 +150,7 @@ angegeben werden.
 
 Die in dieser Arbeit verwendeten Taylormodelle bestehen aus Polynomen mit Intervallkoeffizienten und reellen Endpunkten. Für die praktische Umsetzung wurde die Software-Bibliothek \verb+iRRAM+ \cite{Mller2009EnhancingIE} verwendet, welche reelle Zahlen, ähnlich wie oben beschrieben, darstellt und annähert. Stellen diese Taylormodelle nun ein Intervall dar, so ist das Ziel, für die Darstellung der reellen Zahlen einen möglichst kleinen Wert für $m$ zu finden, sodass die Verlustrate der Aussagekraft der reellen Intervallgrenzen erlaubt, dass sich das Intervall für eine Iterationszahl $n$ so nah wie möglich am Lyapunov Exponenten entwickelt. 
 
-Da sich die H\e non-Abbildung nun im $\mathbb{R}^2$ bewegt, bedeutet eine Definition der Taylormodelle als Intervall, dass diese ein Rechteck aufspannen. Eine Berechnung von H\e non-Iterationen auf einem größeren Rechteck hat zu Folge, dass eine kritische Itervallbreite, bei der die Ausdehnung nicht mehr dem Lyapunov-Exponenten gleicht, sondern exponentiell schnell wächst, schneller erreicht wird. Um diesem Effekt entgegenzuwirken, kann das Rechteck und damit die Taylormodelle partitioniert werden und die Berechnung auf den kleineren Flächen fortgeführt werden. Mit der Entwicklung der Breite kann nun abgeschätzt werden, wie fein die Partitionierung sein muss, um eine gewisse Anzahl an Iterationen berechnen zu können.
+Da sich die H\e non-Abbildung nun im $\mathbb{R}^2$ bewegt, bedeutet eine Definition der Taylormodelle als Intervall, dass diese ein Rechteck aufspannen. Eine Berechnung von H\e non-Iterationen auf einem größeren Rechteck hat zu Folge, dass eine kritische Itervallbreite, bei der die Ausdehnung nicht mehr dem Lyapunov-Exponenten gleicht, sondern exponentiell schnell wächst, schneller erreicht wird. Um diesem Effekt entgegenzuwirken, kann das Rechteck und damit die Taylormodelle partitioniert und die Berechnung auf den kleineren Flächen fortgeführt werden. Mit der Entwicklung der Breite kann nun abgeschätzt werden, wie fein die Partitionierung sein muss, um eine gewisse Anzahl an Iterationen berechnen zu können.
 
 
 

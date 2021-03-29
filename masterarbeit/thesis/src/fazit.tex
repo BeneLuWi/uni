@@ -26,10 +26,13 @@ Gefahr des Overfittings auf Henon
 
 \subsection{Laufzeitoptimierung}
 
-
+\subsection{Sweeping-Heuristiken}
 
 \subsection{Schnittstellen}
-Die Implementierung der \verb+iRRAM+, beziehungsweise der \verb+HOTM+ bietet ein sehr hohes Abstrantionsniveau für die komplexen Berechnungen, die damit ausgeführt werden, sodass die reellen Zahlen und die nichtlinearen Taylormodelle als reguläre Zahlentypen verwendbar sind. Neben der reinen Entwicklungsarbeit, stellt allerdings auch die Verbreitung der Ideen und der Programme als solches ein Problem dar, da sich deren Verwendung auf \verb.C++.-Programme beschränkt. Eine Schnittstelle zu anderen Programmiersprachen, wie beispielsweise in der \verb+Python+-Bibliothek \verb+numpy+, eigentlich in \verb+FORTRAN+ implementiert, würde die Verwendung der populärsten Programmiersprache\footnote{\url{https://de.statista.com/infografik/22669/popularitaet-von-programmiersprachen/} (Stand 26.03.2021)} ermöglichen.
+Die Implementierung der \verb+iRRAM+, beziehungsweise der \verb+HOTM+ bietet ein sehr hohes Abstrantionsniveau für die komplexen Berechnungen, die damit ausgeführt werden, sodass die reellen Zahlen und die nichtlinearen Taylormodelle als reguläre Zahlentypen verwendbar sind. Neben der reinen Entwicklungsarbeit, stellt allerdings auch die Verbreitung der Ideen und der Programme als solches ein Problem dar, da sich deren Verwendung auf \verb.C++.-Programme beschränkt. Eine Schnittstelle zu anderen Programmiersprachen, wie beispielsweise in der \verb+Python+-Bibliothek \verb+numpy+, eigentlich in \verb+FORTRAN+ implementiert, würde die Verwendung der populärsten Programmiersprache\footnote{\url{https://de.statista.com/infografik/22669/popularitaet-von-programmiersprachen/} (Stand 26.03.2021)} eröffnen.
+
+
+Für die Umsetzung wäre eine mögliche Lösung, die \verb+iRRAM+, beziehungsweise \verb+HOTM+ in einem eigenen Thread laufen zu lassen und mit asynchronen Anfragen Ergebnisse für Berechnungen zu erhalten.
 
 %%% Local Variables: 
 %%% mode: latex

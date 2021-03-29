@@ -1,6 +1,6 @@
 \chapter{Anhang}
 
-
+\section*{Algorithmen für Geobuckets}
 \begin{algorithm}
 \SetAlgoLined
 \SetKwInOut{Input}{input}
@@ -42,6 +42,34 @@ $i\gets 0 $\;
 \end{algorithm}
 
 
+\begin{algorithm}[H]
+\SetAlgoLined
+\label{algo:add}
+\SetKwInOut{Input}{input}
+\Input{Polynome $p_1, p_2$}
+$p \gets (), i \gets 0, j \gets 0$ \; 
+\While{$i < \#p_1$ \textbf{and} $j  < \#p_2$} {
+    $max \gets max\_errorsymbols(p_1[i], p_1[j])$ \;
+    \uIf{max = left}{
+        $p.append(p_1[i])$\;
+        $i \gets i+1 $\;
+    }
+    \uElseIf{max = right}{
+        $p.append(p_2[j])$\;
+        $j \gets j+1 $\;
+    }
+    \uElse{ // $max = equal$\\
+        $p.append(p_1[i] + p_1[j])$\;
+        $p_1.remove(i)$\;
+        $i \gets i+1; j \gets j +1 $\;
+    }
+}
+Append the rest to $p$\;
+\Return $p$
+
+ \caption{Addition zweier Polynome}
+\end{algorithm}
+
 
 \begin{algorithm}[H]
 \label{algo:maxes}
@@ -64,7 +92,7 @@ $i \gets 0 $ \;
 
 \Abbildungps{tbh}{.9}{img/7iter_w_sweep.pdf}{fig:7iter}{H\e non-Abbildung: Mehrere Iterationen mit Farbkodierung}{Mehrere Iterationen mit Farbkodierung}
 
-
+\section*{Details der Implementierung}
 
 \begin{lstlisting}[language=JSON, caption=Bespielkonfiguration,captionpos=b, label=list:config]
  [
