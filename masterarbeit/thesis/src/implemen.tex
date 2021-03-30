@@ -16,6 +16,9 @@ Für eine solche Iteration werden gerade so viele Zwischenergebnisse während de
 
 Einige der für rationale Zahlen zur Verfügung stehenden Funktionen, wie der Vergleich zweier Zahlen, sind mit reellen Zahlen nicht ohne weiteres Möglich. Dies gilt insbesondere für den Test auf Gleichheit und die Vorzeichenfunktion $sign$. Bei all diesen Funktionen handelt es sich im Reellen (und bei der \verb+iRRAM+) um mehrwertige Funktionen, da sich das jeweilige Ergebnis mit veränderter Präzsion in der Darstellung der Zahlen ändern kann. Dieses Problem wird in \verb+hotm+ durch den \verb+SignType+ adressiert. Zusätzlich zu den Werten 'positiv' (=\verb+POS+) und 'negativ' (=\verb+NEG+),  kann die Vorzeichenfunktion \verb+sign+ den Wert 'ambivalent' (=\verb+AMBI+) ausgeben, wenn nicht entscheidbar ist, wo genau die reelle Zahl um die Null liegt. Hierfür erhält die Vorzeichenfunktion einen Parameter, der den Bereich der Unsicherheit definiert. Ist der Ausgabewert 'ambivalent', so wird in den Funktionen, welche die Vorzeichenfunktion aufrufen, der schlechteste Fall im Hinblick auf die Genauigkeit, beziehungsweise die Intervallbreite des Ergebnisses angenommen. 
 
+Für die Quadrierung eines Intervalls $I=[x_1, x_2]$ bedeutet das bespielsweise, dass statt $I^2 = [\min(x_1^2, x_2^2), \max(x_1^2, x_2^2)]$, die Überschätzung $I^2 = [0, \max(x_1^2, x_2^2)]$ verwendet werden muss.
+
+
 
 Eine weitere Besonderheit ergibt sich aus dem Aufbau der Zahlen. Es entstehen zwei Intervall-`Ebenen`: Zum Einen, die Darstellung des Koeffizienten als Intervall aus Mitte und Radius. Zum Anderen die Darstellung von Mitte und Radius, als \verb+iRRAM-REAL+, jeweils wiederum als Intervall mit Wert und Fehler, wie in Grafik \ref{fig:levels} zu sehen ist. Dies sorgt für eine recht hohe Komplexität, allerdings lässt sich die Ungenauigkeit sehr genau steuern, indem zum Beispiel der Rechenfehler des Mittelpunkts eines Koeffizienten auf den Radius 'verlagert' wird. So vergrößert sich zwar der Radius des Koeffizienten, welcher dadurch ungenauer wird, jedoch verkleinert sich der Rechenfehler auf der Zahlenebene der \verb+REAL+s. 
 
@@ -38,8 +41,8 @@ Eine weitere Besonderheit ergibt sich aus dem Aufbau der Zahlen. Es entstehen zw
 \subsection{Präzision}
 Werden zwei \verb+iRRAM-REAL+s $x$ und $y$ mit einer jeweiligen Präzision $p_x$ und $p_y$ verrechnet $z = x \circ y$, so entscheidet die Präzisions-Strategie der \verb+iRRAM+ \verb+prec_policy+, ob für für diese Operation absolute oder relative Genauigkeit verwendet wird. Zudem existiert eine globale, an die Iteration der \verb+iRRAM+ gebundene Genauigkeit \verb+actual_precision+ $p_g$ , die sich mit jeder Iteration verringert, beginnend mit dem Wert $p_{g0} = -50$. Diese Werte sind negativ und repräsentieren, die Anzahl an Bits, für die eine Zahl genau bekannt ist. Bei $z = x\circ y$ ist die Genauigkeit $p_z$ durch
 $$p_z = \begin{cases}
-         max(p_x, p_y, p_g) & \text{für absolute Genauigkeit}\\
-         max(p_x, p_y, max(p_x, p_y) - 50 + p_g) & \text{für relative Genauigkeit}
+         \max(p_x, p_y, p_g) & \text{für absolute Genauigkeit}\\
+         \max(p_x, p_y, \max(p_x, p_y) - 50 + p_g) & \text{für relative Genauigkeit}
         \end{cases}
 $$
 gegeben.
@@ -101,7 +104,7 @@ Die Addition zweier Polynome $p_1$ und $p_2$ stellt ein Zusammenfügen zweier Li
 \end{itemize}
 Bei einer Gleichheit der Monome werden diese zusammengefügt und die Koeffizienten addiert.
 
-Algorithmus \ref{algo:add} erzeugt aus zwei nach der oben definierten Ordnung $\succ$ sortierten Polynomen wiederum ein sortiertes Polynom. Endet die While-Schleife in Zeile 2, so ist im Regelfall eines der Polynome noch nicht gänzlich betrachtet, was bedeutet, dass alle übrigen Monome in diesem Polynom (im Hinblick auf $\succ$) kleiner sind, als die des anderen Summanden und daher dem Ergebnispolynom angehangen werden können, ohne sie weiter zu betrachten. 
+Algorithmus \ref{algo:add} erzeugt aus zwei nach der oben definierten Ordnung $\succ$ sortierten Polynomen wiederum ein sortiertes Polynom. Endet die While-Schleife in Zeile 2, so ist im Regelfall eines der Polynome noch nicht gänzlich betrachtet, was bedeutet, dass alle übrigen Monome in diesem Polynom (im Hinblick auf $\succ$) kleiner sind, als die des anderen Summanden und daher dem Ergebnispolynom angehangen werden können, ohne sie vergleichen zu müssen. 
 
 \subsection{Polynommultiplikation}
 
@@ -109,10 +112,10 @@ Algorithmus \ref{algo:add} erzeugt aus zwei nach der oben definierten Ordnung $\
 Betrachtet man die Summe dreier Polynome $p_1 + p_2 + p_3$ mit $\#p_1 >> \#p_2 = \#p_3 = 1$, benötigt das Aufsummieren von links nach rechts bis zu $2\#p_1 + 1$ Vergleiche, da mit dem oben verwendeten Additionsverfahren zweifach in $p_1$ eingefügt wird und potentiell jedes Monom miteinander verglichen werden muss\footnote{$\#p$ liefert die Anzahl an Monomen des Polynoms $p$}. Summiert man jedoch von rechts nach links so werden lediglich $\#p_1 + 2$ Vergleiche benötigt. Nach dieser Idee kann die Anzahl der Monomvergleiche reduziert werden, indem zunächst Polynome gleicher Länge miteinander addiert werden. 
 
 
-Um die oben (\ref{def:order}) definierte Ordnung $\prec$ auf dem Polynom $p = p_1 \cdot p_2$ zu erhalten, müssen die $n\cdot m$ Monome ($n := \#p_1, m := \#p_2$), die bei der Multiplikation entstehen, sortiert werden. Werden diese sequentiell zu $p$ hinzugefügt bedeutet das 2 Vergleiche, dann 3, dann 4, und so weiter, bis hin zu $nm$ Vergleichen:
+Um die oben (\ref{def:order}) definierte Ordnung $\succ$ auf dem Polynom $p = p_1 \cdot p_2$ zu erhalten, müssen die $n\cdot m$ Monome ($n := \#p_1, m := \#p_2$), die bei der Multiplikation entstehen, sortiert werden. Werden diese sequentiell zu $p$ hinzugefügt bedeutet das zunächst 2 Vergleiche, dann 3, dann 4, und so weiter, bis hin zu $nm$ Vergleichen:
 $$ 2 + 3 + 4 + 5 + ... + nm = \frac{nm \cdot (nm + 1)}{2} - 1$$
 So ergibt sich für die naive Multiplikation eine quadratische Laufzeit in $O$-Notation von $O(nm + (nm)^2)$
-Mit Geobuckets werden die Zwischenergebnisse der Polynommultiplikation in geometrisch wachsenden 'Buckets' gespeichert. Hat ein Bucket seine Kapazität erreicht, wird das Polynom zum nächst größeren Bucket hinzuaddiert. Der Unterschied zum Originalalgorithmus besteht darin, dass die Größe der hinzukommenden Polynome bereits bekannt ist und die Bucketkapazität dementsprechend angepasst werden kann. Algorithmus \ref{algo:mult} zeigt die in \verb+HOTM+ implementierte Version der Geobucketmultiplikation. Durch den Teile und Herrsche Ansatz, kann die Multiplikation mit Geobuckets so in $O(nm \log nm)$ durchgeführt werden \cite{geobucketsmulti}.
+Mit Geobuckets werden die Zwischenergebnisse der Polynommultiplikation in geometrisch wachsenden Listen (\textit{Buckets}) gespeichert. Hat ein Bucket seine Kapazität erreicht, wird das Polynom zum nächst größeren Bucket hinzuaddiert. Der Unterschied zum Originalalgorithmus besteht darin, dass die Größe der hinzukommenden Polynome bereits bekannt ist und die Bucketkapazität dementsprechend angepasst werden kann. Algorithmus \ref{algo:mult} zeigt die in \verb+HOTM+ implementierte Version der Geobucketmultiplikation. Durch den Teile und Herrsche Ansatz, kann die Multiplikation mit Geobuckets so in $O(nm \log nm)$ durchgeführt werden \cite{geobucketsmulti}.
 
 
 
