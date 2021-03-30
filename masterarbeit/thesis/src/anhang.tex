@@ -3,36 +3,37 @@
 \section*{Algorithmen für Geobuckets}
 \begin{algorithm}
 \SetAlgoLined
-\SetKwInOut{Input}{input}
-\Input{Polynome $p_1, p_2$}
-$n \gets \#p_1, m\gets \#p_2$ \\
-$p \gets [\ ]$ \\
-Allocate $buckets$ with space for polynomials: $\{2m, 4m, ..., 2^{\lceil log_2(n)\rceil -1 }m\}$\\
+\SetKwInOut{Input}{Eingabe}
+\SetKwInOut{Output}{Ausgabe}
+\Input{Polynome $p, q$ mit Monomen $m_{p_i}$ und $m_{q_j}$, wobei $i = \#p$ und $j = \#q$}
+\Output{Polynom $p'$ mit geordneten Monomen}
+$n \gets \#p, k\gets \#q$ \\
+$buckets$ mit Platz geom. wachsender Größe anlegen: $\{2k, 4k, ..., 2^{\lceil log_2(n)\rceil -1 }k\}$\\
 $i\gets 0 $\\
-\While{$i < n$}{
-    $p \gets p_1[i] \cdot p_2$\\
+\While(\Comment*[f]{Bis jedes Monom aus $q$ betrachtet wurde}){$i < n$}{
+    $p' \gets m_{p_i} \cdot q$\\
     \uIf{$i < (n-1)$}{
-        $p \gets p + p_1[i+1] \cdot p_2$\\
+        $p' \gets p' + m_{p_{i+1}} \cdot q$\\
     }
     $i\gets i+2$\\
    $j\gets 0 $\\ 
-    \While{$buckets[j].not\_empty()$}{
-        $p \gets p + buckets[j]$ \\
+    \While(\Comment*[f]{Sammle alle Buckets ein und speichere in $p'$}){$buckets[j]\neq \emptyset$}{
+        $p' \gets p' + buckets[j]$\Comment*{Polynome gleicher Größe werden addiert}
         $buckets[j] \gets [\ ]$\\
         $j\gets j+1 $\\ 
     }
-    \uIf{$i < n$}{
-        $buckets[j] \gets p$\\
-        $p \gets [\ ]$ \\
+    \uIf(\Comment*[f]{Wurde $q$ nicht komplett betrachtet}){$i < n$}{
+        $buckets[j] \gets p'$\Comment*{Speichere $p'$ im aktuell leeren Bucket $j$}
+        $p' \gets 0$ \Comment*{Leere $p'$ für eine neue Iteration vorbereiten}
     }
     
 }
 \ForEach(\Comment*[f]{Merge aller Buckets ins Polynom}){$bucket \in buckets$}{
-    $p \gets p + bucket$\Comment*{vom kleinsten zum größten}
+    $p' \gets p' + bucket$\Comment*{vom kleinsten zum größten}
 }
 
 
-\Return $p$
+\Return $p'$
 
  \caption{Polynommultipliaktion mit Geobuckets}
  \label{algo:mult}
@@ -47,9 +48,9 @@ $i\gets 0 $\\
 \Input{Polynome $p, q$ mit Monomen $m_{p_i}$ und $m_{q_j}$, wobei $i = \#p$ und $j = \#q$}
 \Output{Polynom $p'$ mit geordneten Monomen}
 $i \gets 0, j \gets 0$ \\
-\While(\Comment*[f]{Solange ein Polynom nicht komplett betrachtet wurde}){$i < \#p_1$ \textbf{and} $j  < \#p_2$} {
+\While(\Comment*[f]{Solange ein Polynom nicht komplett betrachtet wurde}){$i < \#p$ \textbf{and} $j  < \#q$} {
     \uIf{$m_{p_i} \succ m_{q_j}$}{
-        $p' \gets p' + m_{p_i}$\
+        $p' \gets p' + m_{p_i}$\\
         $i \gets i+1 $\\
     }
     \uElseIf{$m_{q_j} \succ m_{p_i}$}{
@@ -61,7 +62,7 @@ $i \gets 0, j \gets 0$ \\
         $i \gets i+1; j \gets j +1 $\\
     }
 }
-\If{$i < \#p_1$ \textbf{or} $j  < \#p_2$}{
+\If{$i < \#p$ \textbf{or} $j  < \#q$}{
 Füge den Rest zu $p$ hinzu
 }
 

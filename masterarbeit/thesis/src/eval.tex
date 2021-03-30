@@ -258,36 +258,14 @@ Abbildung \ref{fig:lyapu_int_tm} zeigt die Entwicklung bei Berechnungen der H\e 
  
   \Abbildungps{tbh}{1}{img/lyapu_int_tm.png}{fig:lyapu_int_tm}{Vergleich der Entfernung von Punkten, eines Intervalls und eines Taylormodells}{Entwicklung des Abstandes der x-Koordinate zweier Punkte $(0,0)$ und $(\varepsilon,\varepsilon)$ in Farbe, der Breite des Intervalls des x-Wertes eines Rechtecks $([0\pm \varepsilon], [0\pm \varepsilon])$ in Grau und der Breite des ausgewerteten Taylormodells für die x-Koordinate in Schwarz mit $|x_0| = \varepsilon$. Getestet bei der H\e non-Iteration mit $a=1.4$ und $b=0.3$.}
  
+ \newpage
  \section{Umsetzung}
  \label{ch:umsetung}
- Zwei Implementierungen der H\e non-Abbildung für die Parameter $a=1.4$ und $b=0.3$ sind in den Listings \ref{list:point} und \ref{list:int} zu sehen. Es werden drei verschiedenene Zahlentypen verwendet, die jedoch alle auf den \verb+iRRAM-REAL+s aufbauen: \textit{High Order Taylor Modell} \verb+HOTM+, \textit{Real Number} \verb+num+ und \textit{Real Number Interval} \verb+numint+. Die jeweils definierte Funktion \verb+compute()+ in Zeile 4 stellt den in der \verb+iRRAM+ verwendeten Rahmen für Iterationen, beziehungsweise Erhöhungen der Genauigkeit der \verb+REAL+s dar. Mit dem Funktionsaufruf \verb+HOTM::init()+ in Zeile 7 werden die zuvor in diesem Kapitel beschriebenen Grenzwerte und Parameter für die Housekeeping-Methoden mit Werten initialisiert, die experimentell die beste Performanz lieferten. Die Parameter $a$ und $b$ werden in Zeile 10 als \verb+num+ (\verb+iRRAM::REAL+) instanziiert. Die Durchführung der Housekeeping-Methoden ist ein Überschreiben des Zuweisungsoperators \anf{=} für die \verb+HOTM+-Taylormodelle realisiert. Während der Berechnung in den Zeilen 12 und 13 können sich die Taylormodelle aufblähen und werden dann bei der Zuweisung reduziert. In den Zeilen 14 und 15 findet kein Housekeeping mehr statt, gesteuert durch einen Parameter, der den Zustand des Taylormodells beschreibt \footnote{Operationen auf dem Taylormodell markieren es als \anf{not cleaned}. Dieser Wert wird dann durch die Anwendung von Housekeeping zurückgesetzt.}.
- 
- 
- Um die Anpassung der Parameter der \verb+HOTM+ zu vereinfachen stehen verschiedene Möglichkeiten zur Verfügung:
- \paragraph{Initiale Taylormodelle}
- In der linken Implementierung \ref{list:point} werden $x$ und $y$ als Punktintervalle, also als Taylormodelle mit lediglich einem Kernel definiert:
-  \begin{center}
-  \verb+HOTM::x(0)+ $\rightsquigarrow x\coloneqq [0]$\\
-  \verb+HOTM::y(0)+ $\rightsquigarrow y\coloneqq [0]$
- \end{center}
-
- 
- Unter Verwendung des Konstruktors auf der rechten Seite wird aus der Eingabe eines Intervalls mit Mittelpunkt $c$ und Radius $\varepsilon$ je ein Taylormodell mit einem Fehlersymbol, welches $\varepsilon$ enthält und dem Kernel als Punktintervall $c$: 
- \begin{center}
-  \verb+HOTM::x(0,0.001)+ $\rightsquigarrow x\coloneqq [0] + [1] \cdot \lambda_0,\ \lambda_0 \in [0 \pm 0.001]$\\
-  \verb+HOTM::y(0,0.001)+ $\rightsquigarrow y\coloneqq[0] + [1] \cdot \lambda_1,\ \lambda_1 \in [0 \pm 0.001]$
- \end{center}
-
-\paragraph{Anzahl der zu erhaltenden Fehlersymbole}
-Die Initialisierungsfunktion \verb+init()+ akzeptiert eine \verb+int+ $\geq 0$ als Eingabe. Damit kann die Anzahl der zu erhaltenden Fehlersymbole pro Taylormodellangepasst werden, wie in  Listing \ref{list:int} Zeile 9. Der Standardwert liegt bei 3. Außerdem besteht die Möglichkeit, diesen Wert für jedes Taylormodell individuell zu bestimmen (Listing \ref{list:int} Zeile 11). Ist dieser Wert nicht gesetzt, so wird er aus dem \verb+init()+ Aufruf abgeleitet.
-
-\paragraph{Manuelles Housekeeping}
- Sollen die Housekeeping-Methoden nur für bestimmte Taylormodelle oder zu einem anderen Zeitpunkt, als bei der Zuweisung durchgeführt werden, so wird die Funktion \verb+HOTM::kousekeep+ aufgerufen. Ein Aufruf, wie in Listing \ref{list:int} Zeile 16, schaltet das Housekeeping während der Zuweisung aus. Zudem wird das Entfernen bis auf die $m$-größten Fehlersymbole nun für alle im Aufruf enthaltenen Taylormodelle durchgeführt, statt einzeln. Das bedeutet, dass nach diesem Aufruf in allen Taylormodellen dieselben Fehlersymbole übrig bleiben.
- 
+ Zwei Implementierungen der H\e non-Abbildung für die Parameter $a=1.4$ und $b=0.3$ sind in den Listings \ref{list:point} und \ref{list:int} zu sehen. Es werden drei verschiedenene Zahlentypen verwendet, die jedoch alle auf den \verb+iRRAM-REAL+s aufbauen: \textit{High Order Taylor Modell} \verb+HOTM+, \textit{Real Number} \verb+num+ und \textit{Real Number Interval} \verb+numint+. Die jeweils definierte Funktion \verb+compute()+ in Zeile 5 stellt den in der \verb+iRRAM+ verwendeten Rahmen für Iterationen, beziehungsweise Erhöhungen der Genauigkeit der \verb+REAL+s dar. Mit dem Funktionsaufruf \verb+HOTM::init()+ in Zeile 9 werden die zuvor in diesem Kapitel beschriebenen Grenzwerte und Parameter für die Housekeeping-Methoden mit Werten initialisiert, die experimentell die beste Performanz lieferten. Die Parameter $a$ und $b$ werden in Zeile 14 als \verb+num+ (\verb+iRRAM::REAL+) instanziiert. Die Durchführung der Housekeeping-Methoden ist ein Überschreiben des Zuweisungsoperators \anf{=} für die \verb+HOTM+-Taylormodelle realisiert. Während der Berechnung in den Zeilen 17 und 18 können sich die Taylormodelle aufblähen und werden dann bei der Zuweisung reduziert. In den Zeilen 19 und 20 findet kein Housekeeping mehr statt, gesteuert durch einen Parameter, der den Zustand des Taylormodells beschreibt \footnote{Operationen auf dem Taylormodell markieren es als \anf{not cleaned}. Dieser Wert wird dann durch die Anwendung von Housekeeping zurückgesetzt.}.
  
  
  \begin{minipage}{.5\textwidth}
-    \begin{lstlisting}[language=C++, style=cpp, caption={[Implementierung der H\e non-Iteration in HOTM mit Intervallen,] \\Implementierung mit Punktintervallen },label=list:point]
+    \begin{lstlisting}[language=C++, style=cpp, caption={[Implementierung der H\e non-Iteration in HOTM mit Punktintervallen] \\Implementierung mit Punktintervallen },label=list:point]
 #include "iRRAM.h"
 #include "hoTM.h"
 using namespace iRRAM;
@@ -344,6 +322,30 @@ void compute(){
  \end{minipage}
 
  
+ 
+ Um die Anpassung der Parameter der \verb+HOTM+ zu vereinfachen stehen verschiedene Möglichkeiten zur Verfügung:
+ \paragraph{Initiale Taylormodelle}
+ In der linken Implementierung \ref{list:point} werden $x$ und $y$ als Punktintervalle, also als Taylormodelle mit lediglich einem Kernel definiert:
+  \begin{center}
+  \verb+HOTM::x(0)+ $\rightsquigarrow x\coloneqq [0]$\\
+  \verb+HOTM::y(0)+ $\rightsquigarrow y\coloneqq [0]$
+ \end{center}
+
+ 
+ Unter Verwendung des Konstruktors auf der rechten Seite wird aus der Eingabe eines Intervalls mit Mittelpunkt $c$ und Radius $\varepsilon$ je ein Taylormodell mit einem Fehlersymbol, welches $\varepsilon$ enthält und dem Kernel als Punktintervall $c$: 
+ \begin{center}
+  \verb+HOTM::x(0,0.001)+ $\rightsquigarrow x\coloneqq [0] + [1] \cdot \lambda_0,\ \lambda_0 \in [0 \pm 0.001]$\\
+  \verb+HOTM::y(0,0.001)+ $\rightsquigarrow y\coloneqq[0] + [1] \cdot \lambda_1,\ \lambda_1 \in [0 \pm 0.001]$
+ \end{center}
+
+\paragraph{Anzahl der zu erhaltenden Fehlersymbole}
+Die Initialisierungsfunktion \verb+init()+ akzeptiert eine \verb+int+ $\geq 0$ als Eingabe. Damit kann die Anzahl der zu erhaltenden Fehlersymbole pro Taylormodellangepasst werden, wie in  Listing \ref{list:int} Zeile 9. Der Standardwert liegt bei 3. Außerdem besteht die Möglichkeit, diesen Wert für jedes Taylormodell individuell zu bestimmen (Listing \ref{list:int} Zeile 11). Ist dieser Wert nicht gesetzt, so wird er aus dem \verb+init()+ Aufruf abgeleitet.
+
+\paragraph{Manuelles Housekeeping}
+ Sollen die Housekeeping-Methoden nur für bestimmte Taylormodelle oder zu einem anderen Zeitpunkt, als bei der Zuweisung durchgeführt werden, so wird die Funktion \verb+HOTM::kousekeep+ aufgerufen. Ein Aufruf, wie in Listing \ref{list:int} Zeile 16, schaltet das Housekeeping während der Zuweisung aus. Zudem wird das Entfernen bis auf die $m$-größten Fehlersymbole nun für alle im Aufruf enthaltenen Taylormodelle durchgeführt, statt einzeln. Das bedeutet, dass nach diesem Aufruf in allen Taylormodellen dieselben Fehlersymbole übrig bleiben.
+ 
+\paragraph{Ausgabe}
+ Die Ausgabe des Ergebnisses erfolgt jeweils in den Zeilen 22 und 23. Listing \ref{list:point} erzeugt hier eine Auswertung der Taylormodelle zu Intervallen mit einer Genauigkeit von 20 Stellen nach dem Komma für Mitte und Radius. In Listing \ref{list:int} hingegen werden die Taylormodelle aufgelistet, ohne diese auszuwerten. Das heißt, es werden alle Monome mitsamt ihrer Variablen angezeigt.
  
 
 %%% Local Variables: 
