@@ -71,15 +71,13 @@ Füge den Rest zu $p$ hinzu
  \caption{Addition zweier geordneter Polynome}
 \end{algorithm}
 
-
-\Abbildungps{tbh}{.9}{img/7iter_w_sweep.pdf}{fig:7iter}{H\e non-Abbildung: Mehrere Iterationen mit Farbkodierung}{Mehrere Iterationen mit Farbkodierung}
-
 \section*{Details der Implementierung}
+Die Konfiguraion in Listing \ref{list:config} erstellt zwei Taylormodelle mit $x = [1] + [1] \cdot \lambda_0$ und $y = [1] + [0.1] \cdot \lambda_1 $ und den Supportintervallen $S=([0\pm2^{-1000}], [0\pm2^{-1000}])$, für die 1000 Iterationen der H\e non-Abbildung berechnet werden.
 
 \begin{lstlisting}[language=JSON, caption=Bespielkonfiguration,captionpos=b, label=list:config]
  [
   {
-    "comment": "Error 100",
+    "comment": "Error 1000",
     "rel": 1,
     "linear": 0,
     "keep": 2,
@@ -145,3 +143,8 @@ Füge den Rest zu $p$ hinzu
   }
 ]
 \end{lstlisting}
+
+\section*{Darstellungen von Taylormodellen}
+
+\Abbildungps{tbh}{.8}{img/7iter_w_sweep.pdf}{fig:7iter}{H\e non-Abbildung: Mehrere Iterationen mit Farbkodierung}{Mehrere Iterationen der H\e non-Abbildung mit Farbkodierung, die den Ursprung der jeweiligen Regionen darstellt. Das initiale Rechteck wird durch zwei Taylormodelle aufgespannt bei denen während der Iteration auf das Hinzufügen und Entfernen von Fehlersymbolen verzichtet wird, damit diese Abhängigkeitsinformationen erhalten bleiben. Dies sorgt allerdings auch dafür, dass die Überschätzung schnell zu einem exponentiellen Wachstum der Intervalle gegen $\infty$ führt.}
+
