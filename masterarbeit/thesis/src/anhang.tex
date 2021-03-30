@@ -5,33 +5,30 @@
 \SetAlgoLined
 \SetKwInOut{Input}{input}
 \Input{Polynome $p_1, p_2$}
-// Initialize \\
-$n \gets \#p_1, m\gets \#p_2$ \;
-$p \gets [\ ]$ \;
-Allocate $buckets$ with space for polynomials: $\{2m, 4m, ..., 2^{\lceil log_2(n)\rceil -1 }m\}$\;
-$i\gets 0 $\;
-// Main Loop \\
+$n \gets \#p_1, m\gets \#p_2$ \\
+$p \gets [\ ]$ \\
+Allocate $buckets$ with space for polynomials: $\{2m, 4m, ..., 2^{\lceil log_2(n)\rceil -1 }m\}$\\
+$i\gets 0 $\\
 \While{$i < n$}{
-    $p \gets p_1[i] \cdot p_2$\;
+    $p \gets p_1[i] \cdot p_2$\\
     \uIf{$i < (n-1)$}{
-        $p \gets p + p_1[i+1] \cdot p_2$\;
+        $p \gets p + p_1[i+1] \cdot p_2$\\
     }
-    $i\gets i+2$\;
-   $j\gets 0 $\; 
+    $i\gets i+2$\\
+   $j\gets 0 $\\ 
     \While{$buckets[j].not\_empty()$}{
-        $p \gets p + buckets[j]$ \;
-        $buckets[j] \gets [\ ]$\;
-        $j\gets j+1 $\; 
+        $p \gets p + buckets[j]$ \\
+        $buckets[j] \gets [\ ]$\\
+        $j\gets j+1 $\\ 
     }
     \uIf{$i < n$}{
-        $buckets[j] \gets p$\;
-        $p \gets [\ ]$ \;
+        $buckets[j] \gets p$\\
+        $p \gets [\ ]$ \\
     }
     
 }
-// Merge each bucket into the final polynomial\\
-\ForEach{$bucket \in buckets$}{
-    $p \gets p + bucket$\;
+\ForEach(\Comment*[f]{Merge aller Buckets ins Polynom}){$bucket \in buckets$}{
+    $p \gets p + bucket$\Comment*{vom kleinsten zum größten}
 }
 
 
@@ -45,48 +42,32 @@ $i\gets 0 $\;
 \begin{algorithm}[H]
 \SetAlgoLined
 \label{algo:add}
-\SetKwInOut{Input}{input}
-\Input{Polynome $p_1, p_2$}
-$p \gets (), i \gets 0, j \gets 0$ \; 
-\While{$i < \#p_1$ \textbf{and} $j  < \#p_2$} {
-    $max \gets max\_errorsymbols(p_1[i], p_1[j])$ \;
-    \uIf{max = left}{
-        $p.append(p_1[i])$\;
-        $i \gets i+1 $\;
+\SetKwInOut{Input}{Eingabe}
+\SetKwInOut{Output}{Ausgabe}
+\Input{Polynome $p, q$ mit Monomen $m_{p_i}$ und $m_{q_j}$, wobei $i = \#p$ und $j = \#q$}
+\Output{Polynom $p'$ mit geordneten Monomen}
+$i \gets 0, j \gets 0$ \\
+\While(\Comment*[f]{Solange ein Polynom nicht komplett betrachtet wurde}){$i < \#p_1$ \textbf{and} $j  < \#p_2$} {
+    \uIf{$m_{p_i} \succ m_{q_j}$}{
+        $p' \gets p' + m_{p_i}$\
+        $i \gets i+1 $\\
     }
-    \uElseIf{max = right}{
-        $p.append(p_2[j])$\;
-        $j \gets j+1 $\;
+    \uElseIf{$m_{q_j} \succ m_{p_i}$}{
+        $p' \gets p' + m_{q_j}$\\
+        $j \gets j+1 $\\
     }
-    \uElse{ // $max = equal$\\
-        $p.append(p_1[i] + p_1[j])$\;
-        $p_1.remove(i)$\;
-        $i \gets i+1; j \gets j +1 $\;
+    \uElse(\Comment*[f]{Beide Monome haben dieselben Variablen}){
+        $p' \gets p' + (m_{q_j} + m_{p_i})$\\
+        $i \gets i+1; j \gets j +1 $\\
     }
 }
-Append the rest to $p$\;
+\If{$i < \#p_1$ \textbf{or} $j  < \#p_2$}{
+Füge den Rest zu $p$ hinzu
+}
+
 \Return $p$
 
- \caption{Addition zweier Polynome}
-\end{algorithm}
-
-
-\begin{algorithm}[H]
-\label{algo:maxes}
-\SetAlgoLined
-\SetKwInOut{Input}{input}
-\Input{Zwei Listen von Fehlersymbolen $ess_1, ess_2$}
-$size \gets max\{length(ess_1), length(ess_2)\}$\; 
-$i \gets 0 $ \;
-\While{i < size}{
-  \uIf{$i \geq length(ess_1)\ \textbf{or}\ ess_1[i] \succ ess_2[i]$}{
-        \Return right
-  }\uElseIf{$i \geq length(ess_2)\ \textbf{or}\ ess_1[i] \prec ess_2[i]$}{
-        \Return left
-  }
-}
-\Return equal
- \caption{Vergleich Variablen zweier Monome}
+ \caption{Addition zweier geordneter Polynome}
 \end{algorithm}
 
 

@@ -88,7 +88,7 @@ Die im Basisprogramm \verb+tangentspace+ vorhandene Implementierung wurde erweit
 Die Verwendung von Geobuckets ist eine Methode, die Addition \cite{geobuckets} und Mulitplikation \cite{geobucketsmulti} zweier Polynome effizient zu gestalten, indem die Zahl der dafür nötigen Monomvergleiche reduziert wird.
 
 \subsection{Polynomaddition}
-Die Addition zweier Polynome $p_1$ und $p_2$ stellt ein Zusammenfügen zweier Listen von Monomen (\textit{Merge}) dar. Sind diese geordnet, so sind im schlimmsten Falle $\#p_1 +\#p_2$ Vergleiche nötig, während es für ungeordnete Polynome $\#p_1 \cdot \#p_2$ sind, da alle Monome miteinander verglichen werden müssen. Die hierfür verwendete partielle Ordnung $\succ$ sortiert die Monome nach dem Index der Variablen und deren Exponenten:
+Die Addition zweier Polynome $p_1$ und $p_2$ stellt ein Zusammenfügen zweier Listen von Monomen (\textit{Merge}) dar. Sind diese geordnet, so sind im schlimmsten Falle $\#p_1 +\#p_2$ Vergleiche nötig, während es für ungeordnete Polynome $\#p_1 \cdot \#p_2$ sind, da alle Monome während des Vorgangs miteinander verglichen werden müssen. Die hierfür verwendete partielle Ordnung $\succ$ sortiert die Monome nach dem Index der Variablen und deren Exponenten:
 
 \begin{itemize}
     \label{def:order}
@@ -99,7 +99,7 @@ Die Addition zweier Polynome $p_1$ und $p_2$ stellt ein Zusammenfügen zweier Li
         \item[] $ i = i'$ und $ j > j'$
     \end{itemize}
 \end{itemize}
-
+Bei einer Gleichheit der Monome werden diese zusammengefügt und die Koeffizienten addiert.
 
 Algorithmus \ref{algo:add} erzeugt aus zwei nach der oben definierten Ordnung $\succ$ sortierten Polynomen wiederum ein sortiertes Polynom. Endet die While-Schleife in Zeile 2, so ist im Regelfall eines der Polynome noch nicht gänzlich betrachtet, was bedeutet, dass alle übrigen Monome in diesem Polynom (im Hinblick auf $\succ$) kleiner sind, als die des anderen Summanden und daher dem Ergebnispolynom angehangen werden können, ohne sie weiter zu betrachten. 
 
