@@ -253,6 +253,7 @@ x = sweep_to(x, 2, SQUARE_ONLY);
 
 
 \subsection{Darstellung der Taylormodelle}
+\label{sec:darstellung}
 Die grafischen Darstellungen der Taylormodelle in dieser Arbeit wurden mit \verb+gnuplot+ \cite{gnuplot} erstellt und zeigen je eine Übermenge des tatsächlichen Taylormodells. Eine Darstellung eines Taylormodells entsteht, indem für jedes der $k$ Fehlersymbol aus $\lambda=(\lambda_1, \dots, \lambda_k)$ ein Wert festgelegt und dann das Taylormodell evaluiert wird. Um eine Übermenge zu zeichnen muss der gesamte Wertebereich eines jeden Fehlersymbols abgedeckt werden. In \verb+hotm+ geschieht das, indem für eine gegebene \textit{Auflösung} $a \in \mathbb{N}$ die Supportintervalle $S=(s_1, \cdots s_k)$ in jeweils $a$ Intervalle geteilt und für jede Kombination mit eingesetzten Werten ein von den anderen unabhängiges Rechteck gezeichnet wird. So ergeben sich für Taylormodelle mit $k$ Variablen $a^k$ Rechtecke. Eine solche Darstellung wird in \cite{DBLP:conf/macis/BrausseKM15} als $image(T) \subseteq \mathbb{R}^d$ definiert. Die hier verwendete Darstellung wird um die verwendete Auflösung erweitert: $image_{acc}(T,a)$.
 
 \Abbildungps{tbh}{.9}{img/accuracy.pdf}{fig:acc}{H\e non-Abbildung: Abbildung mit verschiedenen Auflösungen}{Jede Zeile zeigt eine einfache Abbildung der Rechtecke durch die H\e non-Abbildung mit $a=1.4$ und $b=0.3$ mit verschiedenen Auflösungen für die Darstellung. (a): 4 Rechtecke; (b): 100 Rechtecke, (c): 10000 Rechtecke. Das Tetragon stellt die Fangzone für die verwendeten Parameter dar. }

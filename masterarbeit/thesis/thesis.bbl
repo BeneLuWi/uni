@@ -15,6 +15,11 @@ F.~Brau{\ss}e, M.~V. Korovina und N.~T. M{\"u}ller.
   Selected Papers}, Band 9582 der {\em Lecture Notes in Computer Science}.
   Springer, 2015, S.~474--488.
 
+\bibitem[HaMa20]{harris2020array}
+C.~R. Harris, K.~J. Millman und S.~J. van der Walt~et al.
+\newblock Array programming with {NumPy}.
+\newblock {\em Nature} 585(7825), September 2020, S.~357--362.
+
 \bibitem[Hén76]{henon1976}
 M.~Hénon.
 \newblock A two-dimensional mapping with a strange attractor.
