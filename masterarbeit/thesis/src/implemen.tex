@@ -14,7 +14,7 @@ Die Software-Bibliothek \verb+iRRAM+ \cite{Mller2009EnhancingIE} implementiert d
 Für eine solche Iteration werden gerade so viele Zwischenergebnisse während der Berechnung gespeichert, dass eine Wiederholung der Schritte mit höherer Präzision möglich ist. Da sich durch die Wiederholung mit höherer Genauigkeit Änderungen bei bereits durchgeführten Berechnungen ergeben können, müssen während der Laufzeit Sichtbarkeit von Variablen und Zwischenergebnissen für den Nutzer genau kontrolliert und unter Umständen beschränkt werden, da sonst unerwartetes Verhalten und Exceptions entstehen können, indem die zugegriffenen Werte gegebenfalls nicht in der aktuellen Iteration existieren.
 
 
-Einige der für rationale Zahlen zur Verfügung stehenden Funktionen, wie der Vergleich zweier Zahlen, sind mit reellen Zahlen nicht ohne weiteres Möglich. Dies gilt insbesondere für den Test auf Gleichheit und die Vorzeichenfunktion $sign$. Bei all diesen Funktionen handelt es sich im Reellen (und bei der \verb+iRRAM+) um mehrwertige Funktionen, da sich das jeweilige Ergebnis mit veränderter Präzsion in der Darstellung der Zahlen ändern kann. Dieses Problem wird in \verb+hotm+ durch den \verb+SignType+ adressiert. Zusätzlich zu den Werten 'positiv' (=\verb+POS+) und 'negativ' (=\verb+NEG+),  kann die Vorzeichenfunktion \verb+sign+ den Wert 'ambivalent' (=\verb+AMBI+) ausgeben, wenn nicht entscheidbar ist, wo genau die reelle Zahl um die Null liegt. Hierfür erhält die Vorzeichenfunktion einen Parameter, der den Bereich der Unsicherheit definiert. Ist der Ausgabewert 'ambivalent', so wird in den Funktionen, welche die Vorzeichenfunktion aufrufen, der schlechteste Fall im Hinblick auf die Genauigkeit, beziehungsweise die Intervallbreite des Ergebnisses angenommen. 
+Einige der für rationale Zahlen zur Verfügung stehenden Funktionen, wie der Vergleich zweier Zahlen, sind mit reellen Zahlen nicht ohne Weiteres Möglich. Dies gilt insbesondere für den Test auf Gleichheit und die Vorzeichenfunktion $sign$. Bei all diesen Funktionen handelt es sich im Reellen (und bei der \verb+iRRAM+) um mehrwertige Funktionen, da sich das jeweilige Ergebnis mit veränderter Präzsion in der Darstellung der Zahlen ändern kann. Dieses Problem wird in \verb+hotm+ durch den \verb+SignType+ adressiert. Zusätzlich zu den Werten 'positiv' (=\verb+POS+) und 'negativ' (=\verb+NEG+),  kann die Vorzeichenfunktion \verb+sign+ den Wert 'ambivalent' (=\verb+AMBI+) ausgeben, wenn nicht entscheidbar ist, wo genau die reelle Zahl um die Null liegt. Hierfür erhält die Vorzeichenfunktion einen Parameter, der den Bereich der Unsicherheit definiert. Ist der Ausgabewert 'ambivalent', so wird in den Funktionen, welche die Vorzeichenfunktion aufrufen, der schlechteste Fall im Hinblick auf die Genauigkeit, beziehungsweise die Intervallbreite des Ergebnisses angenommen. 
 
 Für die Quadrierung eines Intervalls $I=[x_1, x_2]$ bedeutet das bespielsweise, dass statt $I^2 = [\min(x_1^2, x_2^2), \max(x_1^2, x_2^2)]$, die Überschätzung $I^2 = [0, \max(x_1^2, x_2^2)]$ verwendet werden muss.
 
@@ -39,7 +39,7 @@ Eine weitere Besonderheit ergibt sich aus dem Aufbau der Zahlen. Es entstehen zw
 
 
 \subsection{Präzision}
-Werden zwei \verb+iRRAM-REAL+s $x$ und $y$ mit einer jeweiligen Präzision $p_x$ und $p_y$ verrechnet $z = x \circ y$, so entscheidet die Präzisions-Strategie der \verb+iRRAM+ \verb+prec_policy+, ob für für diese Operation absolute oder relative Genauigkeit verwendet wird. Zudem existiert eine globale, an die Iteration der \verb+iRRAM+ gebundene Genauigkeit \verb+actual_precision+ $p_g$ , die sich mit jeder Iteration verringert, beginnend mit dem Wert $p_{g0} = -50$. Diese Werte sind negativ und repräsentieren, die Anzahl an Bits, für die eine Zahl genau bekannt ist. Bei $z = x\circ y$ ist die Genauigkeit $p_z$ durch
+Werden zwei \verb+iRRAM-REAL+s $x$ und $y$ mit einer jeweiligen Präzision $p_x$ und $p_y$ verrechnet $z = x \circ y$, so entscheidet die Präzisions-Strategie der \verb+iRRAM+ \verb+prec_policy+, ob für diese Operation absolute oder relative Genauigkeit verwendet wird. Zudem existiert eine globale, an die Iteration der \verb+iRRAM+ gebundene Genauigkeit \verb+actual_precision+ $p_g$ , die sich mit jeder Iteration verringert, beginnend mit dem Wert $p_{g0} = -50$. Diese Werte sind negativ und repräsentieren, die Anzahl an Bits, für die eine Zahl genau bekannt ist. Bei $z = x\circ y$ ist die Genauigkeit $p_z$ durch
 $$p_z = \begin{cases}
          \max(p_x, p_y, p_g) & \text{für absolute Genauigkeit}\\
          \max(p_x, p_y, \max(p_x, p_y) - 50 + p_g) & \text{für relative Genauigkeit}
@@ -88,7 +88,7 @@ Die im Basisprogramm \verb+tangentspace+ vorhandene Implementierung wurde erweit
 %% ==============================
 \label{ch:Implementierung:sec:Abschnitt1}
 
-Die Verwendung von Geobuckets ist eine Methode, die Addition \cite{geobuckets} und Mulitplikation \cite{geobucketsmulti} zweier Polynome effizient zu gestalten, indem die Zahl der dafür nötigen Monomvergleiche reduziert wird.
+Die Verwendung von Geobuckets ist eine Methode, die Addition \cite{geobuckets} und Multiplikation \cite{geobucketsmulti} zweier Polynome effizient zu gestalten, indem die Zahl der dafür nötigen Monomvergleiche reduziert wird.
 
 \subsection{Polynomaddition}
 Die Addition zweier Polynome $p_1$ und $p_2$ stellt ein Zusammenfügen zweier Listen von Monomen (\textit{Merge}) dar. Sind diese geordnet, so sind im schlimmsten Falle $\#p_1 +\#p_2$ Vergleiche nötig, während es für ungeordnete Polynome $\#p_1 \cdot \#p_2$ sind, da alle Monome während des Vorgangs miteinander verglichen werden müssen. Die hierfür verwendete partielle Ordnung $\succ$ sortiert die Monome nach dem Index der Variablen und deren Exponenten:
@@ -112,9 +112,9 @@ Algorithmus \ref{algo:add} erzeugt aus zwei nach der oben definierten Ordnung $\
 Betrachtet man die Summe dreier Polynome $p_1 + p_2 + p_3$ mit $\#p_1 >> \#p_2 = \#p_3 = 1$, benötigt das Aufsummieren von links nach rechts bis zu $2\#p_1 + 1$ Vergleiche, da mit dem oben verwendeten Additionsverfahren zweifach in $p_1$ eingefügt wird und potentiell jedes Monom miteinander verglichen werden muss\footnote{$\#p$ liefert die Anzahl an Monomen des Polynoms $p$}. Summiert man jedoch von rechts nach links so werden lediglich $\#p_1 + 2$ Vergleiche benötigt. Nach dieser Idee kann die Anzahl der Monomvergleiche reduziert werden, indem zunächst Polynome gleicher Länge miteinander addiert werden. 
 
 
-Um die oben (\ref{def:order}) definierte Ordnung $\succ$ auf dem Polynom $p = p_1 \cdot p_2$ zu erhalten, müssen die $n\cdot m$ Monome ($n := \#p_1, m := \#p_2$), die bei der Multiplikation entstehen, sortiert werden. Werden diese sequentiell zu $p$ hinzugefügt bedeutet das zunächst 2 Vergleiche, dann 3, dann 4, und so weiter, bis hin zu $nm$ Vergleichen:
+Um die oben (\ref{def:order}) definierte Ordnung $\succ$ auf dem Polynom $p = p_1 \cdot p_2$ zu erhalten, müssen die $n\cdot m$ Monome ($n := \#p_1, m := \#p_2$), die bei der Multiplikation entstehen, sortiert werden. Werden diese sequentiell zu $p$ hinzugefügt, bedeutet das zunächst 2 Vergleiche, dann 3, dann 4, und so weiter, bis hin zu $nm$ Vergleichen:
 $$ 2 + 3 + 4 + 5 + ... + nm = \frac{nm \cdot (nm + 1)}{2} - 1$$
-So ergibt sich für die naive Multiplikation eine quadratische Laufzeit in $O$-Notation von $O(nm + (nm)^2)$
+So ergibt sich für die naive Multiplikation eine quadratische Laufzeit in $O$-Notation von $O(nm + (nm)^2)$.
 Mit Geobuckets werden die Zwischenergebnisse der Polynommultiplikation in geometrisch wachsenden Listen (\textit{Buckets}) gespeichert. Hat ein Bucket seine Kapazität erreicht, wird das Polynom zum nächst größeren Bucket hinzuaddiert. Der Unterschied zum Originalalgorithmus besteht darin, dass die Größe der hinzukommenden Polynome bereits bekannt ist und die Bucketkapazität dementsprechend angepasst werden kann. Algorithmus \ref{algo:mult} zeigt die in \verb+HOTM+ implementierte Version der Geobucketmultiplikation. Durch den Teile und Herrsche Ansatz, kann die Multiplikation mit Geobuckets so in $O(nm \log nm)$ durchgeführt werden \cite{geobucketsmulti}.
 
 
@@ -200,19 +200,19 @@ Mit Geobuckets werden die Zwischenergebnisse der Polynommultiplikation in geomet
 \newpage
 %% ==============================
 \section{Taylormodelle}
-Taylormodelle bestehen in \verb+HOTM+ aus einer Liste von nach der Ordnunng $\succ$ (siehe \ref{def:order}) sortierten Monomen. Für die Supportintervalle der Fehlersymbole wird eine statische Liste, für die Grenzwerte der Housekeeping-Methoden und den Index neuer Fehlersymbole jeweils statische Variablen angelegt.
+Taylormodelle bestehen in \verb+HOTM+ aus einer Liste von nach der Ordnung $\succ$ (siehe \ref{def:order}) sortierten Monomen. Für die Supportintervalle der Fehlersymbole wird eine statische Liste, für die Grenzwerte der Housekeeping-Methoden und den Index neuer Fehlersymbole jeweils statische Variablen, angelegt.
 \subsection{Housekeeping-Methoden}
 Die Housekeeping-Methoden Splitting und Sweeping werden in \cite{DBLP:conf/macis/BrausseKM15} beschrieben und dienen der Kontrolle der Intervallkoeffizienten und deren Wachstum. Wann die Methoden angewandt werden, wird durch die manuell justierbaren Parameter \verb+MACRO_THRESHOLD+ für Splitting und \verb+MICRO_THRESHOLD+ für Cleaning festgelegt. Da für diese beiden Methoden Vergleiche reeller Zahlen nötig sind, um das Überschreiten eines Grenzwertes zu bestimmnen, werden die Zahlen mit Funktionen der \verb+iRRAM+ in rationale Approximationen zerlegt.
 
 Ziel der Housekeeping-Methoden ist, eine Balance zwischen der Breite der Intervallkoeffizienten und dem Erhalt von Abhängigkeitsinformationen durch längere Polynome, also mehr Fehlersymbolen, zu halten, sodass die Monomzahl und der Informationsverlust gleichsam klein bleiben.
 
-\paragraph{Cleaning}
+\paragraph{Cleaning}  
 \label{par:cleaning}
 Wie oben beschrieben, ergibt die Verwendung der \verb+iRRAM-REAL+s als Intervallgrenzen zweistufige Intervalle mit der Zahlen- und Intervallebene (siehe Abbildung \ref{fig:levels}). Mit fortlaufenden Rechnungen wächst die Breite der Intervalle auf Zahlenebene kontinuierlich und kann ohne weitere Methoden nur durch ein Erhöhen der verwendeten Präzision wieder verringert werden, beziehungsweise durch eine Iteration der \verb+iRRAM+. \textit{Cleaning} verlagert den Rechenfehler der Zahlenebene auf die Intervallebene und macht ihn damit auch für andere Housekeeping-Methoden sichtbar. Das Intervall $I=[m \pm r]$ mit $m=[c_m \pm \varepsilon_m]$ und $r = [c_r \pm \varepsilon_r]$ wird um $\varepsilon_m$ und $\varepsilon_r$ vergrößert, sodass das $I$ zwar wächst, jedoch dessen Endpunkte exakt sind:
 \begin{align*}[[c_m \pm \varepsilon_m] \pm [c_r \pm \varepsilon_r]] &\rightsquigarrow [[c_m \pm 0] \pm [c_r + \varepsilon_m +\varepsilon_r  \pm 0]] \\
 &= [c_m' \pm \underbrace{c_r'}_{c_m + \varepsilon_m +\varepsilon_r}  ]\end{align*}
 
-Algorithmus \ref{algo:clean} zeigt eine vereinfachte Darstellung der Cleaning Prozedur.
+Algorithmus \ref{algo:cl} zeigt eine vereinfachte Darstellung der Cleaning Prozedur.
 
 
     
@@ -246,7 +246,7 @@ Die Sweeping-Strategie \verb+square_only+ beschränkt das Sweeping auf gerade Po
 \subparagraph{square\_first}
 Mit \verb+square_first+ wird der angestrebte Grad erreicht, indem zunächst möglichst viele Fehlersymbole quadratisch gesweept werden. Die übrig gebliebene Differenz zwischen Zielgrad und dem tatsächlichen Grad wird durch einfaches Sweeping entfernt.
 
-Der Aufruf der Methode erhält in \verb+HOTM+ drei Parameter; das zu reduziere Taylormodell, den Grad, auf das Taylormodell durch Sweeping reduziert werden soll und die Strategie:
+Der Aufruf der Methode erhält in \verb+HOTM+ drei Parameter; das zu reduzierende Taylormodell, den Grad, auf den das Taylormodell durch Sweeping reduziert werden soll und die Strategie:
 
  \begin{lstlisting}[language=C++, style=cpp, caption=Beispielaufruf der Sweeping-Routine,captionpos=b,xleftmargin=15pt]
 tmsimple x;
@@ -257,11 +257,11 @@ x = sweep_to(x, 2, SQUARE_ONLY);
 
 \subsection{Darstellung der Taylormodelle}
 \label{sec:darstellung}
-Die grafischen Darstellungen der Taylormodelle in dieser Arbeit wurden mit \verb+gnuplot+ \cite{gnuplot} erstellt und zeigen je eine Übermenge des tatsächlichen Taylormodells. Eine Darstellung eines Taylormodells entsteht, indem für jedes der $k$ Fehlersymbol aus $\lambda=(\lambda_1, \dots, \lambda_k)$ ein Wert festgelegt und dann das Taylormodell evaluiert wird. Um eine Übermenge zu zeichnen muss der gesamte Wertebereich eines jeden Fehlersymbols abgedeckt werden. In \verb+hotm+ geschieht das, indem für eine gegebene \textit{Auflösung} $a \in \mathbb{N}$ die Supportintervalle $S=(s_1, \cdots s_k)$ in jeweils $a$ Intervalle geteilt und für jede Kombination mit eingesetzten Werten ein von den anderen unabhängiges Rechteck gezeichnet wird. So ergeben sich für Taylormodelle mit $k$ Variablen $a^k$ Rechtecke. Eine solche Darstellung wird in \cite{DBLP:conf/macis/BrausseKM15} als $image(T) \subseteq \mathbb{R}^d$ definiert. Die hier verwendete Darstellung wird um die verwendete Auflösung erweitert: $image_{acc}(T,a)$.
+Die grafischen Darstellungen der Taylormodelle in dieser Arbeit wurden mit \verb+gnuplot+ \cite{gnuplot} erstellt und zeigen je eine Übermenge des tatsächlichen Taylormodells. Eine Darstellung eines Taylormodells entsteht, indem für jedes der $k$ Fehlersymbole aus $\lambda=(\lambda_1, \dots, \lambda_k)$ ein Wert festgelegt und dann das Taylormodell evaluiert wird. Um eine Übermenge zu zeichnen muss der gesamte Wertebereich eines jeden Fehlersymbols abgedeckt werden. In \verb+hotm+ geschieht das, indem für eine gegebene \textit{Auflösung} $a \in \mathbb{N}$ die Supportintervalle $S=(s_1, \cdots s_k)$ in jeweils $a$ Intervalle geteilt und für jede Kombination mit eingesetzten Werten ein von den anderen unabhängiges Rechteck gezeichnet wird. So ergeben sich für Taylormodelle mit $k$ Variablen $a^k$ Rechtecke. Eine solche Darstellung wird in \cite{DBLP:conf/macis/BrausseKM15} als $image(T) \subseteq \mathbb{R}^d$ definiert. Die hier verwendete Darstellung wird um die verwendete Auflösung erweitert: $image_{acc}(T,a)$.
 
 \Abbildungps{tbh}{.9}{img/accuracy.pdf}{fig:acc}{H\e non-Abbildung: Abbildung mit verschiedenen Auflösungen}{Jede Zeile zeigt eine einfache Abbildung der Rechtecke durch die H\e non-Abbildung mit $a=1.4$ und $b=0.3$ mit verschiedenen Auflösungen für die Darstellung. (a): 4 Rechtecke; (b): 100 Rechtecke, (c): 10000 Rechtecke. Das Tetragon stellt die Fangzone für die verwendeten Parameter dar. }
 
-Seien $T_1$ und $T_2$ Taylormodelle mit $k=2$ Variablen, die eine Fläche aufspannen, bei denen die initialen Fehlersymbole erhalten bleiben und keine neuen Fehlersymbole eigeführt werden, so kann durch die Abhängigkeitsinformation der Fehlersymbole Ursprung und Abbild der einzelnen Regionen dieser Fläche farblich dargestellt werden. Abbildung \ref{fig:acc} zeigt eine Iteration der H\e non-Abbildung eines Rechtecks mit verschiedenen Auflösungen. Es ist gut zu erkennen, dass die gröberen Auflösungen, die feinere überdeckt und $image_{acc}(T_1,100)\times image_{acc}(T_2,100) \subseteq image_{acc}(T_1,10)\times image_{acc}(T_2,10) \subseteq image_{acc}(T_1,2)\times image_{acc}(T_2,2) $ gilt. Durch die Einfärbung der Rechtecke können verschiedene Effekte beobachtet werden:
+Seien $T_1$ und $T_2$ Taylormodelle mit $k=2$ Variablen, die eine Fläche aufspannen, bei denen die initialen Fehlersymbole erhalten bleiben und keine neuen Fehlersymbole eigeführt werden, so kann durch die Abhängigkeitsinformation der Fehlersymbole Ursprung und Abbild der einzelnen Regionen dieser Fläche farblich dargestellt werden. Abbildung \ref{fig:acc} zeigt eine Iteration der H\e non-Abbildung eines Rechtecks mit verschiedenen Auflösungen. Es ist gut zu erkennen, dass die gröberen Auflösungen die feineren überdecken und $image_{acc}(T_1,100)\times image_{acc}(T_2,100) \subseteq image_{acc}(T_1,10)\times image_{acc}(T_2,10) \subseteq image_{acc}(T_1,2)\times image_{acc}(T_2,2) $ gilt. Durch die Einfärbung der Rechtecke können verschiedene Effekte beobachtet werden:
 \begin{enumerate}
  \item Die Rechtecke überlagern sich im Abbild, obwohl sie sich im Ursprung nicht überschneiden und die H\e non-Abbildung an sich eindeutig invertierbar ist. Grund hierfür ist die entstehende Überschätzung durch Intervallarithmetik, die besonders bei Multiplikation, beziehungsweise Quadrierung der Intervalle zum Tragen kommt.
  \item Das in den Grafiken eingezeichnete Tetragon stellt die Fangzone $R$ für die hier verwendeten Parameter $a=1.4$ und $b=0.3$ dar. Mit Hilfe der Einfärbung ist erkennbar, wie Regionen außerhalb von $R$ wiederum außerhalb abgebildet werden, während innerhalb liegende diese nach der Abbildung nicht verlassen.
@@ -269,8 +269,7 @@ Seien $T_1$ und $T_2$ Taylormodelle mit $k=2$ Variablen, die eine Fläche aufspa
 
 
 
-\begin{algorithm}[tbh]
-\label{algo:clean}
+\begin{algorithm}[tbh]    
 \SetAlgoLined
 \SetKwInOut{Input}{Eingabe}
 \SetKwInOut{Output}{Ausgabe}
@@ -289,8 +288,9 @@ $T' \gets T$ \Comment*{Kopiere das alte Taylormodell}
     }
 }
 
-\Return $T'$ \Comment*{$T'$ hat Punktintervalle oder sehr kleine Intervalle auf Zahleneben}
+\Return $T'$ \Comment*{$T'$ hat Punktintervalle oder sehr kleine Intervalle auf Zahlenebene}
  \caption{Algorithmus für Cleaning eines Taylormodell}
+ \label{algo:cl}
 \end{algorithm}
 
 
