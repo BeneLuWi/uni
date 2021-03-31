@@ -348,6 +348,30 @@ Die Initialisierungsfunktion \verb+init()+ akzeptiert eine \verb+int+ $\geq 0$ a
 \paragraph{Ausgabe}
  Die Ausgabe des Ergebnisses erfolgt jeweils in den Zeilen 22 und 23. Listing \ref{list:point} erzeugt hier eine Auswertung der Taylormodelle zu Intervallen mit einer Genauigkeit von 20 Stellen nach dem Komma für Mitte und Radius. In Listing \ref{list:int} hingegen werden die Taylormodelle aufgelistet, ohne diese auszuwerten. Das heißt, es werden alle Monome mitsamt ihrer Variablen angezeigt.
  
+ \paragraph{Switches}
+ Wie auch in der \verb+iRRAM+, ist es für \verb+HOTM+ möglich, Einstellung via \textit{Switches} zu steuern und anzupassen. Ein Switch ist eine Instanz einer Klasse, die einen Standardwert während ihrer Lebenszeit überschreibt und durch den Destruktor wieder auf den vorherigen Wert zurücksetzt. So können entweder vorübergehende Änderungen in einem bestimmen Bereich, wie in Listing \ref{list:switch} oder für die gesamte Berechnung vorgenommen werden. Es stehen folgende Switches zur Verfügung:
+ \begin{itemize}
+  \item \verb+linear+: Verwendung linearer Taylormodellen
+  \item \verb+cleaning\_threshold+: Grenzwert für die Cleaning-Methode
+  \item \verb+splitting\_threshold+: Grenzwert für die Splitting-Methode
+  \item \verb+housekeep\_on\_assignment+: Überschreben des Zuweisungsoperators mit Housekeeping
+  \item \verb+lambdas\_to\_keep+: Anzahl der Fehlersymbole, die nach dem Housekeeping übrig bleiben
+  \item \verb+sweeping\_strategy+: Verfolgte Strategie beim Sweeping
+  \item \verb+swp\_to+: Grad auf den die Taylormodelle gesweept werden sollen
+ \end{itemize}
+
+ 
+ 
+\begin{lstlisting}[language=C++,  style=cpp, caption={[Beispiel für Anwendung von Switches] Anwendung des \anf{swp\_to} Switches, um nur für diese Rechnung beim Sweeping den Zielgrad 2 zu setzen.}, label=list:switch]  
+...
+{swp_to swp(2);
+    x = x * y;
+}
+...
+\end{lstlisting}
+ 
+ 
+ 
 
 %%% Local Variables: 
 %%% mode: latex
